@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 10:57:00 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/08 12:02:26 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:12:38 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,7 @@ void	final_ss(t_m_list *tmp, int i, int j, int cp)
 			i++;
 		}
 	}
+		tmp->dup_com[cp] = NULL;
 }
 
 t_m_list	*final_s(t_m_list *lst)
@@ -308,7 +309,6 @@ t_m_list	*final_s(t_m_list *lst)
 		i = 0;
 		cp = 0;
 		final_ss(tmp, i, 0, cp);
-		tmp->dup_com[cp] = NULL;
 		if (!ft_strcmp(tmp->first_comm, tmp->d_h[0]))
 			tmp->first_comm = tmp->dup_com[0];
 		tmp = tmp->next;

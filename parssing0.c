@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/06 17:18:05 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/06/12 14:58:00 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ void	*allocation(char *line)
 		}
 	}
 	nospace = malloc(j + 1);
+	if (!nospace)
+		return (NULL);
 	return (nospace);
 }
 
@@ -100,6 +102,9 @@ int	cases(char *line)
 		|| !ft_strncmp(line, "<< <<", 5)
 		|| !ft_strncmp(line, "<<<<", 4)
 		|| !ft_strncmp(line, "< >", 3)
+		|| !ft_strncmp(line, "&", 2)
+		|| !ft_strncmp(line, "&&", 2)
+		|| !ft_strncmp(line, "& &", 3)
 		|| !ft_strncmp(line, "> <", 3))
 		return (0);
 	return (1);
