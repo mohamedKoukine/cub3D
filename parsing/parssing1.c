@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parssing1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:10:24 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/08 13:59:07 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:58:07 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pr_minishell.h"
 
 char	*magic_hide2(char *line)
 {

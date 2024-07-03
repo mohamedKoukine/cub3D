@@ -1,25 +1,23 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 10:35:31 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/05/14 14:54:01 by aelbouab         ###   ########.fr       */
+/*   Created: 2024/05/10 16:36:51 by mkaoukin          #+#    #+#             */
+/*   Updated: 2024/06/08 14:06:19 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ex_minishell.h"
 
-size_t	ft_strlen(char *str)
+void ft_pwd()
 {
-	int	i;
+	char	*pwd;
+	char	buff[PATH_MAX];
 
-	i = 0;
-	if (!str)
-		return (0);
-	while (str[i])
-		i++;
-	return (i);
+	pwd = getcwd(buff, PATH_MAX);
+	printf("%s\n", pwd);
 }

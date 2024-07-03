@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   is_empty.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:23:38 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/06 16:12:46 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:57:15 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pr_minishell.h"
 
 int	is_empty(char *line)
 {

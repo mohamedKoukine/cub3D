@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/11 09:14:53 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/06 16:13:20 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/06/10 14:56:52 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pr_minishell.h"
 
 static char	**arg_m(char const *s, char c)
 {

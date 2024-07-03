@@ -6,12 +6,12 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/12 10:46:26 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/03 13:44:47 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
+#include "pr_minishell.h"
+#include "../execution/ex_minishell.h"
 
 void	print_stack(t_m_list *list)
 {
@@ -48,6 +48,8 @@ char *no_qutes(char *line)
 	int i = 0;
 	int j = 0;
 
+	if (!line)
+		return (NULL);
 	no_q = malloc(ft_strlen(line) + 1);
 	if (!no_q)
 		return (NULL);
@@ -58,19 +60,11 @@ char *no_qutes(char *line)
 			q = line[i];
 			i++;
 			while (line[i] != q && line[i])
-			{
-				no_q[j] = line[i];
-				i++;
-				j++;
-			}
+				no_q[j++] = line[i++];
 			i++;
 		}
-		no_q[j] = line[i];
-		if (line[i])
-		{
-			j++;
-			i++;
-		}
+		if (line[i] && line[i] != q)
+			no_q[j++] = line[i++];
 	}
 	no_q[j] = '\0';
 	return (no_q);
@@ -171,7 +165,7 @@ char	*line_shower(char *line, t_list *lst)
 	return (line);
 }
 
-void	list_to_exe(char *line)
+t_m_list	*list_to_exe(char *line)
 {
 	t_m_list	*list;
 
@@ -180,18 +174,20 @@ void	list_to_exe(char *line)
 	list = final_s(list);
 	list = decript_stack(list);
 	clear_stack(list);
-	print_stack(list);
+	// print_stack(list);
+	list->p[0] = dup(STDIN_FILENO);
+	list->p[1] = dup(STDOUT_FILENO);
+	return (list);
 }         
 
 char	*read_lines(char *line)
 {
-	char	*tmp;
+	static char	*tmp;
 
-	line = readline("minishell$====>");
-	tmp = NULL;
+	line = readline("➜ minishell$ ✗ ");
 	if (!line)
 	{
-		printf("\n");
+		printf("exit");
 		exit (0);
 	}
 	if (is_empty(line))
@@ -204,24 +200,40 @@ char	*read_lines(char *line)
 	return (line);
 }
 
+void ft_handler(int sig)
+{
+	(void)sig;
+	printf("\n");
+    rl_on_new_line(); 
+	rl_replace_line("", 0);
+    rl_redisplay();
+}
+
 int	main(int ac, char **av, char **env)
 {
-	t_list	*lst;
-	char	*line;
+	t_list		*lst;
+	t_m_list	*list;
+	char		*line;
 
-	(void) ac;
 	(void) av;
+	(void) ac;
 	lst = NULL;
 	line = NULL;
+	ft_env(env, &lst);
 	while (1)
 	{
-		ft_env(env, &lst);
+		signal(SIGINT, ft_handler);
+		signal(SIGQUIT, SIG_IGN);
 		line = read_lines(line);
 		line = line_shower(line, lst);
 		if (!line)
 			continue ;
-		list_to_exe(line);
+		list  = list_to_exe(line);
+		ft_pipex(ft_lstsize(list), list, env);
 		free(line);
+		line = NULL;
+		dup2(list->p[0],STDIN_FILENO);
+		dup2(list->p[1],STDOUT_FILENO);
 	}
 	return (0);
 }

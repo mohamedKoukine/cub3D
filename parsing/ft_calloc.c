@@ -1,41 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast_bonus.c                                 :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/18 09:29:56 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/06 16:09:00 by aelbouab         ###   ########.fr       */
+/*   Created: 2023/11/05 12:42:07 by aelbouab          #+#    #+#             */
+/*   Updated: 2024/06/10 14:56:33 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pr_minishell.h"
 
-t_m_list	*ft_lstlast(t_m_list *lst)
+void	*ft_calloc(size_t count, size_t size)
 {
-	t_m_list	*p;
+	void	*i;
 
-	if (!lst)
+	if ((int)count < 0 && (int)size < 0)
 		return (NULL);
-	p = lst;
-	while (p->next)
-	{
-		p = p->next;
-	}
-	return (p);
-}
-
-t_list	*ft_lstlast_env(t_list *lst)
-{
-	t_list	*p;
-
-	if (!lst)
+	if (count * size > SIZE_MAX)
 		return (NULL);
-	p = lst;
-	while (p->next)
-	{
-		p = p->next;
-	}
-	return (p);
+	i = malloc(count * size);
+	if (!i)
+		return (NULL);
+	ft_bzero(i, count * size);
+	return (i);
 }

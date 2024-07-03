@@ -1,23 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   pr_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/08 11:51:55 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/03 08:25:15 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef PR_MINISHELL_H
+# define PR_MINISHELL_H
 
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <signal.h>
 
 size_t		ft_strlen(char *str);
 int			ft_strcmp(char *s1, char *s2);
@@ -33,6 +34,8 @@ typedef struct minishell
 	char					**dup_com;
 	char					**d_h;
 	char					**file;
+	int						p[2];
+	int						f_h;
 	struct minishell		*next;
 }	t_m_list;
 
@@ -73,5 +76,7 @@ char		*expanding(char *line, t_list *lst);
 t_m_list	*en_s(t_m_list *lst, int cp);
 t_m_list	*final_s(t_m_list *lst);
 int			checkit(char *red);
+void		ft_echo(t_m_list *list, int s);
+int			ft_len(char **str);
 
 #endif

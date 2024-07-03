@@ -1,27 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_bzero.c                                         :+:      :+:    :+:   */
+/*   ft_strlen.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/04 15:24:05 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/05/10 11:30:47 by aelbouab         ###   ########.fr       */
+/*   Created: 2023/11/06 10:35:31 by aelbouab          #+#    #+#             */
+/*   Updated: 2024/06/10 14:57:00 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pr_minishell.h"
 
-void	ft_bzero(void *s, size_t n)
+size_t	ft_strlen(char *str)
 {
-	size_t	i;
-	char	*r;
+	int	i;
 
 	i = 0;
-	r = (char *)s;
-	while (i < n)
-	{
-		r[i] = '\0';
+	if (!str)
+		return (0);
+	while (str[i])
 		i++;
-	}
+	return (i);
 }
