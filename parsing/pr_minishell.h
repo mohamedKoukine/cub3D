@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/03 08:25:15 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/05 09:03:35 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,25 @@ void		ft_bzero(void *s, size_t n);
 
 typedef struct minishell
 {
-	char					*command;
-	char					*first_comm;
-	char					**d_com;
-	char					**dup_com;
-	char					**d_h;
-	char					**file;
-	int						p[2];
-	int						f_h;
-	struct minishell		*next;
+	char				*command;
+	char				*first_comm;
+	char				**d_com;
+	char				**dup_com;
+	char				**d_h;
+	char				**file;
+	int					p[2];
+	int					f_h;
+	struct minishell	*next;
 }	t_m_list;
+
+int	e_code;
 
 typedef struct s_list
 {
-	char					*env;
-	char					*key;
-	char					*ex;
-	struct s_list			*next;
+	char			*env;
+	char			*key;
+	char			*ex;
+	struct s_list	*next;
 }	t_list;
 
 void		ft_lstadd_back_env(t_list **lst, t_list *new);
@@ -76,7 +78,9 @@ char		*expanding(char *line, t_list *lst);
 t_m_list	*en_s(t_m_list *lst, int cp);
 t_m_list	*final_s(t_m_list *lst);
 int			checkit(char *red);
-void		ft_echo(t_m_list *list, int s);
 int			ft_len(char **str);
+int			ft_atoi(const char *str);
+void		ft_echo(t_m_list *list, int s);
+void		my_exit(t_m_list *list);
 
 #endif

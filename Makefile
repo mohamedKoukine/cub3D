@@ -20,8 +20,10 @@ SRC = ./parsing/ft_strlen.c\
 		./parsing/is_empty.c\
 		./parsing/ft_strtrim.c\
 		./parsing/util.c\
+		./parsing/ft_atoi.c\
 		./parsing/env.c\
 		./parsing/echo.c\
+		./parsing/exit.c\
 		./execution/parsing_pipex.c\
 		./execution/ft_strjoinn.c\
 		./execution/ft_split.c\

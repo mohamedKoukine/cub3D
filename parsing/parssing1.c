@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:10:24 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/10 14:58:07 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/05 13:10:08 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,33 @@ int	if_its_q(char q)
 	return (0);
 }
 
+int	in_or_out(char *line, int f)
+{
+	int		i;
+	char	q;
+	
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '"' || line[i] == '\'')
+		{
+			q = line[i];
+			i++;
+			while (line[i] != q)
+			{
+				if (i == f)
+					return (1);
+				i++;
+			}
+		}
+		if (i == f)
+			return (0);
+		if (line[i])
+			i++;
+	}
+	return (0);
+}
+
 char	*dollar(char *line, int i, int j, char *line2)
 {
 	int		cp;
@@ -86,10 +113,10 @@ char	*dollar(char *line, int i, int j, char *line2)
 				i++;
 				cp++;
 			}
-			if (cp % 2 != 0)
+			if (cp % 2 != 0 && (!if_its_q(line[i]) || in_or_out(line,i - 1)))
 				line2[j++] = '$';
 		}
-		else if (line[i] == '$' && if_its_q(line[i + 1]))
+		else if (line[i] == '$' && if_its_q(line[i + 1]) && !in_or_out(line, i))
 			i++;
 		if (line[i])
 			line2[j++] = line[i++];
@@ -100,31 +127,20 @@ char	*dollar(char *line, int i, int j, char *line2)
 
 char	*duh(char *line, int i, int cp)
 {
-	char	*line2;
-
-	line2 = malloc(ft_strlen(line) + 1);
-	if (!line2)
-		return (NULL);
 	while (line[++i])
 	{
 		if (line[i] == '"')
 			cp++;
 		if (line[i] == '\'' && cp % 2 == 0)
 		{
-			line2[i] = line[i];
 			i++;
 			while (line[i] != '\'')
-			{
-				line2[i] = line[i];
 				i++;
-			}
 		}
 		if (line[i] == ('$' * -1))
-			line2[i] = line[i] * -1;
-		else
-			line2[i] = line[i];
+			line[i] *= -1;
 	}
-	return (line2[i] = '\0', line2);
+	return (line);
 }
 
 int	cp_hd(char *line)

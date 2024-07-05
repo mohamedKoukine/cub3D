@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing0.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/02 08:49:39 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/05 09:22:22 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,6 +93,7 @@ int	cases(char *line)
 		|| !ft_strncmp(line, ">> |", 4)
 		|| !ft_strncmp(line, ">>|", 3)
 		|| !ft_strncmp(line, "> |", 3)
+		|| !ft_strncmp(line, ">|", 2)
 		|| !ft_strncmp(line, "||", 2)
 		|| !ft_strncmp(line, "| |", 3)
 		|| !ft_strncmp(line, "< <", 3)
@@ -100,11 +101,14 @@ int	cases(char *line)
 		|| !ft_strncmp(line, ">> >>", 5)
 		|| !ft_strncmp(line, ">>>", 3)
 		|| !ft_strncmp(line, "<< <<", 5)
-		|| !ft_strncmp(line, "<<<<", 4)
+		|| !ft_strncmp(line, "<<<", 3)
 		|| !ft_strncmp(line, "< >", 3)
-		|| !ft_strncmp(line, "&", 2)
+		|| !ft_strncmp(line, "&", 1)
 		|| !ft_strncmp(line, "&&", 2)
 		|| !ft_strncmp(line, "& &", 3)
+		|| !ft_strncmp(line, "(", 1)
+		|| !ft_strncmp(line, "()", 2)
+		|| !ft_strncmp(line, "( )", 3)
 		|| !ft_strncmp(line, "> <", 3))
 		return (0);
 	return (1);
@@ -119,12 +123,12 @@ int	syntax_error(char *line)
 	i = 0;
 	if (line[0] == '|' || line[ls - 1] == '|'
 		|| line[ls - 1] == '>' || line[ls - 1] == '<')
-		return (write(2, "syntax error\n", 13), 9);
+		return (write(2, "minishell$: syntax error near unexpected token\n", 47), 258);
 	while (i < ls)
 	{
 		if (!cases(&line[i]))
-			return (write(2, "syntax error\n", 13), 8);
+			return (write(2, "minishell$: syntax error near unexpected token\n", 47), 258);
 		i++;
 	}
-	return (1);
+	return (0);
 }

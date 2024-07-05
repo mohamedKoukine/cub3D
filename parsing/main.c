@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/03 13:44:47 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/05 13:09:53 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,12 +152,13 @@ char	*line_shower(char *line, t_list *lst)
 	if (!line || quotes_nb(line) != 1)
 		return (NULL);
 	line = rm_space(line);
-	if (!line || syntax_error(line) != 1)
+	e_code = syntax_error(line);
+	if (!line || e_code)
 		return (NULL);
 	line = add_space(line);
 	if (!line)
 		exit (1);
-	line = dollar(line, 0, 0, NULL);
+	line = magic_hide(dollar(magic_hide(line), 0, 0, NULL));
 	line = expanding(magic_hide2(line), lst);
 	magic_hide2(line);
 	if (is_empty(line))
