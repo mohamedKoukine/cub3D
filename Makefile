@@ -24,6 +24,7 @@ SRC = ./parsing/ft_strlen.c\
 		./parsing/env.c\
 		./parsing/echo.c\
 		./parsing/exit.c\
+		./parsing/cd.c\
 		./execution/parsing_pipex.c\
 		./execution/ft_strjoinn.c\
 		./execution/ft_split.c\

@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/05 09:22:22 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/07 13:51:59 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,17 @@ int	quotes_nb(char *line)
 	qs = 0;
 	while (line[i])
 	{
-		if (line[i] == '\"')
+		if (line[i] == '"')
 			qd++;
 		if (line[i] == '\'')
 			qs++;
 		i++;
 	}
 	if (qs % 2 != 0 || qd % 2 != 0)
-		return (write(2, "syntax error\n", 13), 7);
+	{
+		write(2, "minishell$: syntax error near unexpected token\n", 47);
+		return (258);
+	}
 	return (1);
 }
 
@@ -123,11 +126,17 @@ int	syntax_error(char *line)
 	i = 0;
 	if (line[0] == '|' || line[ls - 1] == '|'
 		|| line[ls - 1] == '>' || line[ls - 1] == '<')
-		return (write(2, "minishell$: syntax error near unexpected token\n", 47), 258);
+	{
+		write(2, "minishell$: syntax error near unexpected token\n", 47);
+		return (258);
+	}
 	while (i < ls)
 	{
 		if (!cases(&line[i]))
-			return (write(2, "minishell$: syntax error near unexpected token\n", 47), 258);
+		{
+			write(2, "minishell$: syntax error near unexpected token\n", 47);
+			return (258);
+		 }
 		i++;
 	}
 	return (0);

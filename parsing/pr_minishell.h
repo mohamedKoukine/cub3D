@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/05 09:03:35 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/08 10:16:38 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,6 @@ int			ft_len(char **str);
 int			ft_atoi(const char *str);
 void		ft_echo(t_m_list *list, int s);
 void		my_exit(t_m_list *list);
+void		ft_cd(t_list *lst, t_m_list *list);
 
 #endif

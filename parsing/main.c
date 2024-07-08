@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/05 13:09:53 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:58:18 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char *no_qutes(char *line)
 				no_q[j++] = line[i++];
 			i++;
 		}
-		if (line[i] && line[i] != q)
+		else if (line[i] && line[i] != q)
 			no_q[j++] = line[i++];
 	}
 	no_q[j] = '\0';
@@ -108,12 +108,6 @@ t_m_list	*decript_stack(t_m_list *list)
 		r = -1;
 		while (tmp->d_com && tmp->d_com[++r])
 			magic_hide(tmp->d_com[r]);
-		r = -1;
-		while (tmp->d_h && tmp->d_h[++r])
-			magic_hide(tmp->d_h[r]);
-		r = -1;
-		while (tmp->file && tmp->file[++r])
-			magic_hide(tmp->file[r]);
 		tmp = tmp->next;
 	}
 	return (list);
@@ -158,7 +152,8 @@ char	*line_shower(char *line, t_list *lst)
 	line = add_space(line);
 	if (!line)
 		exit (1);
-	line = magic_hide(dollar(magic_hide(line), 0, 0, NULL));
+	line = dollar(magic_hide(line), 0, 0, NULL);
+	magic_hide(line);
 	line = expanding(magic_hide2(line), lst);
 	magic_hide2(line);
 	if (is_empty(line))
@@ -179,7 +174,7 @@ t_m_list	*list_to_exe(char *line)
 	list->p[0] = dup(STDIN_FILENO);
 	list->p[1] = dup(STDOUT_FILENO);
 	return (list);
-}         
+}
 
 char	*read_lines(char *line)
 {
@@ -220,7 +215,8 @@ int	main(int ac, char **av, char **env)
 	(void) ac;
 	lst = NULL;
 	line = NULL;
-	ft_env(env, &lst);
+	ft_env(env, &lst); 
+	// rl_catch_signals();
 	while (1)
 	{
 		signal(SIGINT, ft_handler);
