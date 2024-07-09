@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_lstsize_bonus.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/10 16:36:51 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/06/08 14:06:19 by mkaoukin         ###   ########.fr       */
+/*   Created: 2023/11/17 12:44:42 by mkaoukin          #+#    #+#             */
+/*   Updated: 2024/06/10 16:09:31 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ex_minishell.h"
 
-void ft_pwd()
+int	ft_lstsize(t_m_list *lst)
 {
-	char	*pwd;
-	char	buff[PATH_MAX];
+	int		i;
+	t_m_list	*d;
 
-	pwd = getcwd(buff, PATH_MAX);
-	printf("%s\n", pwd);
+	d = lst;
+	i = 0;
+	while (d)
+	{
+		d = d -> next;
+		i++;
+	}
+	return (i);
 }

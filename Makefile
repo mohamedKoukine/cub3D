@@ -1,55 +1,60 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/02/15 16:50:44 by mkaoukin          #+#    #+#              #
-#    Updated: 2024/06/07 15:39:17 by mkaoukin         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
-
 NAME = minishell
 
-CC = CC
+CC = cc 
 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
+READLINE_L = $(shell brew --prefix readline)/lib
+READLINE_I = $(shell brew --prefix readline)/include
 
-SRC =	ft_split.c\
-		parsing_pipex.c\
-		ft_strjoinn.c\
-		ft_strncmp.c\
-		ft_str.c\
-		ft_lstadd_back_bonus.c\
-		ft_lstlast_bonus.c\
-		ft_lstnew_bonus.c\
-		get_next_line_utils.c\
-		get_next_line.c\
-		minishell.c\
-		aff_env.c\
-		pwd.c\
-		pipex_bonus.c
+SRC = ./parsing/ft_strlen.c\
+		./parsing/ft_strcmp.c\
+		./parsing/ft_strncmp.c\
+		./parsing/main.c\
+		./parsing/ft_calloc.c\
+		./parsing/ft_split.c\
+		./parsing/ft_bzero.c\
+		./parsing/ft_lst.c\
+		./parsing/parssing.c\
+		./parsing/parssing0.c\
+		./parsing/parssing1.c\
+		./parsing/is_empty.c\
+		./parsing/ft_strtrim.c\
+		./parsing/util.c\
+		./parsing/ft_atoi.c\
+		./parsing/env.c\
+		./parsing/echo.c\
+		./parsing/exit.c\
+		./parsing/cd.c\
+		./execution/parsing_pipex.c\
+		./execution/ft_strjoinn.c\
+		./execution/ft_split.c\
+		./execution/ft_str.c\
+		./execution/get_next_line_utils.c\
+		./execution/get_next_line.c\
+		./execution/pwd.c\
+		./execution/ft_lstsize_bonus.c\
+		./execution/pipex_bonus.c\
+		./execution/export.c
 
 OBJ = $(SRC:.c=.o)
 
-INCLUDE = minishell.h
+INCLUDE1 = ex_minishell.h
+INCLUDE2 = pr_minishell.h
 
-	
+all: $(NAME)
+
 $(NAME): $(OBJ)
-	$(CC) $(OBJ) -lreadline -o $(NAME) -fsanitize=address -g
-%.o : %.c $(INCLUDE)
-	$(CC) $(FLAGS) -c $< -o $@
+	$(CC) $(FLAGS) $(OBJ) -o $@ -L $(READLINE_L) -lreadline 
 
-all : $(NAME)
+%.o: %.c
+	$(CC) $(FLAGS) -I $(READLINE_I) -c $< -o $@
 
-clean :
-	rm -rf  $(OBJ)
+clean:
+	rm -rf $(OBJ)
 
-fclean : clean
-	rm -rf  $(NAME)
+fclean: clean
+	rm -rf $(NAME)
 
-re : fclean all
+re: fclean all
 
-.PHONY : clean
+.PHONY: clean

@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/10/31 15:48:46 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/05/14 15:59:50 by mkaoukin         ###   ########.fr       */
+/*   Created: 2023/11/05 12:42:07 by aelbouab          #+#    #+#             */
+/*   Updated: 2024/06/10 14:56:33 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pr_minishell.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+void	*ft_calloc(size_t count, size_t size)
 {
-	size_t	i;
+	void	*i;
 
-	i = 0;
-	if (n == 0)
-		return (0);
-	while (s1[i] && s1[i] == s2[i] && i < n - 1)
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	if ((int)count < 0 && (int)size < 0)
+		return (NULL);
+	if (count * size > SIZE_MAX)
+		return (NULL);
+	i = malloc(count * size);
+	if (!i)
+		return (NULL);
+	ft_bzero(i, count * size);
+	return (i);
 }

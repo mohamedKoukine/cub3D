@@ -1,28 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize_bonus.c                                 :+:      :+:    :+:   */
+/*   is_empty.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 12:44:42 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/05/14 17:00:16 by mkaoukin         ###   ########.fr       */
+/*   Created: 2024/05/15 11:23:38 by aelbouab          #+#    #+#             */
+/*   Updated: 2024/06/10 14:57:15 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pr_minishell.h"
 
-int	ft_lstsize(t_list *lst)
+int	is_empty(char *line)
 {
-	int		i;
-	t_list	*d;
+	int	i;
 
-	d = lst;
 	i = 0;
-	while (d)
+	if (!line)
+		return (1);
+	while (line[i])
 	{
-		d = d -> next;
-		i++;
+		if ((line[i] >= 9 && line[i] <= 13) || line[i] == 32)
+			i++;
+		else
+			return (0);
 	}
-	return (i);
+	return (1);
 }

@@ -1,28 +1,23 @@
+
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/18 10:01:40 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/05/09 13:18:07 by mkaoukin         ###   ########.fr       */
+/*   Created: 2024/05/10 16:36:51 by mkaoukin          #+#    #+#             */
+/*   Updated: 2024/06/08 14:06:19 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ex_minishell.h"
 
-void	ft_lstadd_back(t_list **lst, t_list *new)
+void ft_pwd()
 {
-	t_list	*d;
+	char	*pwd;
+	char	buff[PATH_MAX];
 
-	if (!lst || !new)
-		return ;
-	if (!(*lst))
-	{
-		*lst = new;
-		return ;
-	}
-	d = ft_lstlast(*lst);
-	d->next = new;
+	pwd = getcwd(buff, PATH_MAX);
+	printf("%s\n", pwd);
 }

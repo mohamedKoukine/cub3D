@@ -6,13 +6,13 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 10:09:11 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/05/14 16:23:29 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/08 16:16:14 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ex_minishell.h"
 
-size_t	ft_strlen(const char *str, int flag)
+size_t	ft_strlen1(const char *str, int flag)
 {
 	int	i;
 
@@ -42,10 +42,10 @@ char	*ft_strjo_or_cat(char *s1, char *s2)
 	j = 0;
 	if (!s1)
 		return (ft_substr(s2, 0, ft_strchr(s2, '\n')));
-	j = ft_strlen(s2, 1);
+	j = ft_strlen1(s2, 1);
 	if (ft_strchr(s2, '\n') > -1)
 		j++;
-	d = (char *)malloc(sizeof(char) * (ft_strlen(s1, 0) + j + 1));
+	d = (char *)malloc(sizeof(char) * (ft_strlen1(s1, 0) + j + 1));
 	if (!d)
 		return (NULL);
 	j = 0;
@@ -73,7 +73,7 @@ char	*ft_strjoin(char *s1, char *s2)
 		return (ft_strdup(s2));
 	if (!s2)
 		return (ft_strdup(s1));
-	d = malloc(sizeof(char) * (ft_strlen(s1, 0) + ft_strlen(s2, 0) + 1));
+	d = malloc(sizeof(char) * (ft_strlen1(s1, 0) + ft_strlen1(s2, 0) + 1));
 	if (!d)
 		return (NULL);
 	j = 0;
@@ -83,7 +83,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j])
 		d[i++] = s2[j++];
 	d[i] = '\0';
-	free(s1);
+	// free(s1);
 	return (d);
 }
 
@@ -97,11 +97,11 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	i = 0;
 	if (!s)
 		return (NULL);
-	if (start >= ft_strlen(s, 0) || l == 0)
+	if (start >= ft_strlen1(s, 0) || l == 0)
 		return (ft_strdup(""));
-	if (start + l > ft_strlen(s, 0))
+	if (start + l > ft_strlen1(s, 0))
 	{
-		l = ft_strlen(s, 0) - start;
+		l = ft_strlen1(s, 0) - start;
 	}
 	d = (char *)malloc(sizeof(char) * l + 1);
 	if (!d)

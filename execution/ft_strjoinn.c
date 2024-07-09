@@ -6,11 +6,11 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/07 12:17:09 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/05/14 16:28:15 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/06/10 15:24:48 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ex_minishell.h"
 
 char	*ft_strjoinn(char *s1, char *s2)
 {
@@ -26,7 +26,7 @@ char	*ft_strjoinn(char *s1, char *s2)
 		return (ft_strdup(s1));
 	while (s2[i] && s2[i] != ' ')
 		i++;
-	d = malloc(sizeof(char) * (ft_strlen(s1, 0) + i + 1));
+	d = malloc(sizeof(char) * (ft_strlen1(s1, 0) + i + 1));
 	if (!d)
 		return (NULL);
 	j = 0;
