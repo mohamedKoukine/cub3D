@@ -1,29 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   mian.c                                             :+:      :+:    :+:   */
+/*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/06/07 11:03:56 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/06/07 12:55:08 by mkaoukin         ###   ########.fr       */
+/*   Created: 2024/05/24 09:15:21 by aelbouab          #+#    #+#             */
+/*   Updated: 2024/06/10 14:58:40 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "pr_minishell.h"
 
-int main ()
+int	ft_isalnum(int i)
 {
-	m_list lst;
-	lst.f_h = malloc(sizeof(int) * 3);
-	lst.f_h[0] = 1;
-	lst.f_h[1] = 2;
-	lst.f_h[2] = 3;
-	int j;
-	int k;
-	printf("%d\n",*lst.f_h);
-	j = ++*lst.f_h;
-	k = ++*lst.f_h;
-	printf("%d\n",j);
-	printf("%d\n",k);
+	if ((i >= 'a' && i <= 'z') || (i >= 'A' && i <= 'Z')
+		|| (i >= '0' && i <= '9') || i == '_')
+		return (1);
+	return (0);
+}
+
+int	checkit(char *red)
+{
+	if (!ft_strcmp(red, ">")
+		|| !ft_strcmp(red, ">>")
+		|| !ft_strcmp(red, "<")
+		|| !ft_strcmp(red, "<<"))
+		return (0);
+	return (1);
 }

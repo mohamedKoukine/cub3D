@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew_bonus.c                                  :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/17 11:07:51 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/05/09 13:22:55 by mkaoukin         ###   ########.fr       */
+/*   Created: 2023/11/06 11:59:21 by aelbouab          #+#    #+#             */
+/*   Updated: 2024/06/10 14:57:04 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "pr_minishell.h"
 
-t_list	*ft_lstnew()
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	t_list	*d;
+	size_t	i;
 
-	d = (t_list *)malloc(sizeof(t_list));
-	if (!d)
+	i = 0;
+	if (n == 0)
 		return (0);
-	d->next = NULL;
-	return (d);
+	while (s1[i] && s1[i] == s2[i] && i < n - 1)
+	{
+		i++;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }

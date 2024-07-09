@@ -6,11 +6,11 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:18:21 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/06/04 12:26:25 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/06/10 15:19:46 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "ex_minishell.h"
 
 char	*ft_strdup(const char *src)
 {
@@ -34,7 +34,8 @@ char	*ft_strdup(const char *src)
 	dest[i] = '\0';
 	return (dest);
 }
-int	ft_strcmp(const char *s1, const char *s2)
+
+int	ft_strcmp1(const char *s1, const char *s2)
 {
 	size_t	i;
 	i = 0;
