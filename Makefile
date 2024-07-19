@@ -34,6 +34,7 @@ SRC = ./parsing/ft_strlen.c\
 		./execution/pwd.c\
 		./execution/ft_lstsize_bonus.c\
 		./execution/pipex_bonus.c\
+		./execution/unset.c\
 		./execution/export.c
 
 OBJ = $(SRC:.c=.o)

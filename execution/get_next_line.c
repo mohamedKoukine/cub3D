@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 11:05:37 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/06/10 15:25:20 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/15 14:41:20 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static char	*ft_read(char *rest, int fd)
 		if (i == -1)
 			return (free(buff), free(rest), NULL);
 		buff[i] = '\0';
-		rest = ft_strjoin(rest, buff);
+		rest = ft_strjoin(rest, buff, 0);
 		if (ft_strchr(buff, '\n') > -1)
 			break ;
 	}

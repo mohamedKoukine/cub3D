@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/08 15:11:43 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/18 17:28:42 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	quotes_nb(char *line)
 		write(2, "minishell$: syntax error near unexpected token\n", 47);
 		return (258);
 	}
-	return (1);
+	return (0);
 }
 
 void	*allocation(char *line)

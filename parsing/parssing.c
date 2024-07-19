@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 10:57:00 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/04 17:19:10 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/09 11:34:57 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,25 +52,18 @@ char	*add_space(char *line)
 char	*place_key1(char *line)
 {
 	int		i;
-	int		s;
-	char	*line2;
 
-	s = 0;
 	i = 0;
-	line2 = malloc(ft_strlen(line) + 1);
 	while (line[i])
 	{
-		if (line[i] == '$' && s == 0)
+		if (line[i] == '$')
 		{
-			line2[i] = line[i] * -1;
-			s = 1;
+			line[i] = line[i] * -1;
+			break ;
 		}
-		else
-			line2[i] = line[i];
 		i++;
 	}
-	line2[i] = '\0';
-	return (line2);
+	return (line);
 }
 
 char	*place_key2(char *line, char *str, t_list *lst, int i)
@@ -129,11 +122,28 @@ char	*place_key3(char *line, char *str)
 	return (line2);
 }
 
+int		here_expand(char *line)
+{
+	int i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (!ft_strncmp(&line[i], "<<  $", 5)
+			|| !ft_strncmp(&line[i], "<< $", 4)
+			|| !ft_strncmp(&line[i], "<<  \"$", 6)
+			|| !ft_strncmp(&line[i], "<< \"$", 5))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
 char	*place_key(char *line, char *str, t_list *lst)
 {
 	char	*line2;
 
-	if (!str || !str[0])
+	if (!str || !str[0] || here_expand(line))
 	{
 		line2 = place_key1(line);
 		return (line2);
@@ -172,6 +182,7 @@ char	*expanding1(char *line, int i, int k)
 	str[k] = '\0';
 	return (str);
 }
+
 
 char	*expanding(char *line, t_list *lst)
 {
@@ -290,7 +301,7 @@ void	final_ss(t_m_list *tmp, int i, int j, int cp)
 			i++;
 		}
 	}
-		tmp->dup_com[cp] = NULL;
+	tmp->dup_com[cp] = NULL;
 }
 
 t_m_list	*final_s(t_m_list *lst)

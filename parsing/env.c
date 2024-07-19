@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:16:12 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/08 12:59:45 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/18 14:24:05 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	key_lloc(char *env)
 	i = 0;
 	while (env[i])
 	{
-		if (env[i] == '=')
+		if (env[i] == '=' || env[i] == '+')
 			break ;
 		i++;
 	}
@@ -30,7 +30,8 @@ t_list	*ft_lstnew1(char *env, int i, int k)
 {
 	t_list	*d;
 	int		j;
-
+	int l=0;
+	int x=0;
 	j = key_lloc(env);
 	d = (t_list *)malloc(sizeof(t_list));
 	d->env = malloc (ft_strlen(env) + 1);
@@ -41,16 +42,20 @@ t_list	*ft_lstnew1(char *env, int i, int k)
 	d->next = NULL;
 	while ((size_t)i < ft_strlen(env))
 	{
-		d->env[i] = env[i];
+		if (env[i] == '+' && x == 0)
+			x = 1;
+		else
+			d->env[l++] = env[i];
+			
 		if (i < j)
 			d->key[i] = env[i];
 		else if (i > j)
 			d->ex[k++] = env[i];
-		if (i == j)
-			d->key[i] = '\0';
+		if (i + 1 == j)
+			d->key[i + 1] = '\0';
 		i++;
 	}
-	d->env[i] = '\0';
+	d->env[l] = '\0';
 	d->ex[k] = '\0';
 	d->check_aff = 1;
 	i = -1;
@@ -60,7 +65,6 @@ t_list	*ft_lstnew1(char *env, int i, int k)
 			d->check_aff = 0;
 	}
 	d->i = 0;
-	d->e_code = 0;
 	return (d);
 }
 
@@ -70,9 +74,12 @@ void	ft_env(char **env, t_list **lst)
 	t_list	*lst1;
 
 	j = 0;
+	*lst = ft_lstnew1(env[j++], 0, 0);
 	while (env[j])
 	{
 		lst1 = ft_lstnew1(env[j], 0, 0);
+		if (!ft_strncmp("SHLVL",lst1->env,5))
+			lst1->env[6] += 1;
 		ft_lstadd_back_env(lst, lst1);
 		j++;
 	}
@@ -80,6 +87,8 @@ void	ft_env(char **env, t_list **lst)
 
 void	aff_env(t_list *lst)
 {
+	if (!lst)
+		return ;
 	while (lst)
 	{
 		if (lst->check_aff == 0)

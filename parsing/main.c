@@ -6,36 +6,36 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/08 15:49:35 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/18 17:33:58 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
 #include "../execution/ex_minishell.h"
 
-void	print_stack(t_m_list *list)
+void print_stack(t_m_list *list)
 {
-	int			r;
+	int r;
 
 	while (list)
 	{
-		printf("c = %s\n",list->command);
-		printf("f_c = %s\n",list->first_comm);
+		printf("c = %s\n", list->command);
+		printf("f_c = %s\n", list->first_comm);
 		r = 0;
 		while (list->d_com && list->d_com[r])
-			printf("{%s}  ",list->d_com[r++]);
+			printf("{%s}  ", list->d_com[r++]);
 		printf("\n");
 		r = 0;
 		while (list->d_h && list->d_h[r])
-			printf("[%s]  ",list->d_h[r++]);
+			printf("[%s]  ", list->d_h[r++]);
 		printf("\n");
 		r = 0;
 		while (list->file && list->file[r])
-			printf("(%s)  ",list->file[r++]);
+			printf("(%s)  ", list->file[r++]);
 		printf("\n");
 		r = 0;
 		while (list->dup_com && list->dup_com[r])
-			printf("**%s**  ",list->dup_com[r++]);
+			printf("**%s**  ", list->dup_com[r++]);
 		printf("\n");
 		list = list->next;
 	}
@@ -70,10 +70,10 @@ char *no_qutes(char *line)
 	return (no_q);
 }
 
-void	clear_stack(t_m_list *list)
+void clear_stack(t_m_list *list)
 {
-	t_m_list	*tmp;
-	int			r;
+	t_m_list *tmp;
+	int r;
 
 	tmp = list;
 	while (tmp)
@@ -96,10 +96,10 @@ void	clear_stack(t_m_list *list)
 	}
 }
 
-t_m_list	*decript_stack(t_m_list *list)
+t_m_list *decript_stack(t_m_list *list)
 {
-	t_m_list	*tmp;
-	int			r;
+	t_m_list *tmp;
+	int r;
 
 	tmp = list;
 	while (tmp)
@@ -113,12 +113,12 @@ t_m_list	*decript_stack(t_m_list *list)
 	return (list);
 }
 
-t_m_list	*split_all(char *line)
+t_m_list *split_all(char *line)
 {
-	char		**commands;
-	t_m_list	*list;
-	t_m_list	*new;
-	int			i;
+	char **commands;
+	t_m_list *list;
+	t_m_list *new;
+	int i;
 
 	i = 1;
 	commands = ft_split(line, '|');
@@ -132,21 +132,22 @@ t_m_list	*split_all(char *line)
 	return (list);
 }
 
-char	*line_shower(char *line, t_list *lst)
+char *line_shower(char *line, t_list *lst, t_fd *fd)
 {
 	if (!line)
 		return (0);
 	line = ft_strtrim(line, " ");
 	line = magic_hide(line);
-	if (!line || quotes_nb(line) != 1)
+	fd->ex_c = quotes_nb(line);
+	if (!line || fd->ex_c)
 		return (NULL);
 	line = rm_space(line);
-	e_code = syntax_error(line);
-	if (!line || e_code)
+	fd->ex_c = syntax_error(line);
+	if (!line || fd->ex_c)
 		return (NULL);
 	line = add_space(line);
 	if (!line)
-		exit (1);
+		exit(1);
 	line = dollar(magic_hide(line), 0, 0, NULL);
 	magic_hide(line);
 	line = expanding(magic_hide2(line), lst);
@@ -156,9 +157,9 @@ char	*line_shower(char *line, t_list *lst)
 	return (line);
 }
 
-t_m_list	*list_to_exe(char *line)
+t_m_list *list_to_exe(char *line)
 {
-	t_m_list	*list;
+	t_m_list *list;
 
 	list = split_all(line);
 	list = en_s(list, 0);
@@ -169,17 +170,17 @@ t_m_list	*list_to_exe(char *line)
 	list->p[0] = dup(STDIN_FILENO);
 	list->p[1] = dup(STDOUT_FILENO);
 	return (list);
-}         
+}
 
-char	*read_lines(char *line)
+char *read_lines(char *line)
 {
-	static char	*tmp;
+	static char *tmp;
 
 	line = readline("➜ minishell$ ✗ ");
 	if (!line)
 	{
 		printf("exit\n");
-		exit (0);
+		exit(0);
 	}
 	if (is_empty(line))
 		return (0);
@@ -195,36 +196,43 @@ void ft_handler(int sig)
 {
 	(void)sig;
 	printf("\n");
-    rl_on_new_line(); 
+	rl_on_new_line();
 	rl_replace_line("", 0);
-    rl_redisplay();
+	rl_redisplay();
 }
 
-int	main(int ac, char **av, char **env)
+int main(int ac, char **av, char **env)
 {
-	t_list		*lst;
-	t_m_list	*list;
-	char		*line;
+	t_list *lst;
+	t_m_list *list;
+	char *line;
+	t_fd	fd;
 
-	(void) av;
-	(void) ac;
+	(void)av;
+	(void)ac;
 	lst = NULL;
+	list = NULL;
 	line = NULL;
 	ft_env(env, &lst);
 	while (1)
 	{
+		if (list && list->ptr_unset)
+		{
+			lst = list->ptr_unset;
+			list->ptr_unset = NULL;
+		}
 		signal(SIGINT, ft_handler);
 		signal(SIGQUIT, SIG_IGN);
 		line = read_lines(line);
-		line = line_shower(line, lst);
+		line = line_shower(line, lst, &fd);
 		if (!line)
-			continue ;
-		list  = list_to_exe(line);
-		ft_pipex(ft_lstsize(list), list, env, lst);
+			continue;
+		list = list_to_exe(line);
+		ft_pipex(list, lst, &fd);
 		free(line);
 		line = NULL;
-		dup2(list->p[0],STDIN_FILENO);
-		dup2(list->p[1],STDOUT_FILENO);
+		dup2(list->p[0], STDIN_FILENO);
+		dup2(list->p[1], STDOUT_FILENO);
 	}
 	return (0);
 }

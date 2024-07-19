@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:11:28 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/05 14:07:25 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/18 16:23:23 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	cont_access_cmd(char **path, t_fd *fd)
 			ft_exit(1, "error", "allocation\n");
 		if (access(path[i], F_OK | X_OK) != -1)
 		{
-			fd->path1 = ft_substr(path[i], 0, ft_strlen1(path[i], 0));
+			fd->path = ft_substr(path[i], 0, ft_strlen1(path[i], 0));
 		}
 		i++;
 	}
@@ -95,7 +95,7 @@ void	parsing_b(char *av, char **env, t_fd *fd)
 	int		i;
 
 	fd->line = NULL;
-	fd->path1 = NULL;
+	fd->path = NULL;
 	fd->av2 = NULL;
 	i = 0;
 	while (*env)

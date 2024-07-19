@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 10:09:11 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/08 16:16:14 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/15 14:40:34 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*ft_strjo_or_cat(char *s1, char *s2)
 	return (d[i] = '\0', d);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, int l)
 {
 	char	*d;
 	int		i;
@@ -83,7 +83,8 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j])
 		d[i++] = s2[j++];
 	d[i] = '\0';
-	// free(s1);
+	if (l == 0)
+		free(s1);
 	return (d);
 }
 

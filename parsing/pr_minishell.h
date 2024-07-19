@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/08 15:22:57 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/18 17:33:49 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,12 +34,11 @@ typedef struct minishell
 	char				**dup_com;
 	char				**d_h;
 	char				**file;
+	void				*ptr_unset;
 	int					p[2];
 	int					f_h;
 	struct minishell	*next;
 }	t_m_list;
-
-int	e_code;
 
 typedef struct s_list
 {
@@ -48,7 +47,6 @@ typedef struct s_list
 	char			*ex;
 	int				check_aff;
 	int				i;
-	int				e_code;
 	struct s_list	*next;
 }	t_list;
 

@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:44:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/08 16:28:52 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/15 17:12:43 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,13 +42,13 @@ void	ft_cd(t_list *lst, t_m_list *list)
 		{
 			old_pwd = tmp->ex;
 			free(tmp->env);
-			tmp->env = ft_strjoin("PWD=", getcwd(buf, PATH_MAX));
+			tmp->env = ft_strjoin("PWD=", getcwd(buf, PATH_MAX), 1);
 			tmp->ex = getcwd(buf, PATH_MAX);
 		}
 		else if (!ft_strcmp(tmp->key, "OLD_PWD"))
 		{
 			free(tmp->env);
-			tmp->env = ft_strjoin("OLD_PWD=", old_pwd);
+			tmp->env = ft_strjoin("OLD_PWD=", old_pwd, 1);
 			tmp->ex = old_pwd;
 			i = 1;
 		}
@@ -56,7 +56,7 @@ void	ft_cd(t_list *lst, t_m_list *list)
 	}
 	if (i == 0)
 	{
-		tmp = ft_lstnew1(ft_strjoin("OLD_PWD=", old_pwd), 0, 0);
+		tmp = ft_lstnew1(ft_strjoin("OLD_PWD=", old_pwd, 1), 0, 0);
 		ft_lstadd_back_env(&lst, tmp);
 	}
 }

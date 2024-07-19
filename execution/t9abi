@@ -1,0 +1,19 @@
+cd 
+cd ~
+./minishel
+cd ..
+
+cat << l + ctrl + d
+cat << $$""
+
+exit 4454554545454545454545454545454545
+
+< /dev/urandom ./minishell
+
+cat + ctrl |
+
+top + ctrl + c
+env -i ./minishell
+{
+	export pppp=pp
+}
