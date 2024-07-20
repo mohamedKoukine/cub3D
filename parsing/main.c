@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/18 17:33:58 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:39:22 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,6 @@ char *line_shower(char *line, t_list *lst, t_fd *fd)
 	line = add_space(line);
 	if (!line)
 		exit(1);
-	line = dollar(magic_hide(line), 0, 0, NULL);
-	magic_hide(line);
 	line = expanding(magic_hide2(line), lst);
 	magic_hide2(line);
 	if (is_empty(line))
@@ -194,11 +192,13 @@ char *read_lines(char *line)
 
 void ft_handler(int sig)
 {
-	(void)sig;
-	printf("\n");
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (sig == 2 && g_s == 0)
+	{
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
 
 int main(int ac, char **av, char **env)
@@ -214,6 +214,7 @@ int main(int ac, char **av, char **env)
 	list = NULL;
 	line = NULL;
 	ft_env(env, &lst);
+	fd.ex_c = 0;
 	while (1)
 	{
 		if (list && list->ptr_unset)
@@ -223,7 +224,9 @@ int main(int ac, char **av, char **env)
 		}
 		signal(SIGINT, ft_handler);
 		signal(SIGQUIT, SIG_IGN);
+		rl_catch_signals = 0;
 		line = read_lines(line);
+		line = exit_code(line, ft_itoa(fd.ex_c));
 		line = line_shower(line, lst, &fd);
 		if (!line)
 			continue;

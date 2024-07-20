@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 10:57:00 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/09 11:34:57 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/20 14:00:31 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,17 +122,32 @@ char	*place_key3(char *line, char *str)
 	return (line2);
 }
 
-int		here_expand(char *line)
+int	strchr_char(char *s, char c)
 {
-	int i;
+	int	i;
+
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] == c)
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int	here_expand(char **line)
+{
+	int	i;
 
 	i = 0;
 	while (line[i])
 	{
-		if (!ft_strncmp(&line[i], "<<  $", 5)
-			|| !ft_strncmp(&line[i], "<< $", 4)
-			|| !ft_strncmp(&line[i], "<<  \"$", 6)
-			|| !ft_strncmp(&line[i], "<< \"$", 5))
+		if (!ft_strcmp(line[i], "<<")
+			&& strchr_char(line[i + 1], '$'))
+			return (1);
+		if ((!ft_strncmp(line[i], ">", 1) || !ft_strncmp(line[i], "<", 1))
+			&& !ft_strncmp(line[i + 1], "$", 1))
 			return (1);
 		i++;
 	}
@@ -143,7 +158,7 @@ char	*place_key(char *line, char *str, t_list *lst)
 {
 	char	*line2;
 
-	if (!str || !str[0] || here_expand(line))
+	if (!str || !str[0] || here_expand(ft_split(line, ' ')))
 	{
 		line2 = place_key1(line);
 		return (line2);
@@ -167,6 +182,13 @@ char	*expanding1(char *line, int i, int k)
 	char	*str;
 
 	j = 0;
+	if (line[k] >= '0' && line[k] <= '9')
+	{
+		str = malloc(2);
+		str[0] = line[k];
+		str[1] = '\0';
+		return (str);
+	}
 	while (line[k] && line[k] != ' ' && ft_isalnum(line[k]))
 	{
 		j++;
@@ -183,6 +205,58 @@ char	*expanding1(char *line, int i, int k)
 	return (str);
 }
 
+int    exit_key(char *line)
+{
+	int i;
+	int cp;
+
+	i = 0;
+	cp = 0;
+	while(line[i])
+	{
+		if (!ft_strncmp(&line[i], "$?", 2))
+		{
+			cp++;
+			i++;
+		}
+		if (line[i])
+			i++;
+	}
+	return (cp);
+}
+
+char    *exit_code(char *line, char *code)
+{
+	char    *line2;
+	int        i;
+	int        j;
+	int        k;
+	int        cp;
+
+	i = 0;
+	k = 0;
+	cp = exit_key(line);
+	line2 = malloc (ft_strlen(line) - (cp * 2) + (cp * ft_strlen(code)) + 1);
+	while (line[i])
+	{
+		if (!ft_strncmp(&line[i], "$?", 2))
+		{
+			j = 0;
+			while (code[j])
+			{
+				line2[k] = code[j];
+				k++;
+				j++;
+			}
+			i = i + 2;
+		}
+		else if (line[i])
+			line2[k++] = line[i++];
+	}
+	line2[k] = '\0';
+	free (line);
+	return (line2);
+}
 
 char	*expanding(char *line, t_list *lst)
 {
@@ -195,6 +269,8 @@ char	*expanding(char *line, t_list *lst)
 	str = NULL;
 	while (line[i])
 	{
+		line = dollar(magic_hide(line), 0, 0, NULL);
+		magic_hide(line);
 		if (line[i] == '$')
 		{
 			k = ++i;

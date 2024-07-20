@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:10:39 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/19 12:29:58 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:37:18 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,13 +48,14 @@ void	here_d(t_m_list *lst, int i, char *s, t_list *list)
 		line = get_next_line(STDIN_FILENO);
 		if (!line)
 			ft_exit(1, "error","ERROR\n");
+		// rl_catch_signals = 0;///////////////////////////////////////////////
 		if ((ft_strlen1(line, 1) == ft_strlen1(lst->file[i], 0))
 			&& (ft_strncmp(line, lst->file[i], ft_strlen1(line, 1)) == 0))
 		{
 			free(line);
 			break ;
 		}
-		line = dollar(line, 0, 0, NULL);
+		// line = dollar(line, 0, 0, NULL);
 		line = expanding(line,list);
 		write (lst->f_h, line, ft_strlen1(line, 0));
 		free (line);
@@ -186,7 +187,7 @@ int ft_check_builtins(char **line)
 	else
 		return (1);
 }
-int ft_builtins(char **line, t_list *list, t_m_list *lst)
+int	ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd)
 {
 	if (ft_strcmp(line[0], "export") == 0)
 		ft_export(line, list);
@@ -206,13 +207,18 @@ int ft_builtins(char **line, t_list *list, t_m_list *lst)
 	else if (ft_strcmp(line[0], "cd") == 0)
 		ft_cd(list, lst);
 	else if (ft_strcmp(line[0], "unset") == 0)
-	{
 		ft_unset(list, lst, line);
-	}
 	else
 		return (1);
-	return (0);
+	return (fd->ex_c = 0, 0);
 }
+
+void	ft_handler1(int sig)
+{
+	if (sig == 3)
+		printf("\nquit 3\n");
+}
+
 void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 {
 	int		p[2];
@@ -227,6 +233,11 @@ void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 	}
 	if (fd->id1 == 0)
 	{
+		g_s = 1;
+		signal(SIGINT, ft_handler1);
+		signal(SIGQUIT, ft_handler1);
+		rl_catch_signals = 0;
+		g_s = 0;
 		ft_redirection(lst, fd, 0);
 		if (lst->first_comm)
 		{
@@ -237,7 +248,7 @@ void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 				dup2(p[1],STDOUT_FILENO);
 				close(p[1]);
 			}
-			if (ft_builtins(lst->dup_com, list, lst) == 0)
+			if (ft_builtins(lst->dup_com, list, lst, fd) == 0)
 				exit(0);
 			else if (execve(fd->path, lst->dup_com, fd->env) == -1)
 			{
@@ -252,6 +263,8 @@ void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 	}
 	else
 	{
+		if (lst->next == NULL)
+			fd->id_ex = fd->id1;
 		close(p[1]);
 		dup2(p[0], STDIN_FILENO);
 		close(p[0]);
@@ -316,13 +329,14 @@ void	ft_function1(int ac, t_m_list *lst, t_fd *fd, t_list *list)
 
 	i = 0;
 	fd->id1 = 1;
+	fd->id3 = 1;
 	while (++i <= ac && fd->id1 != -1)
 	{
 			if (lst->dup_com[0] && ft_check_builtins(lst->dup_com) == 0 && ac == 1)
 			{
 				ft_redirection(lst, fd, 1);
 				if (fd->id3 != -1)
-					ft_builtins(lst->dup_com, list, lst);
+					ft_builtins(lst->dup_com, list, lst, fd);
 			}
 			else
 			{
@@ -373,11 +387,17 @@ void	ft_pipex(t_m_list *lst, t_list *list, t_fd *fd)
 {
 	int			ex;
 
+	fd->id_ex = 0;
 	open_heredoc(lst, list);
 	ft_function1(ft_lstsize(lst), lst, fd, list);
-	while (waitpid(-1, &ex, 0) != -1)
+	if (fd->id3 == 1)
+	{
+		waitpid(fd->id_ex, &ex, 0);
+		fd->ex_c = WEXITSTATUS(ex);
+	}
+	while (waitpid(-1, NULL, 0) != -1)
 		;
-	fd->ex_c = WEXITSTATUS(ex);
 	// printf ("exit code : <%d>\n", fd->ex_c);
+
 	remove_f_h(lst);
 }

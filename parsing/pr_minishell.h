@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/18 17:33:49 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:25:49 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,27 @@
 # include <unistd.h>
 # include <signal.h>
 
+int g_s;
+
 size_t		ft_strlen(char *str);
 int			ft_strcmp(char *s1, char *s2);
 int			ft_strncmp(const char *s1, const char *s2, size_t n);
 void		*ft_calloc(size_t count, size_t size);
 void		ft_bzero(void *s, size_t n);
+
+typedef struct s_fd
+{
+	int			id;
+	int			id1;
+	int			id2;
+	int			id3;
+	int			id_ex;
+	int			ex_c;
+	char		*path;
+	char		*av2;
+	char		**env;
+	char		*line;
+}			t_fd;
 
 typedef struct minishell
 {
@@ -84,5 +100,8 @@ int			ft_atoi(const char *str);
 void		ft_echo(t_m_list *list, int s);
 void		my_exit(t_m_list *list);
 void		ft_cd(t_list *lst, t_m_list *list);
+char        *ft_itoa(int n);
+char        *exit_code(char *line, char *code);
+void		ft_handler(int sig);
 
 #endif

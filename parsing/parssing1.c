@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing1.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:10:24 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/05 13:10:08 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/07/20 13:50:52 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,14 @@ int	in_or_out(char *line, int f)
 char	*dollar(char *line, int i, int j, char *line2)
 {
 	int		cp;
+	int		s = 0;
 
 	line2 = malloc(ft_strlen(line) + 1);
 	if (!line2)
 		return (NULL);
 	while (line[i])
 	{
-		if (line[i] == '$' && !if_its_q(line[i + 1]))
+		if (line[i] == '$' && !if_its_q(line[i + 1]) && s == 0)
 		{
 			cp = 0;
 			while (line[i] == '$')
@@ -115,9 +116,13 @@ char	*dollar(char *line, int i, int j, char *line2)
 			}
 			if (cp % 2 != 0 && (!if_its_q(line[i]) || in_or_out(line,i - 1)))
 				line2[j++] = '$';
+			s = 1;
 		}
-		else if (line[i] == '$' && if_its_q(line[i + 1]) && !in_or_out(line, i))
+		else if (line[i] == '$' && if_its_q(line[i + 1]) && !in_or_out(line, i) && s == 0)
+		{
 			i++;
+			s = 1;
+		}
 		if (line[i])
 			line2[j++] = line[i++];
 	}
