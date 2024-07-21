@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/20 13:39:22 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/21 13:49:10 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,11 +170,16 @@ t_m_list *list_to_exe(char *line)
 	return (list);
 }
 
-char *read_lines(char *line)
+char *read_lines(char *line, t_fd *fd)
 {
 	static char *tmp;
 
 	line = readline("➜ minishell$ ✗ ");
+    if (g_s == 1)
+    {
+        fd->ex_c = 1;
+        g_s = 0;
+    }
 	if (!line)
 	{
 		printf("exit\n");
@@ -192,13 +197,14 @@ char *read_lines(char *line)
 
 void ft_handler(int sig)
 {
-	if (sig == 2 && g_s == 0)
-	{
-		printf("\n");
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
-	}
+    if (sig == 2)
+    {
+        g_s = 1;
+        printf("\n");
+        rl_on_new_line();
+        rl_replace_line("", 0);
+        rl_redisplay();
+    }
 }
 
 int main(int ac, char **av, char **env)
@@ -215,6 +221,9 @@ int main(int ac, char **av, char **env)
 	line = NULL;
 	ft_env(env, &lst);
 	fd.ex_c = 0;
+	signal(SIGINT, ft_handler);
+	signal(SIGQUIT, SIG_IGN);
+	rl_catch_signals = 0;
 	while (1)
 	{
 		if (list && list->ptr_unset)
@@ -222,10 +231,7 @@ int main(int ac, char **av, char **env)
 			lst = list->ptr_unset;
 			list->ptr_unset = NULL;
 		}
-		signal(SIGINT, ft_handler);
-		signal(SIGQUIT, SIG_IGN);
-		rl_catch_signals = 0;
-		line = read_lines(line);
+		line = read_lines(line, &fd);
 		line = exit_code(line, ft_itoa(fd.ex_c));
 		line = line_shower(line, lst, &fd);
 		if (!line)
@@ -236,6 +242,8 @@ int main(int ac, char **av, char **env)
 		line = NULL;
 		dup2(list->p[0], STDIN_FILENO);
 		dup2(list->p[1], STDOUT_FILENO);
+		close (list->p[0]);
+		close (list->p[1]);
 	}
 	return (0);
 }

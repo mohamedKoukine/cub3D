@@ -6,11 +6,12 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:16:12 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/20 12:22:37 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:32:37 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
+#include "../execution/ex_minishell.h"
 
 static int	key_lloc(char *env)
 {
@@ -79,7 +80,8 @@ void	ft_env(char **env, t_list **lst)
 	{
 		lst1 = ft_lstnew1(env[j], 0, 0);
 		if (!ft_strncmp("SHLVL",lst1->env,5))
-			lst1->env[6] += 1;///////////////////////////////////////////
+			lst1->env = ft_strjoin(ft_substr(lst1->env, 0, 6, 0)
+				, ft_itoa(ft_atoi(&lst1->env[6]) + 1), 0);
 		ft_lstadd_back_env(lst, lst1);
 		j++;
 	}

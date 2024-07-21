@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 10:57:00 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/20 14:00:31 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/21 15:07:04 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,21 +136,33 @@ int	strchr_char(char *s, char c)
 	return (0);
 }
 
-int	here_expand(char **line)
+int	here_expand(char **line, char *str, t_list *lst)
 {
 	int	i;
+	int	s;
 
 	i = 0;
+	s = 0;
 	while (line[i])
 	{
 		if (!ft_strcmp(line[i], "<<")
 			&& strchr_char(line[i + 1], '$'))
 			return (1);
-		if ((!ft_strncmp(line[i], ">", 1) || !ft_strncmp(line[i], "<", 1))
-			&& !ft_strncmp(line[i + 1], "$", 1))
-			return (1);
 		i++;
 	}
+	i = 0;
+	while (lst)
+	{
+		if (!ft_strcmp(lst->key, str) && lst->check_aff == 0 && ft_strtrim(lst->ex, " ")[0])
+		{
+			s = 1;
+			break ;
+		}
+		lst = lst->next;
+	}
+	if ((!ft_strncmp(line[i], ">", 1) || !ft_strncmp(line[i], "<", 1))
+			&& !ft_strncmp(line[i + 1], "$", 1) && s == 0)
+			return (1);
 	return (0);
 }
 
@@ -158,7 +170,7 @@ char	*place_key(char *line, char *str, t_list *lst)
 {
 	char	*line2;
 
-	if (!str || !str[0] || here_expand(ft_split(line, ' ')))
+	if (!str || !str[0] || here_expand(ft_split(line, ' '), str, lst))
 	{
 		line2 = place_key1(line);
 		return (line2);
@@ -235,6 +247,8 @@ char    *exit_code(char *line, char *code)
 
 	i = 0;
 	k = 0;
+	if (!line)
+		return (0);
 	cp = exit_key(line);
 	line2 = malloc (ft_strlen(line) - (cp * 2) + (cp * ft_strlen(code)) + 1);
 	while (line[i])
@@ -258,6 +272,55 @@ char    *exit_code(char *line, char *code)
 	return (line2);
 }
 
+int    d_cp(char *line, int j)
+{
+    int    cp;
+
+    cp = 0;
+    while (line[j] == '$' || (line[j] == '"' || line[j] == '\''))
+    {
+		if (line[j] == '"' || line[j] == '\'')
+		{
+			j++;
+			continue ;
+		}
+        cp++;
+        j++;
+    }
+    return (cp);
+}
+
+char    *here_dollar(char *line)
+{
+    int        i;
+    int        cp;
+    char    *hold;
+
+    i = 0;
+    while (line[i])
+    {
+        if (!ft_strncmp(&line[i], "<", 1) || !ft_strncmp(&line[i], ">", 1))
+        {
+            hold = &line[i];
+            while (line[i] == '<' || line[i] == '>' || line[i] == ' ')
+                i++;
+            cp = d_cp(line, i);
+            while (line[i] == '$')
+            {
+                if (line[i] == '$' && !ft_strncmp(hold, "<<", 2))
+                    line[i] = line[i] * (-1);
+                else if (line[i] == '$' && (hold[0] == '>' || hold[0] == '<')
+                    && cp % 2 == 0)
+                    line[i] = line[i] * (-1);
+                i++;
+            }
+        }
+        if (line[i])
+            i++;
+    }
+    return (line);
+}
+
 char	*expanding(char *line, t_list *lst)
 {
 	int		i;
@@ -267,8 +330,11 @@ char	*expanding(char *line, t_list *lst)
 	i = 0;
 	k = 0;
 	str = NULL;
+	if (!line)
+		return (NULL);
 	while (line[i])
 	{
+		line = here_dollar(line);
 		line = dollar(magic_hide(line), 0, 0, NULL);
 		magic_hide(line);
 		if (line[i] == '$')

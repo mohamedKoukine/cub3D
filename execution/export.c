@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 12:41:12 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/17 16:43:05 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:15:54 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1, int i)
 		{
 			tmp = ft_strjoin(lst1->key, "=", 1);
 			lst1->env = ft_strjoin(tmp, lst1->ex, 1);
-			lst1->env = ft_strjoin(lst1->env,ft_substr(line, ft_posistion(line, '='), ft_strlen(line)), 0);
+			lst1->env = ft_strjoin(lst1->env,ft_substr(line, ft_posistion(line, '='), ft_strlen(line), 0), 0);
 			free(lst1->ex);
-			lst1->ex = ft_substr(line, 0, ft_posistion(line, '+') - 1);
+			lst1->ex = ft_substr(line, 0, ft_posistion(line, '+') - 1, 0);
 			lst1->check_aff = 0;
 			i = -1;
 			printf ("1111\n");
@@ -125,7 +125,7 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1, int i)
 				free(lst1->env);
 				free(lst1->ex);
 				lst1->env = ft_strdup(line);
-				lst1->ex = ft_substr(line,ft_posistion(line, '='), ft_strlen(line));
+				lst1->ex = ft_substr(line,ft_posistion(line, '='), ft_strlen(line), 0);
 				lst1->check_aff = 0;
 			}
 			i = -1;

@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/02 11:05:37 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/15 14:41:20 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:15:26 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static char	*free_and_sub(char *rest)
 	{
 		tmp = ft_strdup(rest);
 		free(rest);
-		rest = ft_substr(tmp, ft_strchr(tmp, '\n') + 1, ft_strlen1(tmp, 0));
+		rest = ft_substr(tmp, ft_strchr(tmp, '\n') + 1, ft_strlen1(tmp, 0), 0);
 		free(tmp);
 	}
 	return (rest);

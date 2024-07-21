@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 10:09:11 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/15 14:40:34 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/20 16:15:10 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*ft_strjo_or_cat(char *s1, char *s2)
 	i = 0;
 	j = 0;
 	if (!s1)
-		return (ft_substr(s2, 0, ft_strchr(s2, '\n')));
+		return (ft_substr(s2, 0, ft_strchr(s2, '\n'), 0));
 	j = ft_strlen1(s2, 1);
 	if (ft_strchr(s2, '\n') > -1)
 		j++;
@@ -88,7 +88,7 @@ char	*ft_strjoin(char *s1, char *s2, int l)
 	return (d);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, unsigned int start, size_t len, int fre)
 {
 	char			*d;
 	unsigned int	l;
@@ -114,5 +114,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		start++;
 	}
 	d[i] = '\0';
+	if (fre == 1)
+		free (s);
 	return (d);
 }
