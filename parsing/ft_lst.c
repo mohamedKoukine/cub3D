@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:20:13 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/16 16:41:54 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/29 15:44:38 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_m_list	*ft_lstnew(char *content, char **com)
 		return (NULL);
 	node->command = content;
 	node->d_com = com;
-	node->first_comm = *com;
+	node->first_comm = NULL;
 	node->d_h = NULL;
 	node->file = NULL;
 	node->next = NULL;

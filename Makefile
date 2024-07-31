@@ -29,8 +29,7 @@ SRC = ./parsing/ft_strlen.c\
 		./execution/ft_strjoinn.c\
 		./execution/ft_split.c\
 		./execution/ft_str.c\
-		./execution/get_next_line_utils.c\
-		./execution/get_next_line.c\
+		./execution/utils.c\
 		./execution/pwd.c\
 		./execution/ft_lstsize_bonus.c\
 		./execution/pipex_bonus.c\

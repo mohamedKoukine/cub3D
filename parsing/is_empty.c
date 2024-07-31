@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:23:38 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/10 14:57:15 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/30 10:10:08 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,6 @@ int	is_empty(char *line)
 		else
 			return (0);
 	}
+	free (line);
 	return (1);
 }

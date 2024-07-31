@@ -1,19 +1,32 @@
 cd 
 cd ~
-./minishel
+exit 4454554545454545454545454545454545
 cd ..
+< /dev/urandom ./minishell
+
+
+
+
+
+
 
 cat << l + ctrl + d
 cat << $$""
+>>> $USER "
+OLDPWD OLD_PWD
 
-exit 4454554545454545454545454545454545
-
-< /dev/urandom ./minishell
-
+SHLVL -99 > 1000
+EXIT IN HERDOC
 cat + ctrl |
+
+export a="hello" b="kkk" c-="1111"  exit status
 
 top + ctrl + c
 env -i ./minishell
 {
 	export pppp=pp
 }
+
+shlvl should be 1 if the environnement was deleted 
+
+unset PWD OLDPWD => enter without env  cd ..

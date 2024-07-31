@@ -6,6 +6,7 @@
 # include <limits.h>
 # include <fcntl.h>
 # include <termios.h>
+#include <dirent.h>
 
 
 char	*ft_strdup(const char *src);
@@ -13,13 +14,11 @@ int		ft_strcmp1(const char *s1, const char *s2);
 void	ft_pwd();
 
 char	*ft_strjoinn(char *s1, char *s2);
-void	ft_exit(int l, char *s, char *err);
+void	ft_exit(int l, char *s, char *err, t_list *lst);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	parsing_b(char *av, char **env, t_fd *fd);
 char	*get_next_line(int fd);
 char	*ft_strjoin(char *s1, char *s2, int l);
-char	*ft_strjo_or_cat(char *s1, char *s2);
-int		ft_strchr(const char *s, int c);
 size_t	ft_strlen1(const char *str, int flag);
 void	free_all(char **p);
 char	**ft_split1(char const *s, char c);

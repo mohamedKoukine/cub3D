@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:10:24 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/20 13:50:52 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/29 12:44:55 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ char	*dollar(char *line, int i, int j, char *line2)
 			line2[j++] = line[i++];
 	}
 	line2[j] = '\0';
+	free (line);
 	return (line2);
 }
 
@@ -159,6 +160,8 @@ int	cp_hd(char *line)
 	{
 		if (!ft_strncmp(&line[i], "<<", 2) || !ft_strncmp(&line[i], ">>", 2))
 		{
+			if (!ft_strncmp(&line[i], "<<<", 3))
+				i++;
 			cp++;
 			i += 2;
 		}

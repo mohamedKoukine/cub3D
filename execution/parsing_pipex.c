@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:11:28 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/21 13:16:19 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/31 16:07:35 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,12 @@ static void	cont_access_cmd(char **path, t_fd *fd)
 	{
 		path[i] = ft_strjoinn(path[i], "/");
 		if (!path[i])
-			ft_exit(1, "error", "allocation\n");
+			ft_exit(1, "error", "allocation\n", NULL);
 		path[i] = ft_strjoinn(path[i], fd->av2);
 		if (!path[i])
-			ft_exit(1, "error", "allocation\n");
+			ft_exit(1, "error", "allocation\n", NULL);
 		if (access(path[i], F_OK | X_OK) != -1)
-		{
 			fd->path = ft_substr(path[i], 0, ft_strlen1(path[i], 0), 0);
-		}
 		i++;
 	}
 	free_all(path);
@@ -74,20 +72,22 @@ static void	access_cmd(char **path, t_fd *fd, char *av)
 	j = 0;
 	if (ft_check_slash(av))
 	{
-		if (access(av, F_OK | X_OK) != -1)
+		if (opendir(av))
+			ft_exit(126, av, "is a directory\n", NULL);
+		else if (access(av, F_OK | X_OK) == 0)
 		{
 			fd->path = ft_substr(av, 0, ft_strlen1(av, 0), 0);
 			if (!fd->path)
-				ft_exit(1, "error", "allocation\n");
+				ft_exit(1, "error", "allocation\n", NULL);
 		}
 		else
-			ft_exit(127, av, "No such file or directory\n");
+			ft_exit(126, av, "Not a directory\n", NULL);
 	}
 	else 
 	{
 		fd->av2 = ft_substr(av, 0, ft_strlen1(av, 0), 0);
 		if (!fd->av2)
-			ft_exit(1, "error", "allocation\n");
+			ft_exit(1, "error", "allocation\n", NULL);
 		cont_access_cmd(path, fd);
 	}
 }
@@ -112,11 +112,11 @@ void	parsing_b(char *av, char **env, t_fd *fd)
 	}
 	path = ft_split1(fd->line, ':');
 	if (!path)
-		ft_exit(1, "error", "ERROR_IN_SPLIT\n");
+		ft_exit(127, av, "No such file or directory\n", NULL);
 	while (av[++i])
 	{
 		if (av[i] == ' ')
-			ft_exit(127, av, "command not found\n");
+			ft_exit(127, av, "command not found\n", NULL);
 	}
 	access_cmd(path, fd, av);
 }

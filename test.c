@@ -1,22 +1,41 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   test.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/27 12:33:48 by mkaoukin          #+#    #+#             */
+/*   Updated: 2024/07/27 12:34:44 by mkaoukin         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <unistd.h>
 
-void print_odd(char *str)
+void	ft_strcmp(void)
 {
-	int 	i;
+	char		a;
+	char		b;
+	char		c;
 
-	i = 0;
-	while (str[i])
+	a = '0';
+	while (a <= '7')
 	{
-		if (i % 2 != 0)
-			write (1, &str[i], 1);
-		i++;
+		b = a + 1;
+		while (b <= '8')
+		{
+			c = b + 1;
+			while (c <= '9')
+			{
+				write (1, &a, 1);
+				write (1, &b, 1);
+				write (1, &c, 1);
+				if (a != '7')
+					write (1, ", ", 2);
+				c++;
+			}
+			b++;
+		}
+		a++;
 	}
-}
-
-int main(int ac, char **av)
-{
-	if (ac == 2)
-		print_odd(av[1]);
-	write (1, "\n", 1);
-	return 0;
 }

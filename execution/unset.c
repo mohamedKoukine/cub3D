@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/16 12:33:01 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/17 12:11:35 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/31 12:39:09 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ t_list *ft_unset1(t_list *lst, t_m_list *list, char *line)
 	t_list *head;
 
 	last = NULL;
+	list->ptr_unset = NULL;
 	head = lst;
 	while (lst)
 	{
@@ -73,6 +74,8 @@ t_list *ft_unset(t_list *lst, t_m_list *list, char **line)
 				printf ("minishell: unset: `%s': not a valid identifier\n", line[i]);
 				break ;
 			}
+			if (line[i][0] == '_' && line[i][1] == '\0')
+				break ;
 			j++;
 		}
 		if (line[i][j] == '\0')

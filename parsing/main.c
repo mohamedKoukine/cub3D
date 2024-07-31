@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/21 13:49:10 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/31 16:20:21 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,10 @@ void print_stack(t_m_list *list)
 	}
 }
 
-char *no_qutes(char *line)
+char *no_qutes(char *line, int fre)
 {
 	char *no_q;
-	char q;
+	char q = '\0';
 	int i = 0;
 	int j = 0;
 
@@ -67,32 +67,21 @@ char *no_qutes(char *line)
 			no_q[j++] = line[i++];
 	}
 	no_q[j] = '\0';
+	if (fre)
+		free(line);
 	return (no_q);
 }
 
-void clear_stack(t_m_list *list)
+void	garbag_find(char *arg)
 {
-	t_m_list *tmp;
-	int r;
+	int i;
 
-	tmp = list;
-	while (tmp)
+	i = 0;
+	while (arg[i])
 	{
-		tmp->command = no_qutes(tmp->command);
-		tmp->first_comm = no_qutes(tmp->first_comm);
-		r = -1;
-		while (tmp->d_com && tmp->d_com[++r])
-			tmp->d_com[r] = no_qutes(tmp->d_com[r]);
-		r = -1;
-		while (tmp->d_h && tmp->d_h[++r])
-			tmp->d_h[r] = no_qutes(tmp->d_h[r]);
-		r = -1;
-		while (tmp->file && tmp->file[++r])
-			tmp->file[r] = no_qutes(tmp->file[r]);
-		r = -1;
-		while (tmp->dup_com && tmp->dup_com[++r])
-			tmp->dup_com[r] = no_qutes(tmp->dup_com[r]);
-		tmp = tmp->next;
+		if (arg[i] < 0)
+			arg[i] *= -1;
+		i++;
 	}
 }
 
@@ -104,10 +93,10 @@ t_m_list *decript_stack(t_m_list *list)
 	tmp = list;
 	while (tmp)
 	{
-		magic_hide(tmp->command);
+		garbag_find(tmp->command);
 		r = -1;
 		while (tmp->d_com && tmp->d_com[++r])
-			magic_hide(tmp->d_com[r]);
+			garbag_find(tmp->d_com[r]);
 		tmp = tmp->next;
 	}
 	return (list);
@@ -122,21 +111,147 @@ t_m_list *split_all(char *line)
 
 	i = 1;
 	commands = ft_split(line, '|');
-	list = ft_lstnew(commands[0], ft_split(commands[0], ' '));
+	list = ft_lstnew(no_qutes(commands[0], 0), ft_split(commands[0], ' '));
 	while (commands[i])
 	{
-		new = ft_lstnew(commands[i], ft_split(commands[i], ' '));
+		new = ft_lstnew(no_qutes(commands[i], 0), ft_split(commands[i], ' '));
 		ft_lstadd_back(&list, new);
 		i++;
 	}
+	i = 0;
+	while(commands[i])
+		free(commands[i++]);
+	free(commands);
 	return (list);
+}
+
+int	chek_ambi(char *line, t_list *lst)
+{
+	int i = 0;
+	int cp = 0;
+	char *p = NULL;
+	char *a = NULL;
+	while(line[i])
+	{
+		if (!ft_isalnum(line[i]))
+			break ;
+		cp++;
+		i++;
+	}
+	p = malloc(cp + 1);
+	i = 0;
+	while(line[i])
+	{
+		if (!ft_isalnum(line[i]))
+			break ;
+		p[i] = line[i];
+		i++;
+	}
+	p[i] = '\0';
+	while (lst)
+	{
+		if (!ft_strcmp(p,lst->key))
+		{
+			a = ft_strtrim(lst->ex, " ", 0);
+			i = 0;
+			while (a[i])
+			{
+				if (a[i] == ' ')
+				{
+					free(a);
+					free(p);
+					return (1);
+				}
+				i++;
+			}
+			
+		}
+		lst = lst->next;
+	}
+	if (a)
+		free(a);
+	free(p);
+	return (0);
+}
+
+char	*ambiguous(char *line, t_list *lst)
+{
+	int i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (!ft_strncmp(&line[i], ">", 1) || (line[i] == '<' && line[i + 1] != '<'))
+		{
+			while (line[i] == '>' || line[i] == '<' || line[i] == ' ')
+				i++;
+			while (line[i] && line[i] != ' ')
+			{
+				if (line[i] == '$')
+				{
+					i++;
+					if (chek_ambi(&line[i], lst))
+						line[i - 1] = line[i - 1] * -1;
+				}
+				if (line[i])
+					i++;
+			}
+		}
+		if (line[i])
+			i++;
+	}
+	return (line);
+}
+
+int	include_q(char *line)
+{
+	int i = 0;
+	while (line[i] == ' ' && line[i])
+		i++;
+	while (line[i] != ' ' && line[i])
+	{
+		if (line[i] == '"' || line[i] == '\'')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*handel_here(char *line)
+{
+	char	*line2;
+	int		i = 0;
+	int		j = 0;
+	int		ls = ft_strlen(line) + 17;
+	
+	line2 = malloc(ls);
+	while (line[i])
+	{
+		if (!ft_strncmp(&line[i], "<<", 2))
+		{
+			while (line[i] == '<' || line[i] == ' ')
+			{
+				if (line[i] == ' ' && include_q(&line[i]))
+					line2[j++] = '<';
+				while (line[i] == ' ')
+					line2[j++] = line[i++];
+				line2[j++] = line[i++];
+			}
+		}
+		if (line[i])
+			line2[j++] = line[i++];
+	}
+	while (j < ls)
+		line2[j++] = '\0';
+	free(line);
+	return (line2);
 }
 
 char *line_shower(char *line, t_list *lst, t_fd *fd)
 {
 	if (!line)
 		return (0);
-	line = ft_strtrim(line, " ");
+	line = ft_strtrim(line, " ", 1);
 	line = magic_hide(line);
 	fd->ex_c = quotes_nb(line);
 	if (!line || fd->ex_c)
@@ -148,6 +263,9 @@ char *line_shower(char *line, t_list *lst, t_fd *fd)
 	line = add_space(line);
 	if (!line)
 		exit(1);
+	line = ambiguous(magic_hide2(line), lst);
+	magic_hide2(line);
+	line = handel_here(line);
 	line = expanding(magic_hide2(line), lst);
 	magic_hide2(line);
 	if (is_empty(line))
@@ -155,22 +273,81 @@ char *line_shower(char *line, t_list *lst, t_fd *fd)
 	return (line);
 }
 
-t_m_list *list_to_exe(char *line)
+t_m_list *clear_lst(t_m_list *list)
+{
+	t_m_list *tmp;
+	int i;
+
+	i = 0;
+	tmp = list;
+
+	while (tmp)
+	{
+		i = 0;
+		while (tmp->d_com[i])
+		{
+			tmp->d_com[i] = no_qutes(tmp->d_com[i], 1);
+			i++;
+		}
+		tmp = tmp->next;
+	}
+	return (list);
+}
+
+t_m_list    *home_pl(t_m_list *list, t_list *lst, t_m_list *tmp)
+{
+    int            i;
+
+    while (tmp)
+    {
+        i = -1;
+        while (tmp->d_com[++i])
+        {
+            if (!ft_strcmp(tmp->d_com[i], "~"))
+            {
+                
+                free(tmp->d_com[i]);
+                tmp->d_com[i] = ft_strdup(get_home(lst));
+            }
+        }
+        tmp = tmp->next;
+    }
+    return (list);
+}
+
+t_m_list *list_to_exe(char *line, t_list *lst)
 {
 	t_m_list *list;
 
 	list = split_all(line);
+	free(line);
+	list = clear_lst(list);
+	list = home_pl(list, lst, list);
 	list = en_s(list, 0);
 	list = final_s(list);
 	list = decript_stack(list);
-	clear_stack(list);
 	// print_stack(list);
 	list->p[0] = dup(STDIN_FILENO);
 	list->p[1] = dup(STDOUT_FILENO);
 	return (list);
 }
+void free_env(t_list *lst)
+{
+	t_list	*tmp;
 
-char *read_lines(char *line, t_fd *fd)
+	while (lst)
+	{
+		tmp = lst;
+		free (lst->env);
+		if (lst->ex)
+			free (lst->ex);
+		free (lst->key);
+		lst = lst->next;
+		free (tmp);
+	}
+}
+
+char *read_lines(char *line, t_fd *fd, t_list *lst)
 {
 	static char *tmp;
 
@@ -182,6 +359,7 @@ char *read_lines(char *line, t_fd *fd)
     }
 	if (!line)
 	{
+		free_env(lst);
 		printf("exit\n");
 		exit(0);
 	}
@@ -189,6 +367,7 @@ char *read_lines(char *line, t_fd *fd)
 		return (0);
 	if (line[0] != '\0' && ft_strcmp(line, tmp))
 	{
+		free (tmp);
 		add_history(line);
 		tmp = ft_strdup(line);
 	}
@@ -197,7 +376,7 @@ char *read_lines(char *line, t_fd *fd)
 
 void ft_handler(int sig)
 {
-    if (sig == 2)
+    if (sig == SIGINT)
     {
         g_s = 1;
         printf("\n");
@@ -206,12 +385,45 @@ void ft_handler(int sig)
         rl_redisplay();
     }
 }
+void free_list(t_m_list *list)
+{
+	int	i;
+	t_m_list *tmp;
+	
+	if (!list)
+		return ;
+	while (list)
+	{
+		tmp = list;
+		i = 0;
+		while (list->d_com[i])
+			free(list->d_com[i++]);
+		free (list->d_com);
+		free (list->command);
+		if (list->dup_com)
+			free(list->dup_com);
+		if (list->d_h)
+			free(list->d_h);
+		if (list->file)
+			free(list->file);
+		list = tmp->next;
+		free(tmp);
+		tmp = NULL;
+	}
+}
+	
+void f()
+{
+	system("leaks minishell");
+}
 
 int main(int ac, char **av, char **env)
 {
+	// atexit(f);
 	t_list *lst;
 	t_m_list *list;
 	char *line;
+	char *ito;
 	t_fd	fd;
 
 	(void)av;
@@ -226,24 +438,26 @@ int main(int ac, char **av, char **env)
 	rl_catch_signals = 0;
 	while (1)
 	{
+		line = read_lines(line, &fd, lst);
+		ito = ft_itoa(fd.ex_c);
+		line = exit_code(line, ito);
+		free (ito);
+		line = line_shower(line, lst, &fd);
+		if (!line)
+			continue;
+		list = list_to_exe(line, lst);
+		ft_pipex(list, lst, &fd);
 		if (list && list->ptr_unset)
 		{
 			lst = list->ptr_unset;
 			list->ptr_unset = NULL;
 		}
-		line = read_lines(line, &fd);
-		line = exit_code(line, ft_itoa(fd.ex_c));
-		line = line_shower(line, lst, &fd);
-		if (!line)
-			continue;
-		list = list_to_exe(line);
-		ft_pipex(list, lst, &fd);
-		free(line);
-		line = NULL;
 		dup2(list->p[0], STDIN_FILENO);
 		dup2(list->p[1], STDOUT_FILENO);
 		close (list->p[0]);
 		close (list->p[1]);
+		free_list(list);
+		list = NULL;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 12:41:12 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/20 16:15:54 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/31 14:22:53 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	print_export(t_list *lst, t_list *lst2, int i)
 			lst2 = lst->next;
 		lst = lst->next;
 	}
-	if (lst2->i == 0)
+	if (lst2->i == 0 && lst2->check_aff != 2 && lst2->check_aff != 3)
 	{
 		i = -1;
 		write(1, "declare -x ", 11);
@@ -37,8 +37,9 @@ void	print_export(t_list *lst, t_list *lst2, int i)
 		if (lst2->i == 1)
 			write(1, "\"", 1);
 		write(1, "\n", 1);
-		lst2->i = 1;
 	}
+		lst2->i = 1;
+
 }
 
 void	aff_export(t_list *lst)
@@ -50,7 +51,7 @@ void	aff_export(t_list *lst)
 	lst3 = lst;
 	while (lst2)
 	{
-		if (lst2->i == 0)
+		if (lst2->i == 0) 
 			print_export(lst, lst2, 0);
 		else
 			lst2 = lst2->next;
@@ -100,19 +101,22 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1, int i)
 	char *tmp;
 	while (lst1)
 	{
+		
 		if (ft_strncmp(lst1->env, line, ft_strlen_exp(line, '+', 1)) == 0
 			&& ((lst1->env[ft_strlen_exp(line, '+', 1)] == '=')
 			|| (lst1->env[ft_strlen_exp(line, '+', 1)] == '\0'))
 			&& (line[ft_strlen_exp(line, '+', 1)] == '+'))
 		{
 			tmp = ft_strjoin(lst1->key, "=", 1);
-			lst1->env = ft_strjoin(tmp, lst1->ex, 1);
-			lst1->env = ft_strjoin(lst1->env,ft_substr(line, ft_posistion(line, '='), ft_strlen(line), 0), 0);
+			free(lst1->env);
+			lst1->env = ft_strjoin(tmp, lst1->ex, 0);
+			tmp = ft_substr(line, ft_posistion(line, '='), ft_strlen(line), 0);
+			lst1->env = ft_strjoin(lst1->env, tmp, 0);
+			free(tmp);
 			free(lst1->ex);
-			lst1->ex = ft_substr(line, 0, ft_posistion(line, '+') - 1, 0);
+			lst1->ex = ft_substr(lst1->env, ft_posistion(lst1->env, '='), ft_strlen(line), 0);
 			lst1->check_aff = 0;
 			i = -1;
-			printf ("1111\n");
 				break ;
 		}
 		if (ft_strncmp(lst1->env, line, ft_strlen_exp(lst1->env, '=', 1)) == 0
@@ -121,7 +125,6 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1, int i)
 		{
 			if (line[ft_strlen_exp(lst1->env, '=', 1)] == '=')
 			{
-				printf ("2222\n");
 				free(lst1->env);
 				free(lst1->ex);
 				lst1->env = ft_strdup(line);
@@ -135,7 +138,6 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1, int i)
 	}
 	if (i > -1)
 	{
-		printf ("3333\n");
 		lst1 = ft_lstnew1(line, 0, 0);
 		ft_lstadd_back_env(&lst, lst1);
 	}

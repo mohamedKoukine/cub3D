@@ -15,9 +15,8 @@
 
 void ft_pwd()
 {
-	char	*pwd;
 	char	buff[PATH_MAX];
 
-	pwd = getcwd(buff, PATH_MAX);
-	printf("%s\n", pwd);
+	getcwd(buff, PATH_MAX);
+	printf("%s\n", buff);
 }

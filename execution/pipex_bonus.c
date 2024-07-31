@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:10:39 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/21 16:11:56 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:59:41 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	number_heredoc(t_m_list *lst)
 
 void	ft_handler0(int sig)
 {
-	if (sig == 2)
+	if (sig == SIGINT)
 	{
 		close(0);
 		printf ("\n");
@@ -51,12 +51,11 @@ void	here_d(t_m_list *lst, int i, char *s, t_list *list)
 
 	lst->f_h = open (s, O_CREAT | O_RDWR, 0777);
 	if (lst->f_h == -1)
-		ft_exit(1, "error,","Error_F_H\n");
+		ft_exit(1, "error,", "Error_F_H\n", list);
 	signal(SIGINT, ft_handler0);
 	while (1)
 	{
-		write(1, "> ", 2);
-		line = get_next_line(STDIN_FILENO);
+		line = readline("> ");
 		if(!ttyname(0))
 		{
 			g_s = 1;
@@ -71,15 +70,17 @@ void	here_d(t_m_list *lst, int i, char *s, t_list *list)
 			free(line);
 			break ;
 		}
-		line = expanding(line,list);
+		if (!ft_strcmp(lst->d_h[i], "<<"))
+			line = expanding(line,list);
 		write (lst->f_h, line, ft_strlen1(line, 0));
+		write (lst->f_h, "\n", 1);
 		free (line);
 		line = NULL;
 	}
 	close (lst->f_h);
 	lst->f_h = open (s, O_RDWR | O_APPEND, 0777);
 	if (lst->f_h == -1)
-		ft_exit(1, "error,","Error_F_H\n");
+		ft_exit(1, "error,", "Error_F_H\n", list);
 	signal(SIGINT, ft_handler);
 	
 }
@@ -97,14 +98,21 @@ void check_$(char *av)
 }
 void	ft_redirection2(t_m_list *lst, t_fd *fd, int i)
 {
+	int j;
+
 	while (lst->d_h[i])
 	{
 		if (lst->d_h[i][0] == '>' || lst->d_h[i][0] == '<')
 		{
 			if (lst->d_h[i][0] == '>' && lst->d_h[i][1] == '>')
 			{
-				if (lst->file[i][0] == '$' && lst->file[i][1] != '\0')
-					ft_exit(1, lst->file[i],"ambiguous redirect\n");
+				j = 0;
+				while(lst->file[i][j])
+				{
+					if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0')
+						ft_exit(1, lst->file[i],"ambiguous redirect\n", NULL);
+					j++;
+				}
 				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
 			}
 			else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
@@ -113,28 +121,41 @@ void	ft_redirection2(t_m_list *lst, t_fd *fd, int i)
 				fd->id3 = open(lst->file[i], O_RDWR , 0777);
 			else
 			{
-				if (lst->file[i][0] == '$' && lst->file[i][1] != '\0')
-					ft_exit(1, lst->file[i],"ambiguous redirect\n");
-				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR, 0777);
+				j = 0;
+				while(lst->file[i][j])
+				{
+					if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0')
+						ft_exit(1, lst->file[i],"ambiguous redirect\n", NULL);
+					j++;
+				}
+				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR  | O_TRUNC, 0777);
 			}
 			if (fd->id2 == -1 || fd->id3 == -1)
-				ft_exit(1, lst->file[i],"No such file or directory\n");
+				ft_exit(1, lst->file[i],"No such file or directory\n", NULL);
 		}
 		i++;	
 	}
 }
 void	ft_redirection1(t_m_list *lst, t_fd *fd, int i)
 {
+	int j;
+
 	while (lst->d_h[i])
 	{
 		if (lst->d_h[i][0] == '>' || lst->d_h[i][0] == '<')
 		{
 			if (lst->d_h[i][0] == '>' && lst->d_h[i][1] == '>')
 			{
-				if (lst->file[i][0] == '$' && lst->file[i][1] != '\0')
+				j = 0;
+				while(lst->file[i][j])
 				{
-					printf ("minishell: %s: ambiguous redirect\n", lst->file[i]);
-					break;
+					if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0')
+					{
+						fd->id3 = -5;
+						printf ("minishell: %s: ambiguous redirect\n", lst->file[i]);
+						break ;
+					}
+					j++;
 				}
 				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
 			}
@@ -144,12 +165,18 @@ void	ft_redirection1(t_m_list *lst, t_fd *fd, int i)
 				fd->id3 = open(lst->file[i], O_RDWR , 0777);
 			else
 			{
-				if (lst->file[i][0] == '$' && lst->file[i][1] != '\0')
+				j = 0;
+				while(lst->file[i][j])
 				{
-					printf ("minishell: %s: ambiguous redirect\n", lst->file[i]);
-					break;
+					if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0')
+					{
+						fd->id3 = -5;
+						printf ("minishell: %s: ambiguous redirect\n", lst->file[i]);
+						break;
+					}
+					j++;
 				}
-				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR, 0777);
+				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_TRUNC, 0777);
 			}
 			if (fd->id2 == -1 || fd->id3 == -1)
 			{
@@ -183,15 +210,21 @@ void	ft_redirection(t_m_list *lst, t_fd *fd, int i)
 	}
 }
 
-void	ft_exit(int l, char *s, char *err)
+void	ft_exit(int l, char *s, char *err, t_list *lst)
 {
 	int	i;
 
 	i = 0;
 	if (l == 0)
+	{
+		if (lst)
+			free_env(lst);
 		exit (0);
+	}
 	else
 	{
+		if (lst)
+			free_env(lst);
 		printf("minishell: ");
 		printf("%s: ",s);
 		printf("%s",err);
@@ -199,7 +232,7 @@ void	ft_exit(int l, char *s, char *err)
 	}
 }
 
-int	check_heredoc(t_m_list *lst)/////////
+int	check_heredoc(t_m_list *lst)
 {
 	int	i;
 	t_m_list	*lst1;
@@ -255,7 +288,7 @@ int	ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd)
 	else if (ft_strcmp(line[0], "exit") == 0)
 		my_exit(lst);
 	else if (ft_strcmp(line[0], "cd") == 0)
-		ft_cd(list, lst);
+		ft_cd(list, lst, fd);
 	else if (ft_strcmp(line[0], "unset") == 0)
 		ft_unset(list, lst, line);
 	else
@@ -263,24 +296,29 @@ int	ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd)
 	return (fd->ex_c = 0, 0);
 }
 
+void ft_handler1(int sig)
+{
+    if (sig == SIGINT)
+        printf("\n");
+}
+
 void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 {
 	int		p[2];
 
 	if (pipe(p) == -1)
-		ft_exit(1, "pipe","ERROR PIPE\n");
+		ft_exit(1, "pipe","ERROR PIPE\n", NULL);
 	fd->id1 = fork();
 	if (fd->id1 == -1)
 	{
 		printf ("minishell: fork: Resource temporarily unavailable\n");
 		return ;
 	}
+	signal(SIGINT, ft_handler1);
 	if (fd->id1 == 0)
 	{
 		g_s = 1;
-		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_DFL);
-		rl_catch_signals = 0;
 		g_s = 0;
 		ft_redirection(lst, fd, 0);
 		if (lst->first_comm)
@@ -323,14 +361,14 @@ void	open_heredoc(t_m_list *lst, t_list *list)
 	while (lst->d_h[i])
 		i++;
 	if (i > 16)
-		ft_exit(2, "maximum here-document count exceeded\n", "\0");
+		ft_exit(2, "maximum here-document count exceeded\n", "\0", list);
 	while (lst)
 	{
 		i = 0;
 		lst->f_h = 200;
 		while (lst->d_h[i])
 		{
-			if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
+			if ((!ft_strcmp(lst->d_h[i], "<<")) || (!ft_strcmp(lst->d_h[i], "<<<")))
 			{
 				close(lst->f_h);
 				here_d(lst, i, s, list);
@@ -367,10 +405,36 @@ void	convert_env(t_list *list, t_fd *fd)
 	}
 	fd->env[i] = NULL;
 }
-void	ft_function1(int ac, t_m_list *lst, t_fd *fd, t_list *list)
+void	update_env_(t_m_list *lst, t_list *list)
 {
 	int	i;
+	
+	i = 0;
+	while (lst->dup_com[i])
+		i++;
+	if (i)
+		i--;
+	while (list)
+	{
+		if (list->env[0] == '_' && list->env[1] == '=')
+		{
+			free (list->env);
+			free (list->ex);
+			list->env = ft_strjoin(list->key, "=", 1);
+			list->ex = ft_substr(lst->dup_com[i], 0, ft_strlen(lst->dup_com[i]), 0);
+			if (!list->ex)
+				list->ex = ft_strdup("");
+			list->env = ft_strjoin(list->env, list->ex, 0);
+		}
+		list = list->next;
+	}
+}
 
+void	ft_function1(int ac, t_m_list *lst, t_fd *fd, t_list *list)
+{
+	int		i;
+
+	update_env_(lst, list);
 	i = 0;
 	fd->id1 = 1;
 	fd->id3 = 1;
@@ -379,7 +443,7 @@ void	ft_function1(int ac, t_m_list *lst, t_fd *fd, t_list *list)
 			if (lst->dup_com[0] && ft_check_builtins(lst->dup_com) == 0 && ac == 1)
 			{
 				ft_redirection(lst, fd, 1);
-				if (fd->id3 != -1)
+				if (fd->id3 != -1 && fd->id3 != -5)
 					ft_builtins(lst->dup_com, list, lst, fd);
 			}
 			else
@@ -456,5 +520,6 @@ void	ft_pipex(t_m_list *lst, t_list *list, t_fd *fd)
 	while (waitpid(-1, NULL, 0) != -1)
 		;
 	tcsetattr(STDOUT_FILENO, TCSANOW, &state);
+	signal(SIGINT, ft_handler);
 	remove_f_h(lst);
 }

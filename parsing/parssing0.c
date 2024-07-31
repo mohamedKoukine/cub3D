@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/18 17:28:42 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/30 12:25:01 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int	quotes_nb(char *line)
 	if (qs % 2 != 0 || qd % 2 != 0)
 	{
 		write(2, "minishell$: syntax error near unexpected token\n", 47);
+		free (line);
 		return (258);
 	}
 	return (0);
@@ -84,6 +85,7 @@ char	*rm_space(char *line)
 			i++;
 	}
 	nospace[j] = '\0';
+	free(line);
 	return (nospace);
 }
 
@@ -128,6 +130,7 @@ int	syntax_error(char *line)
 		|| line[ls - 1] == '>' || line[ls - 1] == '<')
 	{
 		write(2, "minishell$: syntax error near unexpected token\n", 47);
+		free (line);
 		return (258);
 	}
 	while (i < ls)
@@ -135,6 +138,7 @@ int	syntax_error(char *line)
 		if (!cases(&line[i]))
 		{
 			write(2, "minishell$: syntax error near unexpected token\n", 47);
+			free (line);
 			return (258);
 		 }
 		i++;

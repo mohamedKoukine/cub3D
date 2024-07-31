@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 10:57:00 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/21 15:07:04 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:17:06 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ char	*add_space(char *line)
 		i++;
 	}
 	line2[j] = '\0';
+	free(line);
 	return (line2);
 }
 
@@ -66,6 +67,36 @@ char	*place_key1(char *line)
 	return (line);
 }
 
+int	export_check(char c,char *line, int i)
+{
+	int j = 0;
+	if (c == ' ')
+	{
+		while (line[j])
+		{
+			if (!ft_strncmp(&line[j], "export", 6))
+			{
+				j += 6;
+				while (line[j] == ' ')
+					j++;
+				while (line[j] != '=' && line[j])
+					j++;
+				while (line[j])
+				{
+					if (j == i)
+						return (1);
+					if (line[j] == ' ')
+						break ;
+					j++;
+				}
+			}
+			if (line[j])
+				j++;
+		}
+	}
+	return (0);
+}
+
 char	*place_key2(char *line, char *str, t_list *lst, int i)
 {
 	int		s;
@@ -78,12 +109,47 @@ char	*place_key2(char *line, char *str, t_list *lst, int i)
 	s = 0;
 	line2 = malloc(ft_strlen(line) - ft_strlen(str)
 			+ ft_strlen(lst->ex));
+	if (!line2)
+		return (NULL);
 	while (line[i])
 	{
 		if ((line[i] == '$') && s == 0)
 		{
 			while (lst->ex[k])
-				line2[j++] = lst->ex[k++];
+			{
+				if (lst->ex[k] == '"' || lst->ex[k] == '\'' || lst->ex[k] == '$' || export_check(lst->ex[k],line, i))
+					line2[j++] = lst->ex[k++] * -1;
+				else
+					line2[j++] = lst->ex[k++];
+			}
+			i += ft_strlen(str) + 1;
+			s = 1;
+		}
+		if (line[i])
+			line2[j++] = line[i++];
+	}
+	line2[j] = '\0';
+	free (line);
+	return (line2);
+}
+
+char	*place_key3(char *line, char *str)
+{
+	int		i;
+	int		j;
+	int		s;
+	char	*line2;
+
+	i = 0;
+	j = 0;
+	s = 0;
+	line2 = malloc(ft_strlen(line) - ft_strlen(str));
+	if (!line2)
+		return (NULL);
+	while ((size_t)i < ft_strlen(line))
+	{
+		if (line[i] == '$' && !ft_strncmp(&line[i + 1], str, ft_strlen(str)) && s == 0)
+		{
 			i += ft_strlen(str) + 1;
 			s = 1;
 		}
@@ -95,30 +161,7 @@ char	*place_key2(char *line, char *str, t_list *lst, int i)
 		}
 	}
 	line2[j] = '\0';
-	return (line2);
-}
-
-char	*place_key3(char *line, char *str)
-{
-	int		i;
-	int		j;
-	char	*line2;
-
-	i = 0;
-	j = 0;
-	line2 = malloc(ft_strlen(line) - ft_strlen(str));
-	while ((size_t)i < ft_strlen(line))
-	{
-		if (line[i] == '$' && !ft_strncmp(&line[i + 1], str, ft_strlen(str)))
-			i += ft_strlen(str) + 1;
-		line2[j] = line[i];
-		if (line[i])
-		{
-			i++;
-			j++;
-		}
-	}
-	line2[j] = '\0';
+	free (line);
 	return (line2);
 }
 
@@ -140,7 +183,7 @@ int	here_expand(char **line, char *str, t_list *lst)
 {
 	int	i;
 	int	s;
-
+	char	*tmp;
 	i = 0;
 	s = 0;
 	while (line[i])
@@ -153,39 +196,49 @@ int	here_expand(char **line, char *str, t_list *lst)
 	i = 0;
 	while (lst)
 	{
-		if (!ft_strcmp(lst->key, str) && lst->check_aff == 0 && ft_strtrim(lst->ex, " ")[0])
+		tmp = ft_strtrim(lst->ex, " ", 0);
+		if (!ft_strcmp(lst->key, str) && lst->check_aff == 0 && tmp[0])
 		{
 			s = 1;
+			free (tmp);
 			break ;
 		}
+		free (tmp);
 		lst = lst->next;
 	}
-	if ((!ft_strncmp(line[i], ">", 1) || !ft_strncmp(line[i], "<", 1))
-			&& !ft_strncmp(line[i + 1], "$", 1) && s == 0)
+	while (line[i])
+	{
+		if ((!ft_strncmp(line[i], ">", 1) || !ft_strncmp(line[i], "<", 1))
+				&& !ft_strncmp(line[i + 1], "$", 1) && s == 0)
 			return (1);
+		i++;
+	}
+	i = 0;
+	while (line[i])
+		free(line[i++]);
+	free (line);
 	return (0);
 }
 
 char	*place_key(char *line, char *str, t_list *lst)
 {
-	char	*line2;
 
 	if (!str || !str[0] || here_expand(ft_split(line, ' '), str, lst))
 	{
-		line2 = place_key1(line);
-		return (line2);
+		line = place_key1(line);
+		return (line);
 	}
 	while (lst)
 	{
-		if (!ft_strcmp(str, lst->key))
+		if (!ft_strcmp(str, lst->key) && lst->ex && lst->ex[0])
 		{
-			line2 = place_key2(line, str, lst, 0);
-			return (line2);
+			line = place_key2(line, str, lst, 0);
+			return (line);
 		}
 		lst = lst->next;
 	}
-	line2 = place_key3(line, str);
-	return (line2);
+	line = place_key3(line, str);
+	return (line);
 }
 
 char	*expanding1(char *line, int i, int k)
@@ -197,6 +250,8 @@ char	*expanding1(char *line, int i, int k)
 	if (line[k] >= '0' && line[k] <= '9')
 	{
 		str = malloc(2);
+		if (!str)
+			return (NULL);
 		str[0] = line[k];
 		str[1] = '\0';
 		return (str);
@@ -277,7 +332,7 @@ int    d_cp(char *line, int j)
     int    cp;
 
     cp = 0;
-    while (line[j] == '$' || (line[j] == '"' || line[j] == '\''))
+    while (line[j] == '$' || line[j] == '"' || line[j] == '\'')
     {
 		if (line[j] == '"' || line[j] == '\'')
 		{
@@ -290,35 +345,100 @@ int    d_cp(char *line, int j)
     return (cp);
 }
 
-char    *here_dollar(char *line)
+char	*ddhere(char *line)
 {
-    int        i;
-    int        cp;
-    char    *hold;
+	char	*line2;
+	int		i = 0;
+	int		j = 0;
+	int		cp;
+	int		s = 0;
+	
+	line2 = malloc(ft_strlen(line) + 1);
+	while (line[i])
+	{
+		if (!ft_strncmp(&line[i], "<<", 2))
+		{
+			while (line[i] == '<' || line[i] == ' ')
+				line2[j++] = line[i++];
+			if (line[i] == '$')
+			{
+				cp = 0;
+				while (line[i] == '$')
+				{
+					i++;
+					cp++;
+				}
+				if (cp % 2 != 0 && if_its_q(line[i]))
+				{
+					s = 1;
+					while (s < cp)
+					{
+						line2[j++] = '$';
+						s++;
+					}
+				}
+				if ((cp % 2 == 0 && if_its_q(line[i])) || !if_its_q(line[i]))
+				{
+					s = 0;
+					while (s < cp)
+					{
+						line2[j++] = '$';
+						s++;
+					}
+				}
+			}
+		}
+		if (line[i])
+			line2[j++] = line[i++];
+	}
+	line2[j] = '\0';
+	free(line);
+	return (line2);
+}
 
-    i = 0;
-    while (line[i])
-    {
-        if (!ft_strncmp(&line[i], "<", 1) || !ft_strncmp(&line[i], ">", 1))
-        {
-            hold = &line[i];
-            while (line[i] == '<' || line[i] == '>' || line[i] == ' ')
-                i++;
-            cp = d_cp(line, i);
-            while (line[i] == '$')
-            {
-                if (line[i] == '$' && !ft_strncmp(hold, "<<", 2))
-                    line[i] = line[i] * (-1);
-                else if (line[i] == '$' && (hold[0] == '>' || hold[0] == '<')
-                    && cp % 2 == 0)
-                    line[i] = line[i] * (-1);
-                i++;
-            }
-        }
-        if (line[i])
-            i++;
-    }
-    return (line);
+char    *here_dollar(char *line)
+	{
+	int		i;
+	int		cp;
+	char	*hold;
+
+	i = 0;
+	line = ddhere(line);
+	while (line[i])
+	{
+		if (line[i] == '<' || line[i] == '>')
+		{
+			hold = &line[i];
+			while (line[i] == '<' || line[i] == '>' || line[i] == ' ')
+				i++;
+			cp = d_cp(line, i);
+			int j = i;
+			while (line[i] == '$' || line[i] == '"' || line[i] == '\'')
+			{
+				if (line[i] == '"' || line[i] == '\'')
+				{
+					i++;
+					continue ;
+				}
+				if (line[i] == '$' && !ft_strncmp(hold, "<<", 2))
+					line[i] = line[i] * (-1);
+				i++;
+			}
+			if (!line[j + cp])
+			{
+				while (line[j] == '$')
+				{
+					if (line[j] == '$' && (hold[0] == '>' || hold[0] == '<')
+						&& cp % 2 == 0)
+						line[j] = line[j] * (-1);
+					j++;
+				}
+			}
+		}
+		if (line[i])
+			i++;
+	}
+	return (line);
 }
 
 char	*expanding(char *line, t_list *lst)
@@ -335,8 +455,7 @@ char	*expanding(char *line, t_list *lst)
 	while (line[i])
 	{
 		line = here_dollar(line);
-		line = dollar(magic_hide(line), 0, 0, NULL);
-		magic_hide(line);
+		line = dollar(line, 0, 0, NULL);
 		if (line[i] == '$')
 		{
 			k = ++i;
@@ -345,7 +464,7 @@ char	*expanding(char *line, t_list *lst)
 			free(str);
 			i = 0;
 		}
-		if (line[i])
+		else if (line[i])
 			i++;
 	}
 	line = duh(line, -1, 0);
@@ -400,7 +519,7 @@ int	cp_conter(t_m_list *tmp, int cp)
 	while (tmp->d_com[i])
 	{
 		j = 0;
-		while (tmp->d_h[j])
+		while (tmp->file[j] && tmp->d_h[j])
 		{
 			if (!ft_strcmp(tmp->d_h[j], tmp->d_com[i])
 				|| tmp->file[j] == tmp->d_com[i])
@@ -425,7 +544,7 @@ void	final_ss(t_m_list *tmp, int i, int j, int cp)
 	while (tmp->d_com[i])
 	{
 		j = 0;
-		while (tmp->d_h[j])
+		while (tmp->file[j] && tmp->d_h[j])
 		{
 			if (!ft_strcmp(tmp->d_h[j], tmp->d_com[i])
 				|| tmp->file[j] == tmp->d_com[i])
@@ -449,7 +568,6 @@ void	final_ss(t_m_list *tmp, int i, int j, int cp)
 t_m_list	*final_s(t_m_list *lst)
 {
 	t_m_list	*tmp;
-	int			i;
 	int			cp;
 
 	tmp = lst;
@@ -459,11 +577,9 @@ t_m_list	*final_s(t_m_list *lst)
 		tmp->dup_com = malloc(sizeof(char *) * (cp + 1));
 		if (!tmp->dup_com)
 			return (NULL);
-		i = 0;
-		cp = 0;
-		final_ss(tmp, i, 0, cp);
-		if (!ft_strcmp(tmp->first_comm, tmp->d_h[0]))
-			tmp->first_comm = tmp->dup_com[0];
+		final_ss(tmp, 0, 0, 0);
+		// if (!ft_strcmp(tmp->first_comm, tmp->d_h[0]))/////////////// 3andak am3alm
+		tmp->first_comm = tmp->dup_com[0];
 		tmp = tmp->next;
 	}
 	return (lst);

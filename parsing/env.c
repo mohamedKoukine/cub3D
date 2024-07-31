@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:16:12 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/20 16:32:37 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/07/31 15:36:05 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_list	*ft_lstnew1(char *env, int i, int k)
 	int		j;
 	int l=0;
 	int x=0;
+
 	j = key_lloc(env);
 	d = (t_list *)malloc(sizeof(t_list));
 	d->env = malloc (ft_strlen(env) + 1);
@@ -65,26 +66,85 @@ t_list	*ft_lstnew1(char *env, int i, int k)
 		if (env[i] == '=')
 			d->check_aff = 0;
 	}
+	if ((d->env[0] == '_' && d->env[1] == '='))
+		d->check_aff  = 2;
+	if (!ft_strcmp(env, "PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."))
+		d->check_aff = 3;
 	d->i = 0;
 	return (d);
+}
+
+void ft_empty_env1(char *env, char *key, char *ex, int j)
+{
+	int		i;
+	
+	i = 0;
+	while (key[i])
+		env[j++] = key[i++];
+	i = 0;
+	while (ex[i])
+		env[j++] = ex[i++];
+	env[j] = '\0';
+}
+
+char	**ft_empty_env()
+{
+	char	buff[PATH_MAX];
+	char	**env;
+
+	getcwd(buff, PATH_MAX);
+	env = malloc(sizeof(char *) * 6);
+	if (!env)
+		exit(0);
+	env[0] = malloc (49);
+	env[1] = malloc (ft_strlen(buff) + 5);
+	env[2] = malloc (8);
+	env[3] = malloc (ft_strlen(buff) + 3);
+	env[4] = malloc (7);
+	if (!env[0] || !env[1] || !env[2] || !env[3] || !env[4])
+		exit(0);
+	ft_empty_env1(env[0], "PATH=", "/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0);
+	ft_empty_env1(env[1], "PWD=", buff, 0);
+	ft_empty_env1(env[2], "SHLVL=", "0", 0);
+	ft_empty_env1(env[3], "_=", buff, 0);
+	ft_empty_env1(env[4], "OLD", "PWD", 0);
+	env[5] = NULL;
+	return (env);
 }
 
 void	ft_env(char **env, t_list **lst)
 {
 	int		j;
 	t_list	*lst1;
+	char	*tmp;
 
 	j = 0;
+	if (!(*env))
+		env = ft_empty_env();
 	*lst = ft_lstnew1(env[j++], 0, 0);
 	while (env[j])
 	{
 		lst1 = ft_lstnew1(env[j], 0, 0);
 		if (!ft_strncmp("SHLVL",lst1->env,5))
-			lst1->env = ft_strjoin(ft_substr(lst1->env, 0, 6, 0)
-				, ft_itoa(ft_atoi(&lst1->env[6]) + 1), 0);
+		{
+			tmp = ft_itoa(ft_atoi(&lst1->env[6]) + 1);
+			lst1->env = ft_strjoin(ft_substr(lst1->env, 0, 6, 1)
+				, tmp, 0);
+			free (tmp);
+		}
+		if (!ft_strncmp("OLDPWD",lst1->env,6))
+		{
+			free (lst1->env);
+			free (lst1->ex);
+			lst1->ex = NULL;
+			lst1->env = ft_strjoin(lst1->key, NULL, 1);
+			lst1->check_aff = 1;
+		}
 		ft_lstadd_back_env(lst, lst1);
 		j++;
 	}
+	if (j == 5)
+		free_all (env);
 }
 
 void	aff_env(t_list *lst)
@@ -93,7 +153,7 @@ void	aff_env(t_list *lst)
 		return ;
 	while (lst)
 	{
-		if (lst->check_aff == 0)
+		if (lst->check_aff != 1 && lst->check_aff != 3)
 			printf ("%s\n", lst->env);
 		lst = lst->next;
 	}
