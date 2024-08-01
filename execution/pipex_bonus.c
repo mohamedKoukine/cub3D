@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:10:39 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/31 15:59:41 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:11:15 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,18 @@ int	number_heredoc(t_m_list *lst)
 void	ft_handler0(int sig)
 {
 	if (sig == SIGINT)
-	{
 		close(0);
-		printf ("\n");
-	}
 }
 
-void	here_d(t_m_list *lst, int i, char *s, t_list *list)
+void	here_d(t_m_list *lst, int i, t_list *list)
 {
 	char	*line;
 
-	lst->f_h = open (s, O_CREAT | O_RDWR, 0777);
-	if (lst->f_h == -1)
+	unlink("here_doc");
+	lst->w_h = open ("here_doc", O_CREAT | O_TRUNC | O_WRONLY, 0777);
+	lst->r_h = open ("here_doc", O_RDONLY, 0777);
+	unlink("here_doc");
+	if (lst->w_h == -1 ||lst->r_h == -1)
 		ft_exit(1, "error,", "Error_F_H\n", list);
 	signal(SIGINT, ft_handler0);
 	while (1)
@@ -72,18 +72,17 @@ void	here_d(t_m_list *lst, int i, char *s, t_list *list)
 		}
 		if (!ft_strcmp(lst->d_h[i], "<<"))
 			line = expanding(line,list);
-		write (lst->f_h, line, ft_strlen1(line, 0));
-		write (lst->f_h, "\n", 1);
+		// ft_putendl(line, lst->w_h);
+		write (lst->w_h, line, ft_strlen1(line, 0));
+		write (lst->w_h, "\n", 1);
 		free (line);
 		line = NULL;
 	}
-	close (lst->f_h);
-	lst->f_h = open (s, O_RDWR | O_APPEND, 0777);
-	if (lst->f_h == -1)
-		ft_exit(1, "error,", "Error_F_H\n", list);
+	close (lst->w_h );
 	signal(SIGINT, ft_handler);
 	
 }
+
 void check_$(char *av)
 {
 	int	i;
@@ -116,7 +115,7 @@ void	ft_redirection2(t_m_list *lst, t_fd *fd, int i)
 				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
 			}
 			else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
-				fd->id3 = lst->f_h;
+				fd->id3 = lst->r_h;
 			else if (lst->d_h[i][0] == '<')
 				fd->id3 = open(lst->file[i], O_RDWR , 0777);
 			else
@@ -160,7 +159,7 @@ void	ft_redirection1(t_m_list *lst, t_fd *fd, int i)
 				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
 			}
 			else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
-				fd->id3 = lst->f_h;
+				fd->id3 = lst->r_h;
 			else if (lst->d_h[i][0] == '<')
 				fd->id3 = open(lst->file[i], O_RDWR , 0777);
 			else
@@ -286,7 +285,7 @@ int	ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd)
 	else if (ft_strcmp(line[0], "echo") == 0)
 		ft_echo(lst, 0);
 	else if (ft_strcmp(line[0], "exit") == 0)
-		my_exit(lst);
+		my_exit(lst, fd);
 	else if (ft_strcmp(line[0], "cd") == 0)
 		ft_cd(list, lst, fd);
 	else if (ft_strcmp(line[0], "unset") == 0)
@@ -299,7 +298,7 @@ int	ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd)
 void ft_handler1(int sig)
 {
     if (sig == SIGINT)
-        printf("\n");
+        printf("");
 }
 
 void	command(t_fd	*fd, t_m_list *lst, t_list *list)
@@ -365,13 +364,13 @@ void	open_heredoc(t_m_list *lst, t_list *list)
 	while (lst)
 	{
 		i = 0;
-		lst->f_h = 200;
+		lst->r_h = 200;
 		while (lst->d_h[i])
 		{
 			if ((!ft_strcmp(lst->d_h[i], "<<")) || (!ft_strcmp(lst->d_h[i], "<<<")))
 			{
-				close(lst->f_h);
-				here_d(lst, i, s, list);
+				close(lst->r_h);
+				here_d(lst, i, list);
 				s[5] += 1;
 			}
 			i++;
@@ -379,6 +378,7 @@ void	open_heredoc(t_m_list *lst, t_list *list)
 		lst = lst->next;
 	}
 }
+
 void	convert_env(t_list *list, t_fd *fd)
 {
 	int i;
@@ -472,19 +472,13 @@ void remove_f_h(t_m_list *lst)////////////////////////////////////
 {
 	int		i;
 	int		j;
-	char	s[7] = "/tmp/a";
+	// char	s[7] = "/tmp/a";
 	
 	i = 0;
 	j = number_heredoc(lst);
-	while (i < j)
-	{
-		unlink(s);
-		s[5] += 1;
-		i++;
-	}
 	while (lst)
 	{
-		close (lst->f_h);
+		close (lst->r_h);
 		lst = lst->next;
 	}
 }

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 08:23:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/03 08:26:26 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:12:23 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ void    ft_echo(t_m_list *list, int s)
 				break;
 			j++;
 		}
-		printf("%s",list->dup_com[i]);
+		if (list->dup_com[i])
+			printf("%s",list->dup_com[i]);
 		if (i < ft_len(list->dup_com) - 1)
 			printf(" ");
-		i++;
+		if (list->dup_com[i])
+			i++;
 	}
 	if (!s)
 		printf("\n");

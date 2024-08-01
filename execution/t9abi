@@ -30,3 +30,43 @@ env -i ./minishell
 shlvl should be 1 if the environnement was deleted 
 
 unset PWD OLDPWD => enter without env  cd ..
+
+-------------------
+jkdshgjkdh
+kjdghdksghds | echo $?
+-------------------
+
+<< . << . << ... cntl c
+
+exit "     2"
+
+exit 12 kdgjkjkdhgjkf == exit status 1
+
+------------------
+unset HOME
+cd -> cd: HOME not set
+------------------
+
+------------------
+echo -n
+[1]    48241 segmentation fault  ./minishell
+------------------
+
+------------------
+export new="$test $run"
+minishell: export: 'TOW FILE TOW': not a valid identifier
+------------------
+
+------------------
+run="FILE TOW"
+declare -x test="FILE TOW"
+declare -x x="FILE TOW FILE TOW"
+------------------
+
+------------------
+minishell: jkfkhgdjks: command not found
+➜ minishell$ ✗ 
+exit
+➜ minishell$ ✗ echo $?
+0
+------------------

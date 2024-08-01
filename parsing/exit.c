@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:25:05 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/08 15:46:50 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:10:50 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,12 @@ int	all_digit(char *str)
 	return (1);
 }
 
-void	my_exit(t_m_list *list)
+void	my_exit(t_m_list *list, t_fd *fd)
 {
 	if (!list->dup_com[1] || !list->dup_com[1][0])
 	{
 		printf ("exit\n"); 
-		exit(0);
+		exit(fd->ex_c);
 	}
 	if (all_digit(list->dup_com[1]) && !list->dup_com[2])
 	{

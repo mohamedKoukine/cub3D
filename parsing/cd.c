@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:44:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/31 16:01:23 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 11:35:38 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ char	*oldisgold(t_list *lst)
 
 int cheng_pwd(t_list *lst, char *old_pwd, t_list *tmp)
 {
-	char	buf[PATH_MAX];
 	int		i;
 
 	i = 0;
@@ -49,8 +48,8 @@ int cheng_pwd(t_list *lst, char *old_pwd, t_list *tmp)
 			free(tmp->env);
 			if (tmp->ex)
 				free(tmp->ex);
-			tmp->env = ft_strjoin("PWD=", getcwd(buf, PATH_MAX), 1);
-			tmp->ex = ft_strdup(getcwd(buf, PATH_MAX));
+			tmp->ex = getcwd(NULL, 0);
+			tmp->env = ft_strjoin("PWD=", tmp->ex, 1); // LEAKS DETECTED
 			tmp = lst;
 			i = 1;
 			continue ;
@@ -96,6 +95,6 @@ void	ft_cd(t_list *lst, t_m_list *list, t_fd *fd)
 		fd->ex_c = 1;
 	}
 	i = cheng_pwd(lst, old_pwd, lst);
-	if (i == 0 || i == 1)
-		ft_export(ft_split(ft_strjoin("export OLDPWD=",old_pwd, 1), ' '), lst);
+	// if (i == 0 || i == 1)
+		// ft_export(ft_split(ft_strjoin("export OLDPWD=",old_pwd, 1), ' '), lst);
 }

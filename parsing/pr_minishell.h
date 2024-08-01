@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/31 16:00:19 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:11:33 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ typedef struct minishell
 	char				**file;
 	void				*ptr_unset;
 	int					p[2];
-	int					f_h;
+	int					w_h;
+	int					r_h;
 	struct minishell	*next;
 }	t_m_list;
 
@@ -98,7 +99,7 @@ int			checkit(char *red);
 int			ft_len(char **str);
 int			ft_atoi(const char *str);
 void		ft_echo(t_m_list *list, int s);
-void		my_exit(t_m_list *list);
+void		my_exit(t_m_list *list, t_fd *fd);
 void		ft_cd(t_list *lst, t_m_list *list, t_fd *fd);
 char        *ft_itoa(int n);
 int			if_its_q(char q);

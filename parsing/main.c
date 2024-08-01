@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/31 16:20:21 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 14:02:41 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -361,7 +361,7 @@ char *read_lines(char *line, t_fd *fd, t_list *lst)
 	{
 		free_env(lst);
 		printf("exit\n");
-		exit(0);
+		exit(fd->ex_c);
 	}
 	if (is_empty(line))
 		return (0);
@@ -385,6 +385,7 @@ void ft_handler(int sig)
         rl_redisplay();
     }
 }
+
 void free_list(t_m_list *list)
 {
 	int	i;
