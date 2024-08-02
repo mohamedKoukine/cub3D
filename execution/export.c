@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 12:41:12 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/31 14:22:53 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:29:01 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,7 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1, int i)
 	}
 	if (i > -1)
 	{
-		lst1 = ft_lstnew1(line, 0, 0);
+		lst1 = ft_lstnew1(line, 0, 0, NULL);
 		ft_lstadd_back_env(&lst, lst1);
 	}
 }

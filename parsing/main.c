@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 14:02:41 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:33:17 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -432,7 +432,7 @@ int main(int ac, char **av, char **env)
 	lst = NULL;
 	list = NULL;
 	line = NULL;
-	ft_env(env, &lst);
+	ft_env(env, &lst, 0, NULL);
 	fd.ex_c = 0;
 	signal(SIGINT, ft_handler);
 	signal(SIGQUIT, SIG_IGN);

@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:10:39 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/01 14:11:15 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 16:00:40 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -505,6 +505,7 @@ void	ft_pipex(t_m_list *lst, t_list *list, t_fd *fd)
 			if (WTERMSIG(ex) == 2)
 			{
 				g_s = 0;
+				write (1, "\n", 1);
 				fd->ex_c = 130;
 			}
 		}

@@ -6,13 +6,13 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:59:39 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/20 11:35:49 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:59:25 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
 
-int ft_atoi(const char *str)
+long ft_atoi(const char *str)
 {
 	long	i;
 	long	res;

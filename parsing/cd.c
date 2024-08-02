@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:44:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 11:35:38 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/02 08:35:40 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ char	*oldisgold(t_list *lst)
 	return (NULL);
 }
 
-int cheng_pwd(t_list *lst, char *old_pwd, t_list *tmp)
+void	cheng_pwd(t_list *lst, char *old_pwd, t_list *tmp)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while(tmp)
@@ -66,18 +66,26 @@ int cheng_pwd(t_list *lst, char *old_pwd, t_list *tmp)
 		}
 		tmp = tmp->next;
 	}
-	return (i);
 }
 
 void	ft_cd(t_list *lst, t_m_list *list, t_fd *fd)
 {
 	char	*old_pwd;
-	int		i;
+	char	*home;
 
 	old_pwd = oldisgold(lst);
 	fd->ex_c = 0;
+	home = get_home(lst);
 	if (!list->dup_com[1])
-		chdir(get_home(lst));
+	{
+		if (home && home[0])
+		{
+			if(chdir(home) == -1)
+				printf ("minishell: %s: No such file or directory\n", home);
+		}
+		else
+			printf ("minishell: cd: HOME not set\n");
+	}
 	else if (!ft_strcmp(list->dup_com[1], "-")) 
 	{
 		if (chdir(old_pwd) == -1)
@@ -94,7 +102,5 @@ void	ft_cd(t_list *lst, t_m_list *list, t_fd *fd)
 		printf ("minishell: %s: No such file or directory\n", list->dup_com[1]);
 		fd->ex_c = 1;
 	}
-	i = cheng_pwd(lst, old_pwd, lst);
-	// if (i == 0 || i == 1)
-		// ft_export(ft_split(ft_strjoin("export OLDPWD=",old_pwd, 1), ' '), lst);
+	cheng_pwd(lst, old_pwd, lst);
 }

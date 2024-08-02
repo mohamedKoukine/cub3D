@@ -13,7 +13,6 @@ cd ..
 cat << l + ctrl + d
 cat << $$""
 >>> $USER "
-OLDPWD OLD_PWD
 
 SHLVL -99 > 1000
 EXIT IN HERDOC

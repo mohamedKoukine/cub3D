@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:16:12 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/31 15:36:05 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:33:07 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	key_lloc(char *env)
 	return (i);
 }
 
-t_list	*ft_lstnew1(char *env, int i, int k)
+t_list	*ft_lstnew1(char *env, int i, int k, char *p)
 {
 	t_list	*d;
 	int		j;
@@ -68,7 +68,7 @@ t_list	*ft_lstnew1(char *env, int i, int k)
 	}
 	if ((d->env[0] == '_' && d->env[1] == '='))
 		d->check_aff  = 2;
-	if (!ft_strcmp(env, "PATH=/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:."))
+	if (env == p)
 		d->check_aff = 3;
 	d->i = 0;
 	return (d);
@@ -112,26 +112,42 @@ char	**ft_empty_env()
 	return (env);
 }
 
-void	ft_env(char **env, t_list **lst)
+void	check_shlvl(t_list *lst1)
 {
-	int		j;
-	t_list	*lst1;
 	char	*tmp;
+	int		i;
 
-	j = 0;
-	if (!(*env))
-		env = ft_empty_env();
-	*lst = ft_lstnew1(env[j++], 0, 0);
-	while (env[j])
-	{
-		lst1 = ft_lstnew1(env[j], 0, 0);
-		if (!ft_strncmp("SHLVL",lst1->env,5))
+	if (!ft_strncmp("SHLVL",lst1->env,5))
 		{
-			tmp = ft_itoa(ft_atoi(&lst1->env[6]) + 1);
+			i = ft_atoi(&lst1->env[6]);
+			if (i >= 1000)
+				i = 0;
+			else if (i < 0)
+				i = -1;
+			if (i == 999)
+				tmp = ft_strdup("");
+			else
+				tmp = ft_itoa(++i);
 			lst1->env = ft_strjoin(ft_substr(lst1->env, 0, 6, 1)
 				, tmp, 0);
 			free (tmp);
 		}
+}
+
+void	ft_env(char **env, t_list **lst, int j, char *p)
+{
+	t_list	*lst1;
+
+	if (!(*env))
+	{
+		env = ft_empty_env();
+		p = *env;
+	}
+	*lst = ft_lstnew1(env[j++], 0, 0, p);
+	while (env[j])
+	{
+		lst1 = ft_lstnew1(env[j++], 0, 0, NULL);
+		check_shlvl(lst1);
 		if (!ft_strncmp("OLDPWD",lst1->env,6))
 		{
 			free (lst1->env);
@@ -141,7 +157,6 @@ void	ft_env(char **env, t_list **lst)
 			lst1->check_aff = 1;
 		}
 		ft_lstadd_back_env(lst, lst1);
-		j++;
 	}
 	if (j == 5)
 		free_all (env);

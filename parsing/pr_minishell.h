@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 14:11:33 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/01 17:59:50 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ t_m_list	*ft_lstlast(t_m_list *lst);
 t_m_list	*ft_lstnew(char *content, char **com);
 char		*ft_strdup(const char *src);
 int			is_empty(char *line);
-t_list		*ft_lstnew1(char *env, int i, int k);
-void		ft_env(char **env, t_list **lst);
+t_list		*ft_lstnew1(char *env, int i, int k, char *p);
+void		ft_env(char **env, t_list **lst, int j, char *p);
 void		aff_env(t_list *lst);
 int			ft_isalnum(int i);
 char		*ft_strtrim(char *s1, char const *set, int fre);
@@ -97,7 +97,7 @@ t_m_list	*en_s(t_m_list *lst, int cp);
 t_m_list	*final_s(t_m_list *lst);
 int			checkit(char *red);
 int			ft_len(char **str);
-int			ft_atoi(const char *str);
+long		ft_atoi(const char *str);
 void		ft_echo(t_m_list *list, int s);
 void		my_exit(t_m_list *list, t_fd *fd);
 void		ft_cd(t_list *lst, t_m_list *list, t_fd *fd);
