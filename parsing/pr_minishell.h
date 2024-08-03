@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 17:59:50 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/02 12:13:53 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char		*ft_strdup(const char *src);
 int			is_empty(char *line);
 t_list		*ft_lstnew1(char *env, int i, int k, char *p);
 void		ft_env(char **env, t_list **lst, int j, char *p);
-void		aff_env(t_list *lst);
+void		aff_env(char **line, t_list *lst, t_fd *fd);
 int			ft_isalnum(int i);
 char		*ft_strtrim(char *s1, char const *set, int fre);
 int			quotes_nb(char *line);
@@ -99,7 +99,7 @@ int			checkit(char *red);
 int			ft_len(char **str);
 long		ft_atoi(const char *str);
 void		ft_echo(t_m_list *list, int s);
-void		my_exit(t_m_list *list, t_fd *fd);
+void		my_exit(t_m_list *list, t_fd *fd, int exit_code);
 void		ft_cd(t_list *lst, t_m_list *list, t_fd *fd);
 char        *ft_itoa(int n);
 int			if_its_q(char q);

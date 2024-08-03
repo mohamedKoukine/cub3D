@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 17:33:17 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/02 12:49:20 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,6 +249,9 @@ char	*handel_here(char *line)
 
 char *line_shower(char *line, t_list *lst, t_fd *fd)
 {
+	int e_c;
+	
+	e_c = fd->ex_c;
 	if (!line)
 		return (0);
 	line = ft_strtrim(line, " ", 1);
@@ -270,6 +273,7 @@ char *line_shower(char *line, t_list *lst, t_fd *fd)
 	magic_hide2(line);
 	if (is_empty(line))
 		return (NULL);
+	fd->ex_c = e_c;
 	return (line);
 }
 

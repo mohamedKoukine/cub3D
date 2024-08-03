@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:25:05 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 18:09:20 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/02 12:13:20 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,22 @@ int	all_digit(char *str)
 	return (1);
 }
 
-void	my_exit(t_m_list *list, t_fd *fd)
+void	my_exit(t_m_list *list, t_fd *fd, int exit_code)
 {
 	if (!list->dup_com[1] || !list->dup_com[1][0])
 	{
 		printf ("exit\n"); 
-		exit(fd->ex_c);
+		exit(exit_code);
 	}
-	if (all_digit(list->dup_com[1]) && !list->dup_com[2] && ft_atoi(list->dup_com[1]) > 0)
+	if (all_digit(ft_strtrim(list->dup_com[1], " ", 0)) && !list->dup_com[2] && ft_atoi(list->dup_com[1]) > 0)
 	{
 		printf ("exit\n");
 		exit(ft_atoi(list->dup_com[1]) % 256);
 	}
-	else if (all_digit(list->dup_com[1]) && list->dup_com[2])
+	else if (all_digit(ft_strtrim(list->dup_com[1], " ", 0)) && list->dup_com[2])
 	{
 		printf("exit\nminishell: exit: too many arguments\n");
+		fd->ex_c = 1;
 		return ;
 	}
 	else if (!all_digit(list->dup_com[1]) || list->dup_com[2] || ft_atoi(list->dup_com[1]) < 0)

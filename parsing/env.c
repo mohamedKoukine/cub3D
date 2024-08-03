@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:16:12 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 17:33:07 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/02 11:56:27 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,8 +162,20 @@ void	ft_env(char **env, t_list **lst, int j, char *p)
 		free_all (env);
 }
 
-void	aff_env(t_list *lst)
+void	aff_env(char **line, t_list *lst, t_fd *fd)
 {
+	int	i;
+
+	i = -1;
+	while (line[++i])
+	{
+		if (ft_strcmp(line[i], "env"))
+		{
+			printf ("%s: %s: No such file or directory\n", line[0], line[i]);
+			fd->ex_c = 1;
+			return ;
+		}
+	}
 	if (!lst)
 		return ;
 	while (lst)

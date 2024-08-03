@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:10:39 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/01 16:00:40 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/02 13:03:27 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	ft_handler0(int sig)
 		close(0);
 }
 
-void	here_d(t_m_list *lst, int i, t_list *list)
+int	here_d(t_m_list *lst, int i, t_list *list)
 {
 	char	*line;
 
@@ -52,7 +52,6 @@ void	here_d(t_m_list *lst, int i, t_list *list)
 	unlink("here_doc");
 	if (lst->w_h == -1 ||lst->r_h == -1)
 		ft_exit(1, "error,", "Error_F_H\n", list);
-	signal(SIGINT, ft_handler0);
 	while (1)
 	{
 		line = readline("> ");
@@ -72,7 +71,6 @@ void	here_d(t_m_list *lst, int i, t_list *list)
 		}
 		if (!ft_strcmp(lst->d_h[i], "<<"))
 			line = expanding(line,list);
-		// ft_putendl(line, lst->w_h);
 		write (lst->w_h, line, ft_strlen1(line, 0));
 		write (lst->w_h, "\n", 1);
 		free (line);
@@ -80,7 +78,9 @@ void	here_d(t_m_list *lst, int i, t_list *list)
 	}
 	close (lst->w_h );
 	signal(SIGINT, ft_handler);
-	
+	if (g_s == 1)
+		return (1);
+	return (0);
 }
 
 void check_$(char *av)
@@ -271,28 +271,27 @@ int ft_check_builtins(char **line)
 }
 int	ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd)
 {
+	int	i; 
+
+	i = fd->ex_c;
+	fd->ex_c = 0;
 	if (ft_strcmp(line[0], "export") == 0)
-		ft_export(line, list);
+		ft_export(line, list, fd);
 	else if (ft_strcmp(line[0], "env") == 0)
-	{
-		if (line[1])
-			printf ("%s: %s: No such file or directory\n", line[0], line[1]);
-		else
-			aff_env(list);
-	}
+		aff_env(line, list, fd);
 	else if (ft_strcmp(line[0], "pwd") == 0)
 		ft_pwd();
 	else if (ft_strcmp(line[0], "echo") == 0)
 		ft_echo(lst, 0);
 	else if (ft_strcmp(line[0], "exit") == 0)
-		my_exit(lst, fd);
+		my_exit(lst, fd, i);
 	else if (ft_strcmp(line[0], "cd") == 0)
 		ft_cd(list, lst, fd);
 	else if (ft_strcmp(line[0], "unset") == 0)
-		ft_unset(list, lst, line);
+		ft_unset(list, lst, line, fd);
 	else
-		return (1);
-	return (fd->ex_c = 0, 0);
+		return (fd->ex_c = i, 1);
+	return (0);
 }
 
 void ft_handler1(int sig)
@@ -310,6 +309,8 @@ void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 	fd->id1 = fork();
 	if (fd->id1 == -1)
 	{
+		close(p[1]);
+		close(p[0]);
 		printf ("minishell: fork: Resource temporarily unavailable\n");
 		return ;
 	}
@@ -330,7 +331,7 @@ void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 				close(p[1]);
 			}
 			if (ft_builtins(lst->dup_com, list, lst, fd) == 0)
-				exit(0);
+				exit(fd->ex_c);
 			else if (execve(fd->path, lst->dup_com, fd->env) == -1)
 			{
 				write (2, "minishell: ", 11);
@@ -354,12 +355,17 @@ void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 void	open_heredoc(t_m_list *lst, t_list *list)
 {
 	int		i;
-	char	s[7] = "/tmp/a";
+	int		cp;
 
 	i = 0;
+	cp = 0;
 	while (lst->d_h[i])
+	{
+		if (!ft_strncmp(lst->d_h[i], "<<", 2))
+			cp++;
 		i++;
-	if (i > 16)
+	}
+	if (cp > 16)
 		ft_exit(2, "maximum here-document count exceeded\n", "\0", list);
 	while (lst)
 	{
@@ -369,9 +375,10 @@ void	open_heredoc(t_m_list *lst, t_list *list)
 		{
 			if ((!ft_strcmp(lst->d_h[i], "<<")) || (!ft_strcmp(lst->d_h[i], "<<<")))
 			{
+				signal(SIGINT, ft_handler0);
 				close(lst->r_h);
-				here_d(lst, i, list);
-				s[5] += 1;
+				if (here_d(lst, i, list))
+					break ;
 			}
 			i++;
 		}
@@ -440,18 +447,18 @@ void	ft_function1(int ac, t_m_list *lst, t_fd *fd, t_list *list)
 	fd->id3 = 1;
 	while (++i <= ac && fd->id1 != -1)
 	{
-			if (lst->dup_com[0] && ft_check_builtins(lst->dup_com) == 0 && ac == 1)
-			{
-				ft_redirection(lst, fd, 1);
-				if (fd->id3 != -1 && fd->id3 != -5)
-					ft_builtins(lst->dup_com, list, lst, fd);
-			}
-			else
-			{
-				convert_env(list, fd);
-				command(fd, lst, list);
-				free_all(fd->env);
-			}
+		if (lst->dup_com[0] && ft_check_builtins(lst->dup_com) == 0 && ac == 1)
+		{
+			ft_redirection(lst, fd, 1);
+			if (fd->id3 != -1 && fd->id3 != -5)
+				ft_builtins(lst->dup_com, list, lst, fd);
+		}
+		else
+		{
+			convert_env(list, fd);
+			command(fd, lst, list);
+			free_all(fd->env);
+		}
 		lst = lst->next;
 	}
 }

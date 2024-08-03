@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:44:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/02 08:35:40 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/02 12:02:56 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,22 @@ void	ft_cd(t_list *lst, t_m_list *list, t_fd *fd)
 	char	*home;
 
 	old_pwd = oldisgold(lst);
-	fd->ex_c = 0;
 	home = get_home(lst);
 	if (!list->dup_com[1])
 	{
 		if (home && home[0])
 		{
 			if(chdir(home) == -1)
+			{
 				printf ("minishell: %s: No such file or directory\n", home);
+				fd->ex_c = 1;
+			}
 		}
 		else
+		{
 			printf ("minishell: cd: HOME not set\n");
+			fd->ex_c = 1;
+		}
 	}
 	else if (!ft_strcmp(list->dup_com[1], "-")) 
 	{

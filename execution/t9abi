@@ -1,54 +1,22 @@
-cd 
+
 cd ~
-exit 4454554545454545454545454545454545
+
 cd ..
 < /dev/urandom ./minishell
 
 
 
 
+ 
 
 
-
-cat << l + ctrl + d
-cat << $$""
->>> $USER "
-
-SHLVL -99 > 1000
 EXIT IN HERDOC
-cat + ctrl |
 
-export a="hello" b="kkk" c-="1111"  exit status
 
-top + ctrl + c
-env -i ./minishell
-{
-	export pppp=pp
-}
-
-shlvl should be 1 if the environnement was deleted 
-
-unset PWD OLDPWD => enter without env  cd ..
 
 -------------------
 jkdshgjkdh
 kjdghdksghds | echo $?
--------------------
-
-<< . << . << ... cntl c
-
-exit "     2"
-
-exit 12 kdgjkjkdhgjkf == exit status 1
-
-------------------
-unset HOME
-cd -> cd: HOME not set
-------------------
-
-------------------
-echo -n
-[1]    48241 segmentation fault  ./minishell
 ------------------
 
 ------------------
@@ -62,10 +30,4 @@ declare -x test="FILE TOW"
 declare -x x="FILE TOW FILE TOW"
 ------------------
 
-------------------
-minishell: jkfkhgdjks: command not found
-➜ minishell$ ✗ 
-exit
-➜ minishell$ ✗ echo $?
-0
-------------------
+leaks fd

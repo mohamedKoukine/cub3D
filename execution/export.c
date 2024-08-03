@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 12:41:12 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/01 17:29:01 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/02 11:43:56 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,39 +143,32 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1, int i)
 	}
 }
 
-void	ft_export_cont(char *line, t_list *lst)
+void	ft_export_cont(char *line, t_list *lst, t_fd *fd)
 {
 	int		i;
 	t_list	*lst1;
 
 	lst1 = lst;
 	i = -1;
-	if ((line[0] == '_' || (line[0] >= 'a' && line[0] <= 'z')
-			|| (line[0] >= 'A' && line[0] <= 'Z')))
+	while (line[++i])
 	{
-		while (line[++i])
+		if (!(line[i] == '=' || ft_isalnum(line[i])
+				|| (line[i] == '+' && line[i + 1] == '='))
+				|| (line[0] <= '9' && line[0] >= '0'))
 		{
-			if (!(line[i] == '=' || line[i] == '_'
-					|| (line[i] >= 'a' && line[i] <= 'z')
-					|| (line[i] >= 'A' && line[i] <= 'Z')
-					|| (line[i] >= '0' && line[i] <= '9')
-					|| (line[i] == '+' && line[i + 1] == '=')))
-			{
-				printf ("minishell: export: '%s': not a valid identifier\n",
-					line);
-				break ;
-			}
-			if (line[i] == '=')
-				break ;
+			printf ("minishell: export: '%s': not a valid identifier\n",
+				line);
+			fd->ex_c = 1;
+			break ;
 		}
-		if (line[i] == '=' || line[i] == '\0')
-			ft_export_cont1(line, lst, lst1, i);
+		if (line[i] == '=')
+			break ;
 	}
-	else
-		printf ("minishell: export: '%s': not a valid identifier\n", line);
+	if (line[i] == '=' || line[i] == '\0')
+		ft_export_cont1(line, lst, lst1, i);
 }
 
-void	ft_export(char **line, t_list *lst)
+void	ft_export(char **line, t_list *lst, t_fd *fd)
 {
 	int	i;
 
@@ -186,7 +179,7 @@ void	ft_export(char **line, t_list *lst)
 	{
 		while (line[i])
 		{
-			ft_export_cont(line[i], lst);
+			ft_export_cont(line[i], lst, fd);
 			i++;
 		}
 	}

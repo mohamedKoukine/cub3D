@@ -25,10 +25,10 @@ char	**ft_split1(char const *s, char c);
 void	ft_pipex(t_m_list *lst, t_list *list, t_fd *fd);
 int		ft_lstsize(t_m_list *lst);
 int		ft_lstsize1(t_list *lst);
-void	ft_export(char **line, t_list *lst);
+void	ft_export(char **line, t_list *lst, t_fd *fd);
 int		ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd);
 char	*ft_substr(char *s, unsigned int start, size_t len, int fre);
-t_list	*ft_unset(t_list *lst, t_m_list *list, char **line);
+t_list	*ft_unset(t_list *lst, t_m_list *list, char **line, t_fd *fd);
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 13
 # endif
