@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:11:28 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/31 16:07:35 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/03 15:40:17 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ static void	access_cmd(char **path, t_fd *fd, char *av)
 				ft_exit(1, "error", "allocation\n", NULL);
 		}
 		else
-			ft_exit(126, av, "Not a directory\n", NULL);
+			ft_exit(126, av, "Permission denied\n", NULL);
 	}
 	else 
 	{

@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:10:39 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/02 13:03:27 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/03 17:31:06 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,41 +41,45 @@ void	ft_handler0(int sig)
 	if (sig == SIGINT)
 		close(0);
 }
-
+void read_heredoc(char	*line, int i, t_m_list *lst, t_list *list)
+{
+	while (1)
+	{
+		line = readline("> ");
+			if(!ttyname(0))
+			{
+				g_s = 1;
+				open(ttyname(2),O_RDWR);
+				break ;
+			}
+			if (!line)
+				break ;
+			if ((ft_strlen1(line, 1) == ft_strlen1(lst->file[i], 0))
+				&& (ft_strncmp(line, lst->file[i], ft_strlen1(line, 1)) == 0))
+			{
+				free(line);
+				break ;
+			}
+			if (!ft_strcmp(lst->d_h[i], "<<"))
+				line = expanding(line,list);
+			write (lst->w_h, line, ft_strlen1(line, 0));
+			write (lst->w_h, "\n", 1);
+			free (line);
+			line = NULL;
+	}
+}
 int	here_d(t_m_list *lst, int i, t_list *list)
 {
 	char	*line;
 
+	line = NULL;
 	unlink("here_doc");
 	lst->w_h = open ("here_doc", O_CREAT | O_TRUNC | O_WRONLY, 0777);
 	lst->r_h = open ("here_doc", O_RDONLY, 0777);
 	unlink("here_doc");
 	if (lst->w_h == -1 ||lst->r_h == -1)
 		ft_exit(1, "error,", "Error_F_H\n", list);
-	while (1)
-	{
-		line = readline("> ");
-		if(!ttyname(0))
-		{
-			g_s = 1;
-			open(ttyname(2),O_RDWR);
-			break ;
-		}
-		if (!line)
-			break ;
-		if ((ft_strlen1(line, 1) == ft_strlen1(lst->file[i], 0))
-			&& (ft_strncmp(line, lst->file[i], ft_strlen1(line, 1)) == 0))
-		{
-			free(line);
-			break ;
-		}
-		if (!ft_strcmp(lst->d_h[i], "<<"))
-			line = expanding(line,list);
-		write (lst->w_h, line, ft_strlen1(line, 0));
-		write (lst->w_h, "\n", 1);
-		free (line);
-		line = NULL;
-	}
+	read_heredoc(line, i, lst, list);
 	close (lst->w_h );
 	signal(SIGINT, ft_handler);
 	if (g_s == 1)
@@ -83,107 +87,78 @@ int	here_d(t_m_list *lst, int i, t_list *list)
 	return (0);
 }
 
-void check_$(char *av)
+void check_ambiguous_ch(t_m_list *lst, t_fd *fd, int i, int l)
 {
-	int	i;
-
-	i = 0;
-	while (av[i])
+	int	j;
+	
+	j = -1;
+	while(lst->file[i][++j])
 	{
-		if (av[i] == '$')
-			
-		i++;
+		if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0'
+			&& ft_strcmp(lst->d_h[i], ">>)") && ft_strcmp(lst->d_h[i], ">)"))
+			ft_exit(1, lst->file[i],"ambiguous redirect\n", NULL);
+	}
+	if (l)
+		fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
+	else
+		fd->id2 = open(lst->file[i],O_CREAT | O_RDWR  | O_TRUNC, 0777);
+		
+}
+void	ft_redirection_ch(t_m_list *lst, t_fd *fd, int i)
+{
+	while (lst->d_h[++i])
+	{
+		if (lst->d_h[i][0] == '>' && lst->d_h[i][1] == '>')
+			check_ambiguous_ch(lst, fd, i, 1);
+		else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
+			fd->id3 = lst->r_h;
+		else if (lst->d_h[i][0] == '<')
+			fd->id3 = open(lst->file[i], O_RDWR , 0777);
+		else
+			check_ambiguous_ch(lst, fd, i, 0);
+		if (fd->id2 == -1 || fd->id3 == -1)
+			ft_exit(1, lst->file[i],"No such file or directory\n", NULL);
 	}
 }
-void	ft_redirection2(t_m_list *lst, t_fd *fd, int i)
+void check_ambiguous_par(t_m_list *lst, t_fd *fd, int i, int l)
 {
-	int j;
-
-	while (lst->d_h[i])
+	int	j;
+	
+	j = -1;
+	while(lst->file[i][++j])
 	{
-		if (lst->d_h[i][0] == '>' || lst->d_h[i][0] == '<')
+		if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0'
+			&& ft_strcmp(lst->d_h[i], ">>)") && ft_strcmp(lst->d_h[i], ">)"))
 		{
-			if (lst->d_h[i][0] == '>' && lst->d_h[i][1] == '>')
-			{
-				j = 0;
-				while(lst->file[i][j])
-				{
-					if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0')
-						ft_exit(1, lst->file[i],"ambiguous redirect\n", NULL);
-					j++;
-				}
-				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
-			}
-			else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
-				fd->id3 = lst->r_h;
-			else if (lst->d_h[i][0] == '<')
-				fd->id3 = open(lst->file[i], O_RDWR , 0777);
-			else
-			{
-				j = 0;
-				while(lst->file[i][j])
-				{
-					if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0')
-						ft_exit(1, lst->file[i],"ambiguous redirect\n", NULL);
-					j++;
-				}
-				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR  | O_TRUNC, 0777);
-			}
-			if (fd->id2 == -1 || fd->id3 == -1)
-				ft_exit(1, lst->file[i],"No such file or directory\n", NULL);
+			fd->id3 = -5;
+			printf ("minishell: %s: ambiguous redirect\n", lst->file[i]);
+			return ;
 		}
-		i++;	
 	}
+	if (l)
+		fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
+	else
+		fd->id2 = open(lst->file[i],O_CREAT | O_RDWR  | O_TRUNC, 0777);
+		
 }
-void	ft_redirection1(t_m_list *lst, t_fd *fd, int i)
-{
-	int j;
 
-	while (lst->d_h[i])
+void	ft_redirection_par(t_m_list *lst, t_fd *fd, int i)
+{
+	while (lst->d_h[++i])
 	{
-		if (lst->d_h[i][0] == '>' || lst->d_h[i][0] == '<')
+		if (lst->d_h[i][0] == '>' && lst->d_h[i][1] == '>')
+			check_ambiguous_par(lst, fd, i, 1);
+		else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
+			fd->id3 = lst->r_h;
+		else if (lst->d_h[i][0] == '<')
+			fd->id3 = open(lst->file[i], O_RDWR , 0777);
+		else
+			check_ambiguous_par(lst, fd, i, 0);
+		if (fd->id2 == -1 || fd->id3 == -1)
 		{
-			if (lst->d_h[i][0] == '>' && lst->d_h[i][1] == '>')
-			{
-				j = 0;
-				while(lst->file[i][j])
-				{
-					if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0')
-					{
-						fd->id3 = -5;
-						printf ("minishell: %s: ambiguous redirect\n", lst->file[i]);
-						break ;
-					}
-					j++;
-				}
-				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
-			}
-			else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
-				fd->id3 = lst->r_h;
-			else if (lst->d_h[i][0] == '<')
-				fd->id3 = open(lst->file[i], O_RDWR , 0777);
-			else
-			{
-				j = 0;
-				while(lst->file[i][j])
-				{
-					if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0')
-					{
-						fd->id3 = -5;
-						printf ("minishell: %s: ambiguous redirect\n", lst->file[i]);
-						break;
-					}
-					j++;
-				}
-				fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_TRUNC, 0777);
-			}
-			if (fd->id2 == -1 || fd->id3 == -1)
-			{
-				printf ("minishell: %s: No such file or directory\n", lst->file[i]);
-				break;
-			}
+			printf ("minishell: %s: No such file or directory\n", lst->file[i]);
+			break;
 		}
-		i++;	
 	}
 }
 
@@ -193,9 +168,9 @@ void	ft_redirection(t_m_list *lst, t_fd *fd, int i)
 	fd->id2 = -2;
 	fd->id3 = -2;
 	if (i == 0)
-		ft_redirection2(lst, fd, 0);
+		ft_redirection_ch(lst, fd, -1);
 	else
-		ft_redirection1(lst, fd, 0);
+		ft_redirection_par(lst, fd, -1);
 	if (fd->id2 != -2)
 	{
 		fd->id = 0;
@@ -300,6 +275,35 @@ void ft_handler1(int sig)
         printf("");
 }
 
+
+void	command_con(t_fd	*fd, t_m_list *lst, t_list *list, int p[2])
+{
+	g_s = 1;
+	signal(SIGQUIT, SIG_DFL);
+	g_s = 0;
+	ft_redirection(lst, fd, 0);
+	if (lst->first_comm)
+	{
+		parsing_b(lst->first_comm, fd->env, fd);
+		if (fd->id == 1 && lst->next)
+		{
+			close(p[0]);
+			dup2(p[1],STDOUT_FILENO);
+			close(p[1]);
+		}
+		if (ft_builtins(lst->dup_com, list, lst, fd) == 0)
+			exit(fd->ex_c);
+		else if (execve(fd->path, lst->dup_com, fd->env) == -1)
+		{
+			write (2, "minishell: ", 11);
+			write (2, lst->first_comm, ft_strlen(lst->first_comm));
+			write (2, ": ", 2);
+			write (2, "command not found\n", 18);
+			exit (127);
+		}
+	}
+	exit(0);
+}
 void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 {
 	int		p[2];
@@ -316,33 +320,7 @@ void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 	}
 	signal(SIGINT, ft_handler1);
 	if (fd->id1 == 0)
-	{
-		g_s = 1;
-		signal(SIGQUIT, SIG_DFL);
-		g_s = 0;
-		ft_redirection(lst, fd, 0);
-		if (lst->first_comm)
-		{
-			parsing_b(lst->first_comm, fd->env, fd);
-			if (fd->id == 1 && lst->next)
-			{
-				close(p[0]);
-				dup2(p[1],STDOUT_FILENO);
-				close(p[1]);
-			}
-			if (ft_builtins(lst->dup_com, list, lst, fd) == 0)
-				exit(fd->ex_c);
-			else if (execve(fd->path, lst->dup_com, fd->env) == -1)
-			{
-				write (2, "minishell: ", 11);
-				write (2, lst->first_comm, ft_strlen(lst->first_comm));
-				write (2, ": ", 2);
-				write (2, "command not found\n", 18);
-				exit (127);
-			}
-		}
-		exit(0);
-	}
+		command_con(fd, lst, list, p);
 	else
 	{
 		if (lst->next == NULL)
@@ -352,13 +330,8 @@ void	command(t_fd	*fd, t_m_list *lst, t_list *list)
 		close(p[0]);
 	}
 }
-void	open_heredoc(t_m_list *lst, t_list *list)
+void	open_heredoc(t_m_list *lst, t_list *list, int i, int cp)
 {
-	int		i;
-	int		cp;
-
-	i = 0;
-	cp = 0;
 	while (lst->d_h[i])
 	{
 		if (!ft_strncmp(lst->d_h[i], "<<", 2))
@@ -496,7 +469,7 @@ void	ft_pipex(t_m_list *lst, t_list *list, t_fd *fd)
 	int			ex;
 
 	fd->id_ex = 0;
-	open_heredoc(lst, list);
+	open_heredoc(lst, list, 0, 0);
 	tcgetattr(STDOUT_FILENO, &state);
 	ft_function1(ft_lstsize(lst), lst, fd, list);
 	if (fd->id3 == 1)

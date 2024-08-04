@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 10:57:00 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/31 15:17:06 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 10:16:27 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,39 +292,54 @@ int    exit_key(char *line)
 	return (cp);
 }
 
+int    multi_pip(char *line, int i)
+{
+    int    j;
+
+    j = 0;
+    while (j < i)
+    {
+        if (line[j] == '|')
+            return (1);
+        j++;
+    }
+    return (0);
+}
+
 char    *exit_code(char *line, char *code)
 {
-	char    *line2;
-	int        i;
-	int        j;
-	int        k;
-	int        cp;
+    char    *line2;
+    int        i;
+    int        j;
+    int        k;
+    int        cp;
 
-	i = 0;
-	k = 0;
-	if (!line)
-		return (0);
-	cp = exit_key(line);
-	line2 = malloc (ft_strlen(line) - (cp * 2) + (cp * ft_strlen(code)) + 1);
-	while (line[i])
-	{
-		if (!ft_strncmp(&line[i], "$?", 2))
-		{
-			j = 0;
-			while (code[j])
-			{
-				line2[k] = code[j];
-				k++;
-				j++;
-			}
-			i = i + 2;
-		}
-		else if (line[i])
-			line2[k++] = line[i++];
-	}
-	line2[k] = '\0';
-	free (line);
-	return (line2);
+    i = 0;
+    k = 0;
+    if (!line)
+        return (0);
+    cp = exit_key(line);
+    line2 = malloc (ft_strlen(line) - (cp * 2) + (cp * ft_strlen(code)) + 1);
+    while (line[i])
+    {
+        if (!ft_strncmp(&line[i], "$?", 2))
+        {
+            j = 0;
+            if (multi_pip(line, i))
+                line2[k++] = '0';
+            else
+            {
+                while (code[j])
+                    line2[k++] = code[j++];
+            }
+            i = i + 2;
+        }
+        else if (line[i])
+            line2[k++] = line[i++];
+    }
+    line2[k] = '\0';
+    free (line);
+    return (line2);
 }
 
 int    d_cp(char *line, int j)

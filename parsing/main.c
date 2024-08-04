@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/02 12:49:20 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 10:20:16 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,17 +111,17 @@ t_m_list *split_all(char *line)
 
 	i = 1;
 	commands = ft_split(line, '|');
-	list = ft_lstnew(no_qutes(commands[0], 0), ft_split(commands[0], ' '));
+	list = ft_lstnew(commands[0], ft_split(commands[0], ' '));
 	while (commands[i])
 	{
-		new = ft_lstnew(no_qutes(commands[i], 0), ft_split(commands[i], ' '));
+		new = ft_lstnew(commands[i], ft_split(commands[i], ' '));
 		ft_lstadd_back(&list, new);
 		i++;
 	}
-	i = 0;
-	while(commands[i])
-		free(commands[i++]);
-	free(commands);
+	// i = 0;
+	// while(commands[i])
+	// 	free(commands[i++]);
+	// free(commands);
 	return (list);
 }
 
@@ -247,6 +247,57 @@ char	*handel_here(char *line)
 	return (line2);
 }
 
+int	include_sq(char *line)
+{
+	int i = 0;
+	int j = 0;
+	while(line[j])
+	{
+		if (line[j] == '$')
+			return (0);
+		j++;
+	}
+	while (line[i] == ' ')
+		i++;
+	while (line[i] != ' ' && line[i])
+	{
+		if (line[i] == '\'')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+char	*handel_ambi(char *line)
+{
+	char	*line2;
+	int		i = 0;
+	int		j = 0;
+	int		ls = ft_strlen(line) + 17;
+	
+	line2 = malloc(ls);
+	while (line[i])
+	{
+		if (!ft_strncmp(&line[i], ">", 1))
+		{
+			while (line[i] == '>' || line[i] == ' ')
+			{
+				if (line[i] == ' ' && include_sq(&line[i]))
+					line2[j++] = ')';
+				while (line[i] == ' ')
+					line2[j++] = line[i++];
+				line2[j++] = line[i++];
+			}
+		}
+		if (line[i])
+			line2[j++] = line[i++];
+	}
+	while (j < ls)
+		line2[j++] = '\0';
+	free(line);
+	return (line2);
+}
+
 char *line_shower(char *line, t_list *lst, t_fd *fd)
 {
 	int e_c;
@@ -266,11 +317,12 @@ char *line_shower(char *line, t_list *lst, t_fd *fd)
 	line = add_space(line);
 	if (!line)
 		exit(1);
-	line = ambiguous(magic_hide2(line), lst);
-	magic_hide2(line);
+	line = ambiguous(magic_hide2(line, 1), lst);
+	magic_hide2(line, 0);
 	line = handel_here(line);
-	line = expanding(magic_hide2(line), lst);
-	magic_hide2(line);
+	line = handel_ambi(line);
+	line = expanding(magic_hide2(line, 1), lst);
+	magic_hide2(line, 0);
 	if (is_empty(line))
 		return (NULL);
 	fd->ex_c = e_c;
@@ -288,6 +340,7 @@ t_m_list *clear_lst(t_m_list *list)
 	while (tmp)
 	{
 		i = 0;
+		tmp->command = no_qutes(tmp->command, 1);
 		while (tmp->d_com[i])
 		{
 			tmp->d_com[i] = no_qutes(tmp->d_com[i], 1);
@@ -322,7 +375,6 @@ t_m_list    *home_pl(t_m_list *list, t_list *lst, t_m_list *tmp)
 t_m_list *list_to_exe(char *line, t_list *lst)
 {
 	t_m_list *list;
-
 	list = split_all(line);
 	free(line);
 	list = clear_lst(list);

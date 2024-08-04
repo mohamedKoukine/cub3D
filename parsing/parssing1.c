@@ -6,34 +6,37 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 17:10:24 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/29 12:44:55 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/03 15:18:19 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
 
-char	*magic_hide2(char *line)
+char    *magic_hide2(char *line, int s)
 {
-	int		i;
-	char	q;
+    int        i;
+    char    q;
 
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] == '\"')
-		{
-			q = line[i];
-			while (line[++i])
-			{
-				if (line[i] == q)
-					break ;
-				line[i] *= -1;
-			}
-		}
-		if (line[i])
-			i++;
-	}
-	return (line);
+    i = 0;
+    while (line[i])
+    {
+        if (line[i] == '\"')
+        {
+            q = line[i];
+            while (line[++i])
+            {
+                if (line[i] == q)
+                    break ;
+                if (line[i] >= 0 && s == 0)
+                    line[i] *= -1;
+                if (line[i] < 0 && s == 1)
+                    line[i] *= -1;
+            }
+        }
+        if (line[i])
+            i++;
+    }
+    return (line);
 }
 
 char	*magic_hide(char *line)
@@ -160,8 +163,8 @@ int	cp_hd(char *line)
 	{
 		if (!ft_strncmp(&line[i], "<<", 2) || !ft_strncmp(&line[i], ">>", 2))
 		{
-			if (!ft_strncmp(&line[i], "<<<", 3))
-				i++;
+			if (!ft_strncmp(&line[i], "<<<", 3) || !ft_strncmp(&line[i], ">>)", 3))
+                i++;
 			cp++;
 			i += 2;
 		}

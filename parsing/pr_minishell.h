@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/02 12:13:53 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/03 17:19:50 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void		*allocation(char *line);
 char		*rm_space(char *line);
 int			cases(char *line);
 int			syntax_error(char *line);
-char		*magic_hide2(char *line);
+char		*magic_hide2(char *line, int s);
 char		*magic_hide(char *line);
 char		*dollar(char *line, int i, int j, char *line2);
 char		*duh(char *line, int i, int cp);
@@ -107,5 +107,9 @@ char		*get_home(t_list *lst);
 char        *exit_code(char *line, char *code);
 void		ft_handler(int sig);
 void		free_env(t_list *lst);
+int			ft_posistion(char *line, char c);
+size_t		ft_strlen_exp(const char *str, char c, int flag);
+void		aff_export(t_list *lst);
+void		print_export(t_list *lst, t_list *lst2, int i);
 
 #endif

@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc 
 
-FLAGS = -Wall -Wextra -Werror #-fsanitize=address
+FLAGS = -Wall -Wextra -Werror -fsanitize=address
 READLINE_L = $(shell brew --prefix readline)/lib
 READLINE_I = $(shell brew --prefix readline)/include
 
@@ -34,7 +34,8 @@ SRC = ./parsing/ft_strlen.c\
 		./execution/ft_lstsize_bonus.c\
 		./execution/pipex_bonus.c\
 		./execution/unset.c\
-		./execution/export.c
+		./execution/export.c\
+		./execution/export_util.c
 
 OBJ = $(SRC:.c=.o)
 

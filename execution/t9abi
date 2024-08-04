@@ -1,33 +1,6 @@
 
-cd ~
-
-cd ..
+cd ~  whene unset HOME
+cd .. whene delet 1/2/3/4
 < /dev/urandom ./minishell
 
-
-
-
- 
-
-
 EXIT IN HERDOC
-
-
-
--------------------
-jkdshgjkdh
-kjdghdksghds | echo $?
-------------------
-
-------------------
-export new="$test $run"
-minishell: export: 'TOW FILE TOW': not a valid identifier
-------------------
-
-------------------
-run="FILE TOW"
-declare -x test="FILE TOW"
-declare -x x="FILE TOW FILE TOW"
-------------------
-
-leaks fd

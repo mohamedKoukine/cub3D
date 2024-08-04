@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/30 12:25:01 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/03 15:31:26 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int	cases(char *line)
 		|| !ft_strncmp(line, "&&", 2)
 		|| !ft_strncmp(line, "& &", 3)
 		|| !ft_strncmp(line, "(", 1)
+		|| !ft_strncmp(line, ")", 1)
 		|| !ft_strncmp(line, "()", 2)
 		|| !ft_strncmp(line, "( )", 3)
 		|| !ft_strncmp(line, "> <", 3))
