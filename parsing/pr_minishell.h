@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pr_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/03 17:19:50 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 16:42:10 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <unistd.h>
 # include <signal.h>
 
-int g_s;
+int	g_s;
 
 size_t		ft_strlen(char *str);
 int			ft_strcmp(char *s1, char *s2);
@@ -90,8 +90,7 @@ char		*magic_hide(char *line);
 char		*dollar(char *line, int i, int j, char *line2);
 char		*duh(char *line, int i, int cp);
 int			cp_hd(char *line);
-char		*add_space(char *line);
-char		*place_key(char *line, char *str, t_list *lst);
+char		*add_space(char *line, int ls, int i, int j);
 char		*expanding(char *line, t_list *lst);
 t_m_list	*en_s(t_m_list *lst, int cp);
 t_m_list	*final_s(t_m_list *lst);
@@ -101,15 +100,44 @@ long		ft_atoi(const char *str);
 void		ft_echo(t_m_list *list, int s);
 void		my_exit(t_m_list *list, t_fd *fd, int exit_code);
 void		ft_cd(t_list *lst, t_m_list *list, t_fd *fd);
-char        *ft_itoa(int n);
+char		*ft_itoa(int n);
 int			if_its_q(char q);
 char		*get_home(t_list *lst);
-char        *exit_code(char *line, char *code);
+char		*exit_code(char *line, char *code, int i, int k);
 void		ft_handler(int sig);
 void		free_env(t_list *lst);
+void		freethis(char *env, char *ex);
+char		*get_home(t_list *lst);
+char		*is_pwd(t_list *lst);
+char		*oldisgold(t_list *lst);
 int			ft_posistion(char *line, char c);
 size_t		ft_strlen_exp(const char *str, char c, int flag);
 void		aff_export(t_list *lst);
 void		print_export(t_list *lst, t_list *lst2, int i);
+t_m_list	*split_all(char *line);
+t_m_list	*clear_lst(t_m_list *list);
+t_m_list	*list_to_exe(char *line);
+char		*no_qutes(char *line, int fre, int i, int j);
+void		garbag_find(char *arg);
+t_m_list	*decript_stack(t_m_list *list);
+char		*ambi_str(char *line, t_list *lst);
+int			chek_ambi(char *line, t_list *lst);
+char		*ambiguous(char *line, t_list *lst);
+int			include_q(char *line);
+char		*handel_here(char *line, int i, int j);
+int			include_sq(char *line);
+char		*handel_ambi(char *line, int i, int j);
+char		*line_shower(char *line, t_list *lst, t_fd *fd);
+void		fill_dfile(t_m_list *tmp);
+int			cp_conter(t_m_list *tmp, int cp);
+void		final_ss(t_m_list *tmp, int i, int j, int cp);
+char		*here_dollar(char *line, t_list *lst, int i);
+char		*ddhere(char *line, int i, int j, t_list *lst);
+void		free_list(t_m_list *list);
+int			d_cp(char *line, int j);
+char		*place_key2(char *line, char *str, t_list *lst, int i);
+int			here_expand(char **line, char *str, t_list *lst);
+int			strchr_char(char *s, char c);
+int			con_d(int *i, char *line, int *s);
 
 #endif

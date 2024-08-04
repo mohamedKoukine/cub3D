@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:59:39 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 17:59:25 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 11:23:33 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
 
-long ft_atoi(const char *str)
+long	ft_atoi(const char *str)
 {
 	long	i;
 	long	res;
@@ -40,44 +40,44 @@ long ft_atoi(const char *str)
 	return (res * j);
 }
 
-static int    size_j(long nb)
+static int	size_j(long nb)
 {
-    int    j;
+	int	j;
 
-    j = 1;
-    while (nb > 9)
-    {
-        nb = nb / 10;
-        j++;
-    }
-    return (j);
+	j = 1;
+	while (nb > 9)
+	{
+		nb = nb / 10;
+		j++;
+	}
+	return (j);
 }
 
-char    *ft_itoa(int n)
+char	*ft_itoa(int n)
 {
-    char    *r;
-    int        j;
-    long    nb;
+	char	*r;
+	int		j;
+	long	nb;
 
-    j = 1;
-    nb = n;
-    if (n < 0)
-    {
-        nb = -nb;
-        j = 2;
-    }
-    r = (char *)malloc(sizeof(char) * (j = size_j(nb) + j));
-    if (!r)
-        return (NULL);
-    j--;
-    r[j] = '\0';
-    while (j > 0)
-    {
-        j--;
-        r[j] = (nb % 10) + 48;
-        nb = nb / 10;
-        if (j == 0 && n < 0)
-            r[j] = '-';
-    }
-    return (r);
+	j = 1;
+	nb = n;
+	if (n < 0)
+	{
+		nb = -nb;
+		j = 2;
+	}
+	r = (char *)malloc(sizeof(char) * (j = size_j(nb) + j));
+	if (!r)
+		return (NULL);
+	j--;
+	r[j] = '\0';
+	while (j > 0)
+	{
+		j--;
+		r[j] = (nb % 10) + 48;
+		nb = nb / 10;
+		if (j == 0 && n < 0)
+			r[j] = '-';
+	}
+	return (r);
 }

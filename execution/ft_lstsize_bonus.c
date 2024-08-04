@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/17 12:44:42 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/18 14:24:43 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:12:30 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	ft_lstsize(t_m_list *lst)
 {
-	int		i;
+	int			i;
 	t_m_list	*d;
 
 	d = lst;

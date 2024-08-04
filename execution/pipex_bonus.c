@@ -6,364 +6,18 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:10:39 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/03 17:31:06 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:39:38 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ex_minishell.h"
 
-int	number_heredoc(t_m_list *lst)
-{
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	while (lst)
-	{
-		while (lst && lst->d_h[i])
-		{
-			if (lst->d_h[i][0] == '>' || lst->d_h[i][0] == '<')
-			{
-				if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')		
-					j++;
-			}
-			i++;
-		}
-		i = 0;
-		lst = lst->next;
-	}
-	return (j);
-}
-
-void	ft_handler0(int sig)
-{
-	if (sig == SIGINT)
-		close(0);
-}
-void read_heredoc(char	*line, int i, t_m_list *lst, t_list *list)
-{
-	while (1)
-	{
-		line = readline("> ");
-			if(!ttyname(0))
-			{
-				g_s = 1;
-				open(ttyname(2),O_RDWR);
-				break ;
-			}
-			if (!line)
-				break ;
-			if ((ft_strlen1(line, 1) == ft_strlen1(lst->file[i], 0))
-				&& (ft_strncmp(line, lst->file[i], ft_strlen1(line, 1)) == 0))
-			{
-				free(line);
-				break ;
-			}
-			if (!ft_strcmp(lst->d_h[i], "<<"))
-				line = expanding(line,list);
-			write (lst->w_h, line, ft_strlen1(line, 0));
-			write (lst->w_h, "\n", 1);
-			free (line);
-			line = NULL;
-	}
-}
-int	here_d(t_m_list *lst, int i, t_list *list)
-{
-	char	*line;
-
-	line = NULL;
-	unlink("here_doc");
-	lst->w_h = open ("here_doc", O_CREAT | O_TRUNC | O_WRONLY, 0777);
-	lst->r_h = open ("here_doc", O_RDONLY, 0777);
-	unlink("here_doc");
-	if (lst->w_h == -1 ||lst->r_h == -1)
-		ft_exit(1, "error,", "Error_F_H\n", list);
-	read_heredoc(line, i, lst, list);
-	close (lst->w_h );
-	signal(SIGINT, ft_handler);
-	if (g_s == 1)
-		return (1);
-	return (0);
-}
-
-void check_ambiguous_ch(t_m_list *lst, t_fd *fd, int i, int l)
-{
-	int	j;
-	
-	j = -1;
-	while(lst->file[i][++j])
-	{
-		if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0'
-			&& ft_strcmp(lst->d_h[i], ">>)") && ft_strcmp(lst->d_h[i], ">)"))
-			ft_exit(1, lst->file[i],"ambiguous redirect\n", NULL);
-	}
-	if (l)
-		fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
-	else
-		fd->id2 = open(lst->file[i],O_CREAT | O_RDWR  | O_TRUNC, 0777);
-		
-}
-void	ft_redirection_ch(t_m_list *lst, t_fd *fd, int i)
-{
-	while (lst->d_h[++i])
-	{
-		if (lst->d_h[i][0] == '>' && lst->d_h[i][1] == '>')
-			check_ambiguous_ch(lst, fd, i, 1);
-		else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
-			fd->id3 = lst->r_h;
-		else if (lst->d_h[i][0] == '<')
-			fd->id3 = open(lst->file[i], O_RDWR , 0777);
-		else
-			check_ambiguous_ch(lst, fd, i, 0);
-		if (fd->id2 == -1 || fd->id3 == -1)
-			ft_exit(1, lst->file[i],"No such file or directory\n", NULL);
-	}
-}
-void check_ambiguous_par(t_m_list *lst, t_fd *fd, int i, int l)
-{
-	int	j;
-	
-	j = -1;
-	while(lst->file[i][++j])
-	{
-		if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0'
-			&& ft_strcmp(lst->d_h[i], ">>)") && ft_strcmp(lst->d_h[i], ">)"))
-		{
-			fd->id3 = -5;
-			printf ("minishell: %s: ambiguous redirect\n", lst->file[i]);
-			return ;
-		}
-	}
-	if (l)
-		fd->id2 = open(lst->file[i],O_CREAT | O_RDWR | O_APPEND, 0777);
-	else
-		fd->id2 = open(lst->file[i],O_CREAT | O_RDWR  | O_TRUNC, 0777);
-		
-}
-
-void	ft_redirection_par(t_m_list *lst, t_fd *fd, int i)
-{
-	while (lst->d_h[++i])
-	{
-		if (lst->d_h[i][0] == '>' && lst->d_h[i][1] == '>')
-			check_ambiguous_par(lst, fd, i, 1);
-		else if (lst->d_h[i][0] == '<' && lst->d_h[i][1] == '<')
-			fd->id3 = lst->r_h;
-		else if (lst->d_h[i][0] == '<')
-			fd->id3 = open(lst->file[i], O_RDWR , 0777);
-		else
-			check_ambiguous_par(lst, fd, i, 0);
-		if (fd->id2 == -1 || fd->id3 == -1)
-		{
-			printf ("minishell: %s: No such file or directory\n", lst->file[i]);
-			break;
-		}
-	}
-}
-
-void	ft_redirection(t_m_list *lst, t_fd *fd, int i)
-{	
-	fd->id = 1;
-	fd->id2 = -2;
-	fd->id3 = -2;
-	if (i == 0)
-		ft_redirection_ch(lst, fd, -1);
-	else
-		ft_redirection_par(lst, fd, -1);
-	if (fd->id2 != -2)
-	{
-		fd->id = 0;
-		dup2(fd->id2, STDOUT_FILENO);
-		close(fd->id2);
-	}
-	if (fd->id3 != -2)
-	{
-		dup2(fd->id3, STDIN_FILENO);
-		close(fd->id3);
-	}
-}
-
-void	ft_exit(int l, char *s, char *err, t_list *lst)
-{
-	int	i;
-
-	i = 0;
-	if (l == 0)
-	{
-		if (lst)
-			free_env(lst);
-		exit (0);
-	}
-	else
-	{
-		if (lst)
-			free_env(lst);
-		printf("minishell: ");
-		printf("%s: ",s);
-		printf("%s",err);
-		exit (l);
-	}
-}
-
-int	check_heredoc(t_m_list *lst)
-{
-	int	i;
-	t_m_list	*lst1;
-
-	lst1 = lst->next;
-	i = 0;
-	while (lst1 && lst1->d_h[i])
-	{
-		if (lst1->d_h[i][0] == '>' || lst1->d_h[i][0] == '<')
-		{
-			if (lst1->d_h[i][0] == '<' && lst1->d_h[i][1] == '<')		
-				return (1);
-		}
-		i++;
-	}
-	return (0);
-}
-
-int ft_check_builtins(char **line)
-{
-	if (ft_strcmp(line[0], "export") == 0)
-		return(0);
-	else if (ft_strcmp(line[0], "env") == 0)
-		return(0);
-	else if (ft_strcmp(line[0], "pwd") == 0)
-		return(0);
-	else if (ft_strcmp(line[0], "echo") == 0)
-		return(0);
-	else if (ft_strcmp(line[0], "exit") == 0)
-		return(0);
-	else if (ft_strcmp(line[0], "cd") == 0)
-		return(0);
-	else if (ft_strcmp(line[0], "unset") == 0)
-		return(0);
-	else
-		return (1);
-}
-int	ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd)
-{
-	int	i; 
-
-	i = fd->ex_c;
-	fd->ex_c = 0;
-	if (ft_strcmp(line[0], "export") == 0)
-		ft_export(line, list, fd);
-	else if (ft_strcmp(line[0], "env") == 0)
-		aff_env(line, list, fd);
-	else if (ft_strcmp(line[0], "pwd") == 0)
-		ft_pwd();
-	else if (ft_strcmp(line[0], "echo") == 0)
-		ft_echo(lst, 0);
-	else if (ft_strcmp(line[0], "exit") == 0)
-		my_exit(lst, fd, i);
-	else if (ft_strcmp(line[0], "cd") == 0)
-		ft_cd(list, lst, fd);
-	else if (ft_strcmp(line[0], "unset") == 0)
-		ft_unset(list, lst, line, fd);
-	else
-		return (fd->ex_c = i, 1);
-	return (0);
-}
-
-void ft_handler1(int sig)
-{
-    if (sig == SIGINT)
-        printf("");
-}
-
-
-void	command_con(t_fd	*fd, t_m_list *lst, t_list *list, int p[2])
-{
-	g_s = 1;
-	signal(SIGQUIT, SIG_DFL);
-	g_s = 0;
-	ft_redirection(lst, fd, 0);
-	if (lst->first_comm)
-	{
-		parsing_b(lst->first_comm, fd->env, fd);
-		if (fd->id == 1 && lst->next)
-		{
-			close(p[0]);
-			dup2(p[1],STDOUT_FILENO);
-			close(p[1]);
-		}
-		if (ft_builtins(lst->dup_com, list, lst, fd) == 0)
-			exit(fd->ex_c);
-		else if (execve(fd->path, lst->dup_com, fd->env) == -1)
-		{
-			write (2, "minishell: ", 11);
-			write (2, lst->first_comm, ft_strlen(lst->first_comm));
-			write (2, ": ", 2);
-			write (2, "command not found\n", 18);
-			exit (127);
-		}
-	}
-	exit(0);
-}
-void	command(t_fd	*fd, t_m_list *lst, t_list *list)
-{
-	int		p[2];
-
-	if (pipe(p) == -1)
-		ft_exit(1, "pipe","ERROR PIPE\n", NULL);
-	fd->id1 = fork();
-	if (fd->id1 == -1)
-	{
-		close(p[1]);
-		close(p[0]);
-		printf ("minishell: fork: Resource temporarily unavailable\n");
-		return ;
-	}
-	signal(SIGINT, ft_handler1);
-	if (fd->id1 == 0)
-		command_con(fd, lst, list, p);
-	else
-	{
-		if (lst->next == NULL)
-			fd->id_ex = fd->id1;
-		close(p[1]);
-		dup2(p[0], STDIN_FILENO);
-		close(p[0]);
-	}
-}
-void	open_heredoc(t_m_list *lst, t_list *list, int i, int cp)
-{
-	while (lst->d_h[i])
-	{
-		if (!ft_strncmp(lst->d_h[i], "<<", 2))
-			cp++;
-		i++;
-	}
-	if (cp > 16)
-		ft_exit(2, "maximum here-document count exceeded\n", "\0", list);
-	while (lst)
-	{
-		i = 0;
-		lst->r_h = 200;
-		while (lst->d_h[i])
-		{
-			if ((!ft_strcmp(lst->d_h[i], "<<")) || (!ft_strcmp(lst->d_h[i], "<<<")))
-			{
-				signal(SIGINT, ft_handler0);
-				close(lst->r_h);
-				if (here_d(lst, i, list))
-					break ;
-			}
-			i++;
-		}
-		lst = lst->next;
-	}
-}
-
+//////////////////////////////////////////////////////
 void	convert_env(t_list *list, t_fd *fd)
 {
-	int i;
-	int j;
-	
+	int	i;
+	int	j;
+
 	i = 0;
 	fd->env = malloc (sizeof(char *) * (ft_lstsize1(list) + 1));
 	if (!fd->env)
@@ -385,10 +39,11 @@ void	convert_env(t_list *list, t_fd *fd)
 	}
 	fd->env[i] = NULL;
 }
+
 void	update_env_(t_m_list *lst, t_list *list)
 {
 	int	i;
-	
+
 	i = 0;
 	while (lst->dup_com[i])
 		i++;
@@ -401,7 +56,8 @@ void	update_env_(t_m_list *lst, t_list *list)
 			free (list->env);
 			free (list->ex);
 			list->env = ft_strjoin(list->key, "=", 1);
-			list->ex = ft_substr(lst->dup_com[i], 0, ft_strlen(lst->dup_com[i]), 0);
+			list->ex = ft_substr(lst->dup_com[i], 0,
+					ft_strlen(lst->dup_com[i]), 0);
 			if (!list->ex)
 				list->ex = ft_strdup("");
 			list->env = ft_strjoin(list->env, list->ex, 0);
@@ -436,62 +92,39 @@ void	ft_function1(int ac, t_m_list *lst, t_fd *fd, t_list *list)
 	}
 }
 
-t_m_list	*ft_lstlastt(t_m_list *lst)
+void	ft_function(t_fd *fd)
 {
-	t_m_list	*d;
+	int		ex;
 
-	if (!lst)
-		return (0);
-	d = lst;
-	while (d->next)
-		d = d->next;
-	return (d);
-}
-
-void remove_f_h(t_m_list *lst)////////////////////////////////////
-{
-	int		i;
-	int		j;
-	// char	s[7] = "/tmp/a";
-	
-	i = 0;
-	j = number_heredoc(lst);
-	while (lst)
+	waitpid(fd->id_ex, &ex, 0);
+	if (WIFSIGNALED(ex))
 	{
-		close (lst->r_h);
-		lst = lst->next;
+		if (WTERMSIG(ex) == 3)
+		{
+			fd->ex_c = 131;
+			write (1, "quit 3\n", 8);
+		}
+		if (WTERMSIG(ex) == 2)
+		{
+			g_s = 0;
+			write (1, "\n", 1);
+			fd->ex_c = 130;
+		}
 	}
+	else
+		fd->ex_c = WEXITSTATUS(ex);
 }
 
 void	ft_pipex(t_m_list *lst, t_list *list, t_fd *fd)
 {
-	struct termios    state;
-	int			ex;
+	struct termios	state;
 
 	fd->id_ex = 0;
 	open_heredoc(lst, list, 0, 0);
 	tcgetattr(STDOUT_FILENO, &state);
 	ft_function1(ft_lstsize(lst), lst, fd, list);
 	if (fd->id3 == 1)
-	{
-		waitpid(fd->id_ex, &ex, 0);
-		if (WIFSIGNALED(ex))
-		{
-			if (WTERMSIG(ex) == 3)
-			{
-				fd->ex_c = 131;
-				write (1, "quit 3\n", 8);
-			}
-			if (WTERMSIG(ex) == 2)
-			{
-				g_s = 0;
-				write (1, "\n", 1);
-				fd->ex_c = 130;
-			}
-		}
-		else
-			fd->ex_c = WEXITSTATUS(ex);
-	}
+		ft_function(fd);
 	while (waitpid(-1, NULL, 0) != -1)
 		;
 	tcsetattr(STDOUT_FILENO, TCSANOW, &state);

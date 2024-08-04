@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:11:28 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/03 15:40:17 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 12:56:28 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ static void	access_cmd(char **path, t_fd *fd, char *av)
 		else
 			ft_exit(126, av, "Permission denied\n", NULL);
 	}
-	else 
+	else
 	{
 		fd->av2 = ft_substr(av, 0, ft_strlen1(av, 0), 0);
 		if (!fd->av2)

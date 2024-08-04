@@ -1,41 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   handler.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/27 12:33:48 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/27 12:34:44 by mkaoukin         ###   ########.fr       */
+/*   Created: 2024/08/04 13:41:19 by mkaoukin          #+#    #+#             */
+/*   Updated: 2024/08/04 15:04:47 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
+#include "ex_minishell.h"
+#include "../parsing/pr_minishell.h"
 
-void	ft_strcmp(void)
+void	ft_handler0(int sig)
 {
-	char		a;
-	char		b;
-	char		c;
+	if (sig == SIGINT)
+		close(0);
+}
 
-	a = '0';
-	while (a <= '7')
+void	ft_handler1(int sig)
+{
+	if (sig == SIGINT)
+		printf("");
+}
+
+void	ft_handler(int sig)
+{
+	if (sig == SIGINT)
 	{
-		b = a + 1;
-		while (b <= '8')
-		{
-			c = b + 1;
-			while (c <= '9')
-			{
-				write (1, &a, 1);
-				write (1, &b, 1);
-				write (1, &c, 1);
-				if (a != '7')
-					write (1, ", ", 2);
-				c++;
-			}
-			b++;
-		}
-		a++;
+		g_s = 1;
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 	}
 }

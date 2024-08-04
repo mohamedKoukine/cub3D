@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:16:12 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/02 11:56:27 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 11:19:44 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,11 @@ t_list	*ft_lstnew1(char *env, int i, int k, char *p)
 {
 	t_list	*d;
 	int		j;
-	int l=0;
-	int x=0;
+	int		l;
+	int		x;
 
+	l = 0;
+	x = 0;
 	j = key_lloc(env);
 	d = (t_list *)malloc(sizeof(t_list));
 	d->env = malloc (ft_strlen(env) + 1);
@@ -48,7 +50,6 @@ t_list	*ft_lstnew1(char *env, int i, int k, char *p)
 			x = 1;
 		else
 			d->env[l++] = env[i];
-			
 		if (i < j)
 			d->key[i] = env[i];
 		else if (i > j)
@@ -67,17 +68,17 @@ t_list	*ft_lstnew1(char *env, int i, int k, char *p)
 			d->check_aff = 0;
 	}
 	if ((d->env[0] == '_' && d->env[1] == '='))
-		d->check_aff  = 2;
+		d->check_aff = 2;
 	if (env == p)
 		d->check_aff = 3;
 	d->i = 0;
 	return (d);
 }
 
-void ft_empty_env1(char *env, char *key, char *ex, int j)
+void	ft_empty_env1(char *env, char *key, char *ex, int j)
 {
-	int		i;
-	
+	int	i;
+
 	i = 0;
 	while (key[i])
 		env[j++] = key[i++];
@@ -87,7 +88,7 @@ void ft_empty_env1(char *env, char *key, char *ex, int j)
 	env[j] = '\0';
 }
 
-char	**ft_empty_env()
+char	**ft_empty_env(void)
 {
 	char	buff[PATH_MAX];
 	char	**env;
@@ -118,20 +119,20 @@ void	check_shlvl(t_list *lst1)
 	int		i;
 
 	if (!ft_strncmp("SHLVL",lst1->env,5))
-		{
-			i = ft_atoi(&lst1->env[6]);
-			if (i >= 1000)
-				i = 0;
-			else if (i < 0)
-				i = -1;
-			if (i == 999)
-				tmp = ft_strdup("");
-			else
-				tmp = ft_itoa(++i);
-			lst1->env = ft_strjoin(ft_substr(lst1->env, 0, 6, 1)
-				, tmp, 0);
-			free (tmp);
-		}
+	{
+		i = ft_atoi(&lst1->env[6]);
+		if (i >= 1000)
+			i = 0;
+		else if (i < 0)
+			i = -1;
+		if (i == 999)
+			tmp = ft_strdup("");
+		else
+			tmp = ft_itoa(++i);
+		lst1->env = ft_strjoin(ft_substr(lst1->env, 0, 6, 1)
+			, tmp, 0);
+		free (tmp);
+	}
 }
 
 void	ft_env(char **env, t_list **lst, int j, char *p)

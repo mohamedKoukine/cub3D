@@ -4,3 +4,5 @@ cd .. whene delet 1/2/3/4
 < /dev/urandom ./minishell
 
 EXIT IN HERDOC
+
+leaks unset env -i 

@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 12:41:12 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/03 17:20:33 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:35:19 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,7 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1)
 			&& (line[ft_strlen_exp(lst1->env, '=', 1)] == '='
 				|| line[ft_strlen_exp(lst1->env, '=', 1)] == '\0'))
 		{
+			puts ("ana hna");
 			add_egual_export(line, lst, lst1);
 			break ;
 		}

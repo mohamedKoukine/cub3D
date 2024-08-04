@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing0.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/03 15:31:26 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:41:46 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,8 +113,6 @@ int	cases(char *line)
 		|| !ft_strncmp(line, "& &", 3)
 		|| !ft_strncmp(line, "(", 1)
 		|| !ft_strncmp(line, ")", 1)
-		|| !ft_strncmp(line, "()", 2)
-		|| !ft_strncmp(line, "( )", 3)
 		|| !ft_strncmp(line, "> <", 3))
 		return (0);
 	return (1);
@@ -141,7 +139,7 @@ int	syntax_error(char *line)
 			write(2, "minishell$: syntax error near unexpected token\n", 47);
 			free (line);
 			return (258);
-		 }
+		}
 		i++;
 	}
 	return (0);

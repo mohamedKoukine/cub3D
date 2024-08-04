@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:43:19 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/29 12:17:00 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 11:25:49 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,7 @@ char	*ft_strtrim(char *s1, char const *set, int fre)
 	if (!str)
 		return (NULL);
 	while (i <= j)
-	{
-		str[e] = s1[i];
-		e++;
-		i++;
-	}
+		str[e++] = s1[i++];
 	str[e] = '\0';
 	if (fre == 1)
 		free(s1);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lst.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/02 13:20:13 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/29 15:44:38 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 11:24:29 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ void	ft_lstadd_back_env(t_list **lst, t_list *new)
 	d = ft_lstlast_env(*lst);
 	d->next = new;
 }
-
 
 t_m_list	*ft_lstlast(t_m_list *lst)
 {

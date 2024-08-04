@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 10:09:11 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/28 12:16:21 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:27:33 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,7 @@ char	*ft_substr(char *s, unsigned int start, size_t len, int fre)
 	if (start >= ft_strlen1(s, 0) || l == 0)
 		return (ft_strdup(""));
 	if (start + l > ft_strlen1(s, 0))
-	{
 		l = ft_strlen1(s, 0) - start;
-	}
 	d = (char *)malloc(sizeof(char) * l + 1);
 	if (!d)
 		return (0);
@@ -88,4 +86,28 @@ char	*ft_substr(char *s, unsigned int start, size_t len, int fre)
 	if (fre == 1)
 		free (s);
 	return (d);
+}
+
+t_m_list	*ft_lstlastt(t_m_list *lst)
+{
+	t_m_list	*d;
+
+	if (!lst)
+		return (0);
+	d = lst;
+	while (d->next)
+		d = d->next;
+	return (d);
+}
+
+void	remove_f_h(t_m_list *lst)
+{
+	int		i;
+
+	i = 0;
+	while (lst)
+	{
+		close (lst->r_h);
+		lst = lst->next;
+	}
 }

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 08:23:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/01 14:12:23 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 14:28:51 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
 
-int ft_len(char **str)
+int	ft_len(char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -22,14 +22,14 @@ int ft_len(char **str)
 	return (i);
 }
 
-static int  ft_check_n(char *str)
+static int	ft_check_n(char *str)
 {
-	int i;
+	int	i;
 
 	i = 1;
-	if (str[0] == '-')
+	if (str && str[0] == '-')
 	{
-		while(str[i])
+		while (str[i])
 		{
 			if (str[i] != 'n')
 				return (0);
@@ -40,28 +40,20 @@ static int  ft_check_n(char *str)
 	return (0);
 }
 
-void    ft_echo(t_m_list *list, int s)
+void	ft_echo(t_m_list *list, int s)
 {
-	int i;
-	int j;
+	int	i;
 
 	i = 1;
-	j = 1;
+	if (ft_check_n(list->dup_com[1]))
+	{
+		s = 1;
+		i++;
+	}
 	while (list->dup_com && list->dup_com[i])
 	{
-		while (list->dup_com && list->dup_com[j])
-		{
-			if (ft_check_n(list->dup_com[j]))
-			{
-				s = 1;
-				i++;
-			}
-			else
-				break;
-			j++;
-		}
 		if (list->dup_com[i])
-			printf("%s",list->dup_com[i]);
+			printf("%s", list->dup_com[i]);
 		if (i < ft_len(list->dup_com) - 1)
 			printf(" ");
 		if (list->dup_com[i])
