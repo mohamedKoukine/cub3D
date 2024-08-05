@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pr_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/04 16:42:10 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/04 17:45:05 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_m_list	*ft_lstlast(t_m_list *lst);
 t_m_list	*ft_lstnew(char *content, char **com);
 char		*ft_strdup(const char *src);
 int			is_empty(char *line);
-t_list		*ft_lstnew1(char *env, int i, int k, char *p);
+t_list		*ft_lstnew1(char *env, int i, char *p);
 void		ft_env(char **env, t_list **lst, int j, char *p);
 void		aff_env(char **line, t_list *lst, t_fd *fd);
 int			ft_isalnum(int i);

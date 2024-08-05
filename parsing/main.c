@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/04 17:18:37 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 18:00:12 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,37 +74,20 @@ char	*read_lines(char *line, t_fd *fd, t_list *lst)
 // }
 	// atexit(f);
 
-int	main(int ac, char **av, char **env)
+void	ft_while(t_list *lst, t_fd *fd, t_m_list *list, char *line)
 {
-	t_list		*lst;
-	t_m_list	*list;
-	char		*line;
-	char		*ito;
-	t_fd		fd;
+	char	*ito;
 
-	(void)av;
-	(void)ac;
-	lst = NULL;
-	list = NULL;
-	line = NULL;
-	if (!isatty(STDIN_FILENO))
-        exit(1);
-	ft_env(env, &lst, 0, NULL);
-	fd.ex_c = 0;
-	signal(SIGINT, ft_handler);
-	signal(SIGQUIT, SIG_IGN);
-	rl_catch_signals = 0;
 	while (1)
 	{
-		line = read_lines(line, &fd, lst);
-		ito = ft_itoa(fd.ex_c);
+		line = read_lines(line, fd, lst);
+		ito = ft_itoa(fd->ex_c);
 		line = exit_code(line, ito, 0, 0);
-		free (ito);
-		line = line_shower(line, lst, &fd);
+		line = line_shower(line, lst, fd);
 		if (!line)
 			continue ;
 		list = list_to_exe(line);
-		ft_pipex(list, lst, &fd);
+		ft_pipex(list, lst, fd);
 		if (list && list->ptr_unset)
 		{
 			lst = list->ptr_unset;
@@ -117,5 +100,23 @@ int	main(int ac, char **av, char **env)
 		free_list(list);
 		list = NULL;
 	}
+}
+
+int	main(int ac, char **av, char **env)
+{
+	t_list		*lst;
+	t_fd		fd;
+
+	(void)av;
+	(void)ac;
+	lst = NULL;
+	if (!isatty(STDIN_FILENO))
+		exit(1);
+	ft_env(env, &lst, 0, NULL);
+	fd.ex_c = 0;
+	signal(SIGINT, ft_handler);
+	signal(SIGQUIT, SIG_IGN);
+	rl_catch_signals = 0;
+	ft_while(lst, &fd, NULL, NULL);
 	return (0);
 }

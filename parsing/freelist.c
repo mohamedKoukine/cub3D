@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   freelist.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 15:55:33 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/04 15:56:16 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/04 17:33:24 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@ void	free_env(t_list *lst)
 	while (lst)
 	{
 		tmp = lst;
-		free (lst->env);
+		if (lst->env)
+			free (lst->env);
 		if (lst->ex)
 			free (lst->ex);
-		free (lst->key);
+		if (lst->key)
+			free (lst->key);
 		lst = lst->next;
 		free (tmp);
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 10:57:00 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/04 16:21:50 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/04 17:56:30 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,5 +115,6 @@ char	*exit_code(char *line, char *code, int i, int k)
 		else if (line[i])
 			line2[k++] = line[i++];
 	}
+	free (code);
 	return (line2[k] = '\0', free (line), line2);
 }
