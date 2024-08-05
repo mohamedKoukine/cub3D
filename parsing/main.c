@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/04 18:00:12 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/05 09:46:27 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,34 @@ char	*read_lines(char *line, t_fd *fd, t_list *lst)
 // 	system("leaks minishell");
 // }
 	// atexit(f);
+char	*get_home1(void)
+{
+	char	*pwd;
+	char	*home;
+	int		i;
+	int		j;
+	
+	i = 0;
+	j = 0;
+	pwd = getcwd(NULL, 0);
+	while (pwd[i])
+	{
+		if (!ft_strncmp("/Desktop", &pwd[i], 8))
+			break ;
+		i++;
+	}
+	home = malloc(i + 1);
+	if (!home)
+		ft_exit(1, "minishell", "filed allocation", NULL);
+	while (j < i)
+	{
+		home[j] = pwd[j];
+		j++;
+	}
+	home[j] = '\0';
+	free (pwd);
+	return (home);
+}
 
 void	ft_while(t_list *lst, t_fd *fd, t_m_list *list, char *line)
 {
@@ -101,6 +129,7 @@ void	ft_while(t_list *lst, t_fd *fd, t_m_list *list, char *line)
 		list = NULL;
 	}
 }
+
 
 int	main(int ac, char **av, char **env)
 {
