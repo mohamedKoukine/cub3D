@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/05 09:46:27 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:41:01 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,13 +73,14 @@ char	*read_lines(char *line, t_fd *fd, t_list *lst)
 // 	system("leaks minishell");
 // }
 	// atexit(f);
+
 char	*get_home1(void)
 {
 	char	*pwd;
 	char	*home;
 	int		i;
 	int		j;
-	
+
 	i = 0;
 	j = 0;
 	pwd = getcwd(NULL, 0);
@@ -114,7 +115,7 @@ void	ft_while(t_list *lst, t_fd *fd, t_m_list *list, char *line)
 		line = line_shower(line, lst, fd);
 		if (!line)
 			continue ;
-		list = list_to_exe(line);
+		list = list_to_exe(lst, line);
 		ft_pipex(list, lst, fd);
 		if (list && list->ptr_unset)
 		{
@@ -129,7 +130,6 @@ void	ft_while(t_list *lst, t_fd *fd, t_m_list *list, char *line)
 		list = NULL;
 	}
 }
-
 
 int	main(int ac, char **av, char **env)
 {

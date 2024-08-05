@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 12:41:12 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/04 17:45:22 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:22:07 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ void	ft_export_cont1(char *line, t_list *lst, t_list *lst1)
 			&& (line[ft_strlen_exp(lst1->env, '=', 1)] == '='
 				|| line[ft_strlen_exp(lst1->env, '=', 1)] == '\0'))
 		{
-			puts ("ana hna");
 			add_egual_export(line, lst, lst1);
 			break ;
 		}

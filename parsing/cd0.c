@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 10:50:52 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/04 10:52:38 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:28:42 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ char	*get_home(t_list *lst)
 {
 	while (lst)
 	{
-		if (!ft_strcmp(lst->key, "HOME"))
+		if (!ft_strncmp(lst->env, "HOME=", 5))
 			return (lst->ex);
 		lst = lst->next;
 	}

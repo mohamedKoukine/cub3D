@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 15:18:15 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/04 15:52:51 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:33:12 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,13 @@ t_m_list	*final_s(t_m_list *lst)
 	return (lst);
 }
 
-t_m_list	*list_to_exe(char *line)
+t_m_list	*list_to_exe(t_list *lst, char *line)
 {
 	t_m_list	*list;
 
 	list = split_all(line);
 	free(line);
+	list = telda_to_home(list, lst, NULL);
 	list = clear_lst(list);
 	list = en_s(list, 0);
 	list = final_s(list);

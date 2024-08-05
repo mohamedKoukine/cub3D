@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pr_minishell.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/04 17:45:05 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/05 10:34:26 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void		my_exit(t_m_list *list, t_fd *fd, int exit_code);
 void		ft_cd(t_list *lst, t_m_list *list, t_fd *fd);
 char		*ft_itoa(int n);
 int			if_its_q(char q);
-char		*get_home(t_list *lst);
 char		*exit_code(char *line, char *code, int i, int k);
 void		ft_handler(int sig);
 void		free_env(t_list *lst);
@@ -116,7 +115,7 @@ void		aff_export(t_list *lst);
 void		print_export(t_list *lst, t_list *lst2, int i);
 t_m_list	*split_all(char *line);
 t_m_list	*clear_lst(t_m_list *list);
-t_m_list	*list_to_exe(char *line);
+t_m_list	*list_to_exe(t_list *lst, char *line);
 char		*no_qutes(char *line, int fre, int i, int j);
 void		garbag_find(char *arg);
 t_m_list	*decript_stack(t_m_list *list);
@@ -139,5 +138,7 @@ char		*place_key2(char *line, char *str, t_list *lst, int i);
 int			here_expand(char **line, char *str, t_list *lst);
 int			strchr_char(char *s, char c);
 int			con_d(int *i, char *line, int *s);
+t_m_list	*telda_to_home(t_m_list *list, t_list *lst, char *home);
+char		*get_home1(void);
 
 #endif
