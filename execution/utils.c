@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/08 10:09:11 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/07/08 16:16:14 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 13:27:33 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,36 +32,7 @@ size_t	ft_strlen1(const char *str, int flag)
 	return (i);
 }
 
-char	*ft_strjo_or_cat(char *s1, char *s2)
-{
-	char	*d;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	if (!s1)
-		return (ft_substr(s2, 0, ft_strchr(s2, '\n')));
-	j = ft_strlen1(s2, 1);
-	if (ft_strchr(s2, '\n') > -1)
-		j++;
-	d = (char *)malloc(sizeof(char) * (ft_strlen1(s1, 0) + j + 1));
-	if (!d)
-		return (NULL);
-	j = 0;
-	while (s1[i])
-		d[i++] = s1[j++];
-	j = 0;
-	while (s2[j])
-	{
-		d[i++] = s2[j++];
-		if (s2[j - 1] == '\n')
-			break ;
-	}
-	return (d[i] = '\0', d);
-}
-
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin(char *s1, char *s2, int l)
 {
 	char	*d;
 	int		i;
@@ -83,11 +54,12 @@ char	*ft_strjoin(char *s1, char *s2)
 	while (s2[j])
 		d[i++] = s2[j++];
 	d[i] = '\0';
-	// free(s1);
+	if (l == 0)
+		free(s1);
 	return (d);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char *s, unsigned int start, size_t len, int fre)
 {
 	char			*d;
 	unsigned int	l;
@@ -100,9 +72,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (start >= ft_strlen1(s, 0) || l == 0)
 		return (ft_strdup(""));
 	if (start + l > ft_strlen1(s, 0))
-	{
 		l = ft_strlen1(s, 0) - start;
-	}
 	d = (char *)malloc(sizeof(char) * l + 1);
 	if (!d)
 		return (0);
@@ -113,5 +83,31 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		start++;
 	}
 	d[i] = '\0';
+	if (fre == 1)
+		free (s);
 	return (d);
+}
+
+t_m_list	*ft_lstlastt(t_m_list *lst)
+{
+	t_m_list	*d;
+
+	if (!lst)
+		return (0);
+	d = lst;
+	while (d->next)
+		d = d->next;
+	return (d);
+}
+
+void	remove_f_h(t_m_list *lst)
+{
+	int		i;
+
+	i = 0;
+	while (lst)
+	{
+		close (lst->r_h);
+		lst = lst->next;
+	}
 }

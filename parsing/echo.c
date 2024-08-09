@@ -1,20 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_echo.c                                          :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 08:23:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/03 08:26:26 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/05 11:14:43 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
 
-int ft_len(char **str)
+int	ft_len(char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -22,14 +22,14 @@ int ft_len(char **str)
 	return (i);
 }
 
-static int  ft_check_n(char *str)
+static int	ft_check_n(char *str)
 {
-	int i;
+	int	i;
 
 	i = 1;
-	if (str[0] == '-')
+	if (str && str[0] == '-')
 	{
-		while(str[i])
+		while (str[i])
 		{
 			if (str[i] != 'n')
 				return (0);
@@ -40,30 +40,24 @@ static int  ft_check_n(char *str)
 	return (0);
 }
 
-void    ft_echo(t_m_list *list, int s)
+void	ft_echo(t_m_list *list, int s)
 {
-	int i;
-	int j;
+	int	i;
 
 	i = 1;
-	j = 1;
 	while (list->dup_com && list->dup_com[i])
 	{
-		while (list->dup_com && list->dup_com[j])
+		if (ft_check_n(list->dup_com[i]))
+			s = 1;
+		else
 		{
-			if (ft_check_n(list->dup_com[j]))
-			{
-				s = 1;
-				i++;
-			}
-			else
-				break;
-			j++;
+			if (list->dup_com[i])
+				printf("%s", list->dup_com[i]);
+			if (i < ft_len(list->dup_com) - 1)
+				printf(" ");
 		}
-		printf("%s",list->dup_com[i]);
-		if (i < ft_len(list->dup_com) - 1)
-			printf(" ");
-		i++;
+		if (list->dup_com[i])
+			i++;
 	}
 	if (!s)
 		printf("\n");

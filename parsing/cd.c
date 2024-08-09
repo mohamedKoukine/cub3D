@@ -6,57 +6,122 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:44:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/08 16:28:52 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/06 14:24:54 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
 #include "../execution/ex_minishell.h"
 
-char	*get_home(t_list *lst)
+static void	cheng_pwd(t_list *lst, char *old_pwd, t_list *tmp, char *str)
 {
-	while (lst)
-	{
-		if (ft_strcmp(lst->key, "HOME"))
-			return (lst->ex);
-		lst = lst->next;
-	}
-	return (NULL);
-}
-
-void	ft_cd(t_list *lst, t_m_list *list)
-{
-	t_list	*tmp = lst;
-	char	buf[PATH_MAX];
-	char	*old_pwd;
-	int		i;
+	int	i;
+	int	j;
 
 	i = 0;
-	if (!list->dup_com[1])
-		chdir(get_home(lst));
-	if (chdir(list->dup_com[1]) == -1)
-		printf ("minishell: %s: No such file or directory\n", list->dup_com[1]);
-	while(tmp)
+	j = 0;
+	while (tmp)
 	{
-		if (!ft_strcmp(tmp->key, "PWD"))
+		if (!ft_strcmp(tmp->key, "PWD") && i == 0)
 		{
-			old_pwd = tmp->ex;
-			free(tmp->env);
-			tmp->env = ft_strjoin("PWD=", getcwd(buf, PATH_MAX));
-			tmp->ex = getcwd(buf, PATH_MAX);
-		}
-		else if (!ft_strcmp(tmp->key, "OLD_PWD"))
-		{
-			free(tmp->env);
-			tmp->env = ft_strjoin("OLD_PWD=", old_pwd);
-			tmp->ex = old_pwd;
+			old_pwd = ft_strdup(tmp->ex);
+			freethis(tmp->env, tmp->ex);
+			tmp->ex = str;
+			tmp->env = ft_strjoin("PWD=", tmp->ex, 1);
+			tmp = lst;
 			i = 1;
+			continue ;
 		}
+		if (!ft_strcmp(tmp->key, "OLDPWD") && i == 1)
+			chang_oldpwd(tmp, old_pwd, &j);
 		tmp = tmp->next;
 	}
 	if (i == 0)
+		free (str);
+	if (i == 1 && j == 0 && old_pwd)
+		free (old_pwd);
+}
+
+static int	check_dir(t_list *lst, t_m_list *list)
+{
+	char	*pwd;
+	char	buf[PATH_MAX];
+	char	*tmp;
+
+	pwd = is_pwd(lst);
+	chdir(list->dup_com[1]);
+	if (getcwd(buf, PATH_MAX) == NULL)
 	{
-		tmp = ft_lstnew1(ft_strjoin("OLD_PWD=", old_pwd), 0, 0);
-		ft_lstadd_back_env(&lst, tmp);
+		if (!ft_strcmp(list->dup_com[1], ".."))
+		{
+			printf ("cd: error retrieving current directory: getcwd: cannot "
+				"access parent directories: No such file or directory\n");
+			tmp = ft_strjoin(pwd, "/..", 1);
+			cheng_pwd(lst, pwd, lst, tmp);
+			return (1);
+		}
 	}
+	return (0);
+}
+
+void	cd_empty(t_fd *fd, t_list *lst)
+{
+	char	*home;
+
+	home = get_home(lst);
+	if (home && home[0])
+	{
+		if (chdir(home) == -1)
+		{
+			printf ("minishell: %s: No such file or directory\n", home);
+			fd->ex_c = 1;
+		}
+	}
+	else
+	{
+		printf ("minishell: cd: HOME not set\n");
+		fd->ex_c = 1;
+	}
+}
+
+static void	cd_return(t_fd *fd, char *old_pwd)
+{
+	if (chdir(old_pwd) == -1)
+	{
+		if (old_pwd)
+			printf ("cd: %s: No such file or directory\n", old_pwd);
+		else
+			printf ("minishell: cd: OLDPWD not set\n");
+		fd->ex_c = 1;
+		return ;
+	}
+	else
+		printf("%s\n", old_pwd);
+}
+
+void	ft_cd(t_list *lst, t_m_list *list, t_fd *fd)
+{
+	char	*old_pwd;
+	char	buf[PATH_MAX];
+
+	old_pwd = oldisgold(lst);
+	if (!list->dup_com[1])
+		cd_empty(fd, lst);
+	else if (!ft_strcmp(list->dup_com[1], "-"))
+		cd_return(fd, old_pwd);
+	else if (getcwd(buf, PATH_MAX) == NULL)
+	{
+		if (check_dir (lst, list))
+			return ;
+	}
+	else
+	{
+		if (chdir(list->dup_com[1]) == -1 && list->dup_com[1][0])
+		{
+			printf("minishell: %s: No such file or directory\n",
+				list->dup_com[1]);
+			fd->ex_c = 1;
+		}
+	}
+	cheng_pwd(lst, old_pwd, lst, getcwd(NULL, 0));
 }

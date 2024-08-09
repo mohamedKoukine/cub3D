@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parssing0.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/07/08 15:11:43 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/08 11:13:32 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
+#include "../execution/ex_minishell.h"
 
 int	quotes_nb(char *line)
 {
@@ -21,6 +22,8 @@ int	quotes_nb(char *line)
 	i = 0;
 	qd = 0;
 	qs = 0;
+	if (!line)
+		return (1);
 	while (line[i])
 	{
 		if (line[i] == '"')
@@ -32,12 +35,13 @@ int	quotes_nb(char *line)
 	if (qs % 2 != 0 || qd % 2 != 0)
 	{
 		write(2, "minishell$: syntax error near unexpected token\n", 47);
+		free (line);
 		return (258);
 	}
-	return (1);
+	return (0);
 }
 
-void	*allocation(char *line)
+void	*allocation(char *line, t_list *lst)
 {
 	int		i;
 	int		j;
@@ -59,11 +63,11 @@ void	*allocation(char *line)
 	}
 	nospace = malloc(j + 1);
 	if (!nospace)
-		return (NULL);
+		ft_mallocerr(NULL, lst, line, NULL);
 	return (nospace);
 }
 
-char	*rm_space(char *line)
+char	*rm_space(char *line, t_list *lst)
 {
 	int		i;
 	int		j;
@@ -71,7 +75,7 @@ char	*rm_space(char *line)
 
 	i = 0;
 	j = 0;
-	nospace = allocation(line);
+	nospace = allocation(line, lst);
 	while (line[i])
 	{
 		if (!((line[i] < 9 || line[i] > 13) && line[i] != 32))
@@ -84,6 +88,7 @@ char	*rm_space(char *line)
 			i++;
 	}
 	nospace[j] = '\0';
+	free(line);
 	return (nospace);
 }
 
@@ -110,8 +115,7 @@ int	cases(char *line)
 		|| !ft_strncmp(line, "&&", 2)
 		|| !ft_strncmp(line, "& &", 3)
 		|| !ft_strncmp(line, "(", 1)
-		|| !ft_strncmp(line, "()", 2)
-		|| !ft_strncmp(line, "( )", 3)
+		|| !ft_strncmp(line, ")", 1)
 		|| !ft_strncmp(line, "> <", 3))
 		return (0);
 	return (1);
@@ -128,6 +132,7 @@ int	syntax_error(char *line)
 		|| line[ls - 1] == '>' || line[ls - 1] == '<')
 	{
 		write(2, "minishell$: syntax error near unexpected token\n", 47);
+		free (line);
 		return (258);
 	}
 	while (i < ls)
@@ -135,8 +140,9 @@ int	syntax_error(char *line)
 		if (!cases(&line[i]))
 		{
 			write(2, "minishell$: syntax error near unexpected token\n", 47);
+			free (line);
 			return (258);
-		 }
+		}
 		i++;
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/31 16:18:21 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/06/10 15:19:46 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/04 15:12:58 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,10 @@ char	*ft_strdup(const char *src)
 int	ft_strcmp1(const char *s1, const char *s2)
 {
 	size_t	i;
+
 	i = 0;
 	if (!s2 || !s1)
-	return (-1);
+		return (-1);
 	while (s1[i] && s1[i] == s2[i])
 		i++;
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);

@@ -6,11 +6,12 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 17:43:19 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/10 14:57:07 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/06 10:49:19 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pr_minishell.h"
+#include "../execution/ex_minishell.h"
 
 int	first_i(char const *s1, char const *set)
 {
@@ -59,7 +60,7 @@ int	last_i(char const *s1, char const *set)
 	return (l);
 }
 
-char	*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char *s1, char const *set, int fre)
 {
 	int		i;
 	int		j;
@@ -79,11 +80,9 @@ char	*ft_strtrim(char const *s1, char const *set)
 	if (!str)
 		return (NULL);
 	while (i <= j)
-	{
-		str[e] = s1[i];
-		e++;
-		i++;
-	}
+		str[e++] = s1[i++];
 	str[e] = '\0';
+	if (fre == 1)
+		free(s1);
 	return (str);
 }
