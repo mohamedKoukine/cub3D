@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 16:19:41 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/09 08:21:51 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/10 14:28:39 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	checkis_one(char **line, int on, int s)
 		{
 			if (!ft_strcmp(line[i], "<<")
 				&& strchr_char(line[i + 1], '$'))
-				return (1);
+				return (free_all (line), 1);
 			i++;
 		}
 	}
@@ -34,7 +34,7 @@ int	checkis_one(char **line, int on, int s)
 		{
 			if ((!ft_strncmp(line[i], ">", 1) || !ft_strncmp(line[i], "<", 1))
 				&& !ft_strncmp(line[i + 1], "$", 1) && s == 0)
-				return (1);
+				return (free_all (line), 1);
 			i++;
 		}
 	}

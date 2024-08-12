@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:25:05 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/06 16:49:29 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/10 15:49:44 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	my_exit(t_m_list *list, t_fd *fd, int exit_code)
 	{
 		printf("exit\nminishell: exit: too many arguments\n");
 		fd->ex_c = 1;
-		return ;
+		return ;  
 	}
 	else if (!all_digit(list->dup_com[1], 0) || list->dup_com[1][0] == '\0')
 	{
