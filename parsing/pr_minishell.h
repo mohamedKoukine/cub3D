@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:09 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/09 10:34:22 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/13 11:01:13 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int			ft_len(char **str);
 long		ft_atoi(const char *str);
 long		ft_atoi2(char *str, t_m_list *list);
 void		ft_echo(t_m_list *list, int s);
-void		my_exit(t_m_list *list, t_fd *fd, int exit_code);
+void		my_exit(t_m_list *list, t_fd *fd, int exit_code, t_list *lst);
 void		ft_cd(t_list *lst, t_m_list *list, t_fd *fd);
 char		*ft_itoa(int n);
 int			if_its_q(char q);

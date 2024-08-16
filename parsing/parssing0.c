@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parssing0.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/08 11:13:32 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:26:27 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	*allocation(char *line, t_list *lst)
 	{
 		if ((line[i] >= 9 && line[i] <= 13) || line[i] == 32)
 			j++;
-		while ((line[i] >= 9 && line[i] <= 13) || line[i] == 32)
+		while (((line[i] >= 9 && line[i] <= 13) || line[i] == 32) && line[i])
 			i++;
 		if (line[i])
 		{
@@ -80,9 +80,9 @@ char	*rm_space(char *line, t_list *lst)
 	{
 		if (!((line[i] < 9 || line[i] > 13) && line[i] != 32))
 			nospace[j++] = ' ';
-		while (!((line[i] < 9 || line[i] > 13) && line[i] != 32))
+		while (!((line[i] < 9 || line[i] > 13) && line[i] != 32) && line[i])
 			i++;
-		if ((line[i] < 9 || line[i] > 13) && line[i] != 32)
+		if ((line[i] < 9 || line[i] > 13) && line[i] != 32 && line[i])
 			nospace[j++] = line[i];
 		if (line[i])
 			i++;
@@ -128,8 +128,8 @@ int	syntax_error(char *line)
 
 	ls = ft_strlen(line);
 	i = 0;
-	if (line[0] == '|' || line[ls - 1] == '|'
-		|| line[ls - 1] == '>' || line[ls - 1] == '<')
+	if (line[0] == '|' || ls > 0 && ( line[ls - 1] == '|'
+		|| line[ls - 1] == '>' || line[ls - 1] == '<'))
 	{
 		write(2, "minishell$: syntax error near unexpected token\n", 47);
 		free (line);

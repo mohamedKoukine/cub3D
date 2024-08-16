@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   util.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/24 09:15:21 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/08 12:26:07 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/15 16:54:21 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	fill_key(t_list *d, char *env, int j)
 			d->env[l++] = env[i];
 		if (i < j)
 			d->key[i] = env[i];
-		else if (i > j)
+		else if (i > j + x)
 			d->ex[k++] = env[i];
 		if (i + 1 == j)
 			d->key[i + 1] = '\0';

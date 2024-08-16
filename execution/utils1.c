@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:37:36 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/08 11:23:28 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/13 11:00:33 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	ft_builtins(char **line, t_list *list, t_m_list *lst, t_fd *fd)
 	else if (ft_strcmp(line[0], "echo") == 0)
 		ft_echo(lst, 0);
 	else if (ft_strcmp(line[0], "exit") == 0)
-		my_exit(lst, fd, i);
+		my_exit(lst, fd, i, list);
 	else if (ft_strcmp(line[0], "cd") == 0)
 		ft_cd(list, lst, fd);
 	else if (ft_strcmp(line[0], "unset") == 0)

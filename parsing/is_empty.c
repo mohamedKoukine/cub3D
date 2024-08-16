@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_empty.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 11:23:38 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/08 13:01:37 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/13 12:32:44 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,26 +25,23 @@ void	telda_to_home0(t_m_list *list, t_list *lst, char *home, t_m_list *tmp)
 {
 	int		i;
 	char	*home1;
+	char	*tofree;
 
 	i = -1;
 	home1 = get_home(lst);
 	while (tmp->d_com[++i])
 	{
-		if (!ft_strcmp(tmp->d_com[i], "~"))
+		if (!ft_strcmp(tmp->d_com[i], "~")
+			|| !ft_strncmp(tmp->d_com[i], "~/", 2))
 		{
-			free(tmp->d_com[i]);
+			tofree = tmp->d_com[i];
 			if (home1)
-			{
-				tmp->d_com[i] = ft_strdup(home1);
-				if (!tmp->d_com[i])
-					ft_mallocerr(list, lst, home, NULL);
-			}
+				tmp->d_com[i] = ft_strjoin(home1, &tmp->d_com[i][1], 1);
 			else
-			{
-				tmp->d_com[i] = ft_strdup(home);
-				if (!tmp->d_com[i])
-					ft_mallocerr(list, lst, home, NULL);
-			}
+				tmp->d_com[i] = ft_strjoin(home, &tmp->d_com[i][1], 1);
+			if (!tmp->d_com[i])
+				ft_mallocerr(list, lst, home, NULL);
+			free(tofree);
 		}
 	}
 }

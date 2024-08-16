@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 15:18:15 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/09 08:31:06 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:09:00 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,7 @@ t_m_list	*list_to_exe(t_list *lst, char *line)
 
 	list = split_all(line, lst, 0);
 	free(line);
+	line = NULL;
 	list = telda_to_home(list, lst, NULL);
 	list = clear_lst(list, lst);
 	list = en_s(list, 0, lst);
