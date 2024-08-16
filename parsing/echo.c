@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 08:23:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/10 10:53:22 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/16 17:41:40 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	ft_check_n(char *str)
 	int	i;
 
 	i = 1;
-	if (str && str[0] == '-')
+	if (str && str[0] == '-' && str[1] == 'n')
 	{
 		while (str[i])
 		{
@@ -55,11 +55,13 @@ static int	ft_check_n(char *str)
 void	ft_echo(t_m_list *list, int s)
 {
 	int	i;
+	int	x;
 
 	i = 1;
+	x = 0;
 	while (list->dup_com && list->dup_com[i])
 	{
-		if (ft_check_n(list->dup_com[i]))
+		if (ft_check_n(list->dup_com[i]) && x == 0)
 			s = 1;
 		else
 		{
@@ -67,6 +69,7 @@ void	ft_echo(t_m_list *list, int s)
 				ft_putstr(list->dup_com[i]);
 			if (i < ft_len(list->dup_com) - 1)
 				write (1, " ", 1);
+			x = 1;
 		}
 		if (list->dup_com[i])
 			i++;

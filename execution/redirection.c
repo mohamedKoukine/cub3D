@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 13:33:16 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/10 15:28:09 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:58:06 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,10 @@ void	check_ambiguous_ch(t_m_list *lst, t_fd *fd, int i, int l)
 	int	j;
 
 	j = -1;
+	if (l != 2)
+		close (fd->id2);
+	else
+		close (fd->id3);
 	while (lst->file[i][++j])
 	{
 		if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0'
@@ -53,6 +57,10 @@ void	check_ambiguous_par(t_m_list *lst, t_fd *fd, int i, int l)
 	int	j;
 
 	j = -1;
+	if (l != 2)
+		close (fd->id2);
+	else
+		close (fd->id3);
 	while (lst->file[i][++j])
 	{
 		if (lst->file[i][j] == '$' && lst->file[i][j + 1] != '\0'

@@ -1,0 +1,37 @@
+➜ minishell$ ✗ export < p
+minishell: p: No such file or directory
+➜ minishell$ ✗ echo $?
+0
+➜ minishell$ ✗ 
+----------------------------------------------
+➜ minishell$ ✗ cd ..
+cd: error retrieving current directory: getcwd: cannot access parent directories: No such file or directory
+➜ minishell$ ✗ echo $?
+0
+----------------------------------------------
+➜ minishell$ ✗ exit | exit 100
+exit
+----------------------------------------------
+minishell: /bin/yassine: Permission denied
+➜ minishell$ ✗ echo $?
+126
+➜ minishell$ ✗ djfgdjk
+minishell: djfgdjk: command not found
+➜ minishell$ ✗ echo $?
+127
+➜ minishell$ ✗ bash
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+bash-3.2$ /bin/yassine
+bash: /bin/yassine: No such file or directory
+bash-3.2$ echo $?
+127
+bash-3.2$ 
+----------------------------------------------
+➜ minishell$ ✗ export x="a      b"
+➜ minishell$ ✗ ls >> $x
+➜ minishell$ ✗ bash
+----------------------------------------------
+----------------------------------------------

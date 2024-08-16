@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:37:36 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/13 11:00:33 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/16 17:58:28 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ void	command(t_fd *fd, t_m_list *lst, t_list *list)
 	{
 		close(p[1]);
 		close(p[0]);
+		fd->ex_c = 1;
+		// fd->id3 = 2;
 		printf ("minishell: fork: Resource temporarily unavailable\n");
 		return ;
 	}

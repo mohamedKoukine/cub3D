@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/07 11:32:22 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/16 16:01:57 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:50:20 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,14 +99,9 @@ char	*get_home1(t_list *lst, t_m_list *list)
 
 void	ft_while(t_list *lst, t_fd *fd, t_m_list *list, char *line)
 {
-	int fd1 = open("test.txt", O_CREAT | O_RDWR, 0777);
-	if (fd1 < 0)
-		perror("open");
 	while (1)
 	{
 		line = read_lines(line, fd, lst);
-		write (fd1, line, ft_strlen(line));
-		write (fd1, "\n", 1);
 		line = exit_code(magic_hide(line), lst, fd);
 		garbag_find (line);
 		line = line_shower(line, lst, fd);
@@ -136,8 +131,8 @@ int	main(int ac, char **av, char **env)
 	(void)av;
 	(void)ac;
 	lst = NULL;
-	// if (!isatty(STDIN_FILENO))
-	// 	exit(1);
+	if (!isatty(STDIN_FILENO))
+		exit(1);
 	ft_env(env, &lst, 0, NULL);
 	fd.ex_c = 0;
 	signal(SIGINT, ft_handler);
