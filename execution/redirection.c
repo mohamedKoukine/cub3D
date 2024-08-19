@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 13:33:16 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/16 16:58:06 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/18 19:23:55 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,11 @@ void	ft_redirection_ch(t_m_list *lst, t_fd *fd, int i)
 		else
 			check_ambiguous_ch(lst, fd, i, 1);
 		if (fd->id2 == -1 || fd->id3 == -1)
+		{
+			if (access(lst->file[i], F_OK) == 0)
+				ft_exit(1, lst->file[i], "Permission denied\n", NULL);
 			ft_exit(1, lst->file[i], "No such file or directory\n", NULL);
+		}
 	}
 }
 
@@ -94,6 +98,12 @@ void	ft_redirection_par(t_m_list *lst, t_fd *fd, int i)
 			check_ambiguous_par(lst, fd, i, 1);
 		if (fd->id2 == -1 || fd->id3 == -1)
 		{
+			fd->ex_c = 1;
+			if (access(lst->file[i], F_OK) == 0)
+			{
+				printf ("minishell: %s: Permission denied\n", lst->file[i]);
+				break ;
+			}
 			printf ("minishell: %s: No such file or directory\n", lst->file[i]);
 			break ;
 		}

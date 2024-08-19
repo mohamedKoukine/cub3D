@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/03 14:25:05 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/13 12:33:04 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/19 10:06:49 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@ int	all_digit(char *str, int l)
 	return (1);
 }
 
-void	my_exit_con(t_m_list *list, int exit_code, t_list *lst)
+void	my_exit_con(t_m_list *list, int exit_code, t_list *lst, t_fd *fd)
 {
 	int	i;
 
 	if (!list->dup_com[1])
 	{
-		printf ("exit\n");
+		if (fd->i == 0)
+			write (2, "exit\n", 5);
 		free_env(lst);
 		free_list(list);
 		exit(exit_code);
@@ -58,7 +59,8 @@ void	my_exit_con(t_m_list *list, int exit_code, t_list *lst)
 		&& !list->dup_com[2] && list->dup_com[1] && list->dup_com[1][0])
 	{
 		i = ft_atoi2(list->dup_com[1], list) % 256;
-		printf ("exit\n");
+		if (fd->i == 0)
+			write (2, "exit\n", 5);
 		free_env(lst);
 		free_list(list);
 		exit(i);
@@ -67,18 +69,23 @@ void	my_exit_con(t_m_list *list, int exit_code, t_list *lst)
 
 void	my_exit(t_m_list *list, t_fd *fd, int exit_code, t_list *lst)
 {
-	my_exit_con(list, exit_code, lst);
+	my_exit_con(list, exit_code, lst, fd);
 	if (all_digit(ft_strtrim(list->dup_com[1], " ", 0), 1)
 		&& list->dup_com[2])
 	{
-		printf("exit\nminishell: exit: too many arguments\n");
+		if (fd->i == 0)
+			write (2, "exit\n", 5);
+		write(2, "minishell: exit: too many arguments\n", 37);
 		fd->ex_c = 1;
 		return ;
 	}
 	else if (!all_digit(list->dup_com[1], 0) || list->dup_com[1][0] == '\0')
 	{
-		printf ("exit\nminishell: exit: %s: numeric argument required\n",
-			list->dup_com[1]);
+		if (fd->i == 0)
+			write (2, "exit\n", 5);
+		write (2, "minishell: exit: ", 17);
+		write (2, list->dup_com[1], ft_strlen(list->dup_com[1]));
+		write (2, ": numeric argument required\n", 28);
 		free_list(list);
 		free_env(lst);
 		exit(255);

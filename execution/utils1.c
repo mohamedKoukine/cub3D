@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 14:37:36 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/16 17:58:28 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/18 17:03:11 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,16 +94,13 @@ void	command_con(t_fd	*fd, t_m_list *lst, t_list *list, int p[2])
 			dup2(p[1], STDOUT_FILENO);
 			close(p[1]);
 		}
+		fd->i = 1;
+		if (!ft_strcmp(lst->dup_com[0], "."))
+			ft_exit(2, lst->first_comm, "filename argument required\n", list);
 		if (ft_builtins(lst->dup_com, list, lst, fd) == 0)
 			exit(fd->ex_c);
 		else if (execve(fd->path, lst->dup_com, fd->env) == -1)
-		{
-			write (2, "minishell: ", 11);
-			write (2, lst->first_comm, ft_strlen(lst->first_comm));
-			write (2, ": ", 2);
-			write (2, "command not found\n", 18);
-			exit (127);
-		}
+			ft_exit(127, lst->first_comm, "No such file or directory\n", list);
 	}
 	exit(0);
 }
@@ -120,7 +117,6 @@ void	command(t_fd *fd, t_m_list *lst, t_list *list)
 		close(p[1]);
 		close(p[0]);
 		fd->ex_c = 1;
-		// fd->id3 = 2;
 		printf ("minishell: fork: Resource temporarily unavailable\n");
 		return ;
 	}

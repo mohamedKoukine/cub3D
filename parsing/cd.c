@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/08 09:44:29 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/06 14:24:54 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/17 13:17:02 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	cheng_pwd(t_list *lst, char *old_pwd, t_list *tmp, char *str)
 		free (old_pwd);
 }
 
-static int	check_dir(t_list *lst, t_m_list *list)
+static int	check_dir(t_list *lst, t_m_list *list, t_fd *fd)
 {
 	char	*pwd;
 	char	buf[PATH_MAX];
@@ -56,6 +56,7 @@ static int	check_dir(t_list *lst, t_m_list *list)
 		{
 			printf ("cd: error retrieving current directory: getcwd: cannot "
 				"access parent directories: No such file or directory\n");
+			fd->ex_c = 1;
 			tmp = ft_strjoin(pwd, "/..", 1);
 			cheng_pwd(lst, pwd, lst, tmp);
 			return (1);
@@ -111,7 +112,7 @@ void	ft_cd(t_list *lst, t_m_list *list, t_fd *fd)
 		cd_return(fd, old_pwd);
 	else if (getcwd(buf, PATH_MAX) == NULL)
 	{
-		if (check_dir (lst, list))
+		if (check_dir (lst, list, fd))
 			return ;
 	}
 	else

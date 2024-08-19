@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:10:39 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/16 17:37:02 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/17 11:35:52 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	ft_function1(int ac, t_m_list *lst, t_fd *fd, t_list *list)
 	{
 		if (lst->dup_com[0] && ft_check_builtins(lst->dup_com) == 0 && ac == 1)
 		{
+			fd->i = 0;
 			ft_redirection(lst, fd, 1);
 			if (fd->id3 != -1 && fd->id3 != -5 && fd->id2 != -1)
 				ft_builtins(lst->dup_com, list, lst, fd);

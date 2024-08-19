@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/15 14:11:28 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/08 10:47:01 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/19 15:01:55 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,11 @@ static int	ft_check_slash(const char *s1)
 	return (0);
 }
 
-static void	cont_access_cmd(char **path, t_fd *fd, t_list *list)
+static void	cont_access_cmd(char **path, t_fd *fd, t_list *list, int i)
 {
-	int	i;
-
-	i = 0;
-	while (path[i])
+	if (!path)
+		return ;
+	while (path[++i])
 	{
 		path[i] = ft_strjoinn(path[i], "/");
 		if (!path[i])
@@ -54,10 +53,16 @@ static void	cont_access_cmd(char **path, t_fd *fd, t_list *list)
 		path[i] = ft_strjoinn(path[i], fd->av2);
 		if (!path[i])
 			ft_exit(1, "error", "allocation\n", list);
-		if (access(path[i], F_OK | X_OK) != -1)
-			fd->path = ft_substr(path[i], 0, ft_strlen1(path[i], 0), 0);
-		i++;
+		if (access(path[i], F_OK) != -1)
+		{
+			if (access(path[i], X_OK) != -1)
+				fd->path = ft_substr(path[i], 0, ft_strlen1(path[i], 0), 0);
+			else
+				ft_exit(126, fd->av2, "Permission denied\n", list);
+		}
 	}
+	if (!fd->path && ft_check_builtins(&fd->av2))
+		ft_exit(127, fd->av2, "command not found\n", list);
 	free_all(path);
 	free (fd->av2);
 	fd->av2 = NULL;
@@ -71,24 +76,24 @@ static void	access_cmd(char **path, t_fd *fd, char *av, t_list *list)
 	{
 		if (opendir(av))
 			ft_exit(126, av, "is a directory\n", list);
-		else if (access(av, F_OK | X_OK) == 0)
+		else if (access(av, F_OK) == 0)
 		{
-			fd->path = ft_substr(av, 0, ft_strlen1(av, 0), 0);
-			if (!fd->path)
-				ft_exit(1, "error", "allocation\n", list);
+			if (access(av, X_OK) == 0)
+			{
+				fd->path = ft_substr(av, 0, ft_strlen1(av, 0), 0);
+				if (!fd->path)
+					ft_exit(1, "error", "allocation\n", list);
+			}
+			else
+				ft_exit(126, av, "Permission denied\n", list);
 		}
-		else
-			ft_exit(126, av, "Permission denied\n", list);
 	}
 	else
 	{
 		fd->av2 = ft_substr(av, 0, ft_strlen1(av, 0), 0);
 		if (!fd->av2)
 			ft_exit(1, "error", "allocation\n", list);
-		if (path)
-			cont_access_cmd(path, fd, list);
-		else
-			ft_exit(127, av, "No such file or directory\n", list);
+		cont_access_cmd(path, fd, list, -1);
 	}
 }
 

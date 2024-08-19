@@ -2,7 +2,7 @@ NAME = minishell
 
 CC = cc 
 
-FLAGS = -Wall -Wextra -Werror #-g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror
 READLINE_L = $(shell brew --prefix readline)/lib
 READLINE_I = $(shell brew --prefix readline)/include
 
@@ -69,8 +69,7 @@ clean:
 	rm -rf $(OBJ)
 
 fclean: clean
-	rm -rf $(NAME)
-
+	rm -rf $(NAME)`
 re: fclean all
 
 .PHONY: clean

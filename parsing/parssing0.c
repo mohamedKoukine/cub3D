@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/06 16:52:34 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/16 16:46:35 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/17 13:20:47 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,7 @@ int	syntax_error(char *line)
 	ls = ft_strlen(line);
 	i = 0;
 	if (line[0] == '|' || (ls > 0 && (line[ls - 1] == '|'
-		|| line[ls - 1] == '>' || line[ls - 1] == '<')))
+				|| line[ls - 1] == '>' || line[ls - 1] == '<')))
 	{
 		write(2, "minishell$: syntax error near unexpected token\n", 47);
 		free (line);

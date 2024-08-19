@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 15:07:34 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/08/15 16:56:18 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/17 12:44:31 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "../parsing/pr_minishell.h"
 # include <limits.h>
+# include <sys/stat.h>
 # include <fcntl.h>
 # include <termios.h>
 # include <dirent.h>
@@ -48,5 +49,7 @@ void		command(t_fd	*fd, t_m_list *lst, t_list *list);
 int			ft_check_builtins(char **line);
 int			ft_strchr(char *str);
 void		convert_env(t_list *list, t_fd *fd, t_m_list *lst);
+void		check_per(char *av, t_list *list);
+void		check_per1(char *av, t_list *list);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/15 13:16:12 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/08 12:30:17 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/08/19 12:05:09 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char	**ft_empty_env(void)
 	env[0] = malloc (49);
 	env[1] = malloc (ft_strlen(buff) + 5);
 	env[2] = malloc (8);
-	env[3] = malloc (ft_strlen(buff) + 3);
+	env[3] = malloc (7);
 	env[4] = malloc (7);
 	if (!env[0] || !env[1] || !env[2] || !env[3] || !env[4])
 		ft_mallocerr(NULL, NULL, NULL, env);
@@ -46,7 +46,7 @@ char	**ft_empty_env(void)
 		"/usr/gnu/bin:/usr/local/bin:/bin:/usr/bin:.", 0);
 	ft_empty_env1(env[1], "PWD=", buff, 0);
 	ft_empty_env1(env[2], "SHLVL=", "0", 0);
-	ft_empty_env1(env[3], "_=", buff, 0);
+	ft_empty_env1(env[3], "_=", "mini", 0);
 	ft_empty_env1(env[4], "OLD", "PWD", 0);
 	env[5] = NULL;
 	return (env);

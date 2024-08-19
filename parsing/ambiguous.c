@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 15:45:26 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/08/16 16:30:39 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/08/17 13:16:32 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	chek_ambi(char *line, t_list *lst)
 			i = -1;
 			while (a[++i])
 			{
-				if (a[i] == ' ')
+				if (a[i] == ' ' && a[i] == '\t')
 					return (free(a), free(p), 1);
 			}
 		}
