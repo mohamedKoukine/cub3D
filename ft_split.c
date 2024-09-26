@@ -5,16 +5,15 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/11 09:14:53 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/06/10 14:56:52 by mkaoukin         ###   ########.fr       */
+/*   Created: 2023/11/08 11:50:02 by mkaoukin          #+#    #+#             */
+/*   Updated: 2024/09/26 10:04:19 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pr_minishell.h"
+#include "cub3D.h"
 
-static char	**arg_m(char const *s, char c)
+static int	ft_cw(char const *s, char c)
 {
-	char	**sp;
 	int		i;
 	int		j;
 
@@ -29,100 +28,88 @@ static char	**arg_m(char const *s, char c)
 		if (s[i])
 			i++;
 	}
-	sp = (char **)malloc(sizeof(char *) * (j + 1));
-	if (!sp)
-		return (NULL);
-	return (sp);
+	return (j);
 }
 
-static char	**freedem(char **sp, int k)
+static char	**ft_free(int index, char **s)
 {
 	int	i;
 
 	i = 0;
-	while (i < k)
+	while (i < index)
 	{
-		free(sp[i]);
+		free(s[i]);
 		i++;
 	}
-	free(sp);
+	free(s);
 	return (NULL);
 }
 
-static char	**splloc(char const *s, char c, char **sp)
+static char	**ft_scpy(char const *s, char **d, char c)
 {
-	int	i;
 	int	j;
-	int	k;
+	int	l;
+	int	i;
 
-	k = 0;
+	j = 0;
 	i = 0;
 	while (s[i])
 	{
-		j = 0;
-		while (s[i] && s[i] != c)
-		{
-			j++;
-			i++;
-		}
-		if (j != 0)
-		{
-			sp[k] = (char *)malloc(sizeof(char) * (j + 1));
-			if (!sp[k])
-				return (freedem(sp, k));
-			k++;
-		}
-		if (s[i])
-			i++;
-	}
-	return (sp);
-}
-
-static char	**printsp(char const *s, char c, char **sp)
-{
-	int	i;
-	int	j;
-	int	k;
-
-	i = 0;
-	k = 0;
-	while (s[i])
-	{
-		j = 0;
+		l = 0;
 		if (s[i] && s[i] != c)
 		{
 			while (s[i] && s[i] != c)
-			{
-				sp[k][j] = s[i];
-				j++;
-				i++;
-			}
-			sp[k][j] = '\0';
-			k++;
+				d[j][l++] = s[i++];
+			d[j][l] = '\0';
+			j++;
 		}
 		if (s[i])
 			i++;
 	}
-	sp[k] = 0;
-	return (sp);
+	return (d);
+}
+
+static char	**ft_spa(char const *s, char **d, char c, int i)
+{
+	int	j;
+	int	p;
+
+	j = 0;
+	while (s[i])
+	{
+		p = 0;
+		while (s[i] && s[i] != c)
+		{
+			p++;
+			i++;
+		}
+		if (p != 0)
+		{
+			d[j] = (char *)malloc(sizeof(char) * (p + 1));
+			if (!d[j])
+				return (ft_free(j, d));
+			j++;
+		}
+		if (s[i])
+			i++;
+	}
+	d[j] = NULL;
+	return (d);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**sp;
-	int		i;
+	char	**d;
+	int		j;
 
-	i = 0;
+	j = 0;
 	if (!s)
 		return (NULL);
-	sp = arg_m(s, c);
-	if (sp != NULL)
-	{
-		sp = splloc(s, c, sp);
-		if (sp == NULL)
-			return (NULL);
-		sp = printsp(s, c, sp);
-		return (sp);
-	}
-	return (sp);
+	d = (char **)malloc(sizeof(char *) * (ft_cw(s, c) + 1));
+	if (!d)
+		return (NULL);
+	d = ft_spa(s, d, c, 0);
+	if (d != NULL)
+		d = ft_scpy(s, d, c);
+	return (d);
 }
