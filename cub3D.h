@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/09/26 10:30:40 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/09/27 15:01:03 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,15 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <fcntl.h>
+# include "MLX42/MLX42.h"
+
+typedef struct s_data
+{
+	void	*mlx_ptr;
+	int		img_width;
+	int		img_height;
+	char	**lines;
+}		t_data;
 
 char	*get_next_line(int fd);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -31,12 +40,14 @@ void	char_check(char *line);
 void	player_nb(char *line);
 void	skep_nl(char *line);
 void	freeall(char **ptr);
-void	empty_sp(char **map);
+void	empty_sp(char **map, t_data *data);
 char	**ft_split(char const *s, char c);
 char	*ft_strdup(const char *src);
+void	ft_draw(t_data *data);
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 13
 # endif
+#  define q_size 20
 
 #endif

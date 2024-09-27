@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:23:05 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/09/26 10:44:20 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/09/26 15:23:33 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,14 +89,13 @@ void	freeall(char **ptr)
 	free(ptr);
 }
 
-void	empty_sp(char **map)
+void	empty_sp(char **map, t_data *data)
 {
 	int	i;
 	int	j;
 
 	i = -1;
 	j = 0;
-
 	while (map[++i])
 	{
 		j = 0;
@@ -106,7 +105,19 @@ void	empty_sp(char **map)
 			{
 				if (i == 0 || j == 0 || !map[i + 1] || !map[i][j + 1]
 					|| map[i][j + 1] == ' ' || map[i][j - 1] == ' ')
-					return (printf ("empty space in map0\n"), freeall(map)
+					return (printf ("empty space in map\n"), freeall(map)
+						, exit(1));
+				if (ft_strlen(map[i + 1], 0) <= (size_t)j
+					|| ft_strlen(map[i - 1], 0) <= (size_t)j
+					|| map[i + 1][j] == ' ' || map[i - 1][j] == ' ')
+					return (printf ("empty space in map\n"), freeall(map)
+						, exit(1));
+			}
+			else if (map[i][j] == 'E' || map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'W')
+			{
+				if (i == 0 || j == 0 || !map[i + 1] || !map[i][j + 1]
+					|| map[i][j + 1] == ' ' || map[i][j - 1] == ' ')
+					return (printf ("empty space in map\n"), freeall(map)
 						, exit(1));
 				if (ft_strlen(map[i + 1], 0) <= (size_t)j
 					|| ft_strlen(map[i - 1], 0) <= (size_t)j
@@ -117,4 +128,5 @@ void	empty_sp(char **map)
 			j++;
 		}
 	}
+	data->lines = map;
 }

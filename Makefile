@@ -2,7 +2,7 @@ NAME = cub3D
 
 CC = cc 
 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address -g
+FLAGS = -Wall -Wextra -Werror -Imlx -fsanitize=address -g
 
 SRC = cub3D.c\
 		get_next_line.c\
@@ -10,18 +10,21 @@ SRC = cub3D.c\
 		ft_strncmp.c\
 		ft_strcmp.c\
 		map_parc.c\
+		draw.c\
 		ft_split.c
 
 OBJ = $(SRC:.c=.o)
 
 INCLUDE1 = cub3D.h
+INCLUDE2 = ./MLX42/MLX42.h
+MLX42 = ./MLX42/libmlx42.a
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(FLAGS) $(OBJ) -o $@ 
+	$(CC) $(FLAGS) $(OBJ) $(MLX42)  -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -framework Cocoa -framework OpenGL -framework IOKit -o $@
 
-%.o: %.c $(INCLUDE1)
+%.o: %.c $(INCLUDE1) $(INCLUDE2)
 	$(CC) $(FLAGS) -c $< -o $@
 
 clean:

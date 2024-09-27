@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/25 11:54:43 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/09/26 10:44:02 by mkaoukin         ###   ########.fr       */
+/*   Created: 2024/09/26 13:54:27 by aelbouab          #+#    #+#             */
+/*   Updated: 2024/09/27 15:02:13 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,8 @@ int	check_valid_file(char *l, int n, int s, int w)
 	}
 	return (i);
 }
-void	parsing(char *s)
+
+void	parsing(char *s, t_data *data)
 {
 	int	i;
 	char    *l;
@@ -139,7 +140,7 @@ void	parsing(char *s)
 		char_check(tmp);
 		player_nb(tmp);
 		skep_nl(tmp);
-		empty_sp(ft_split(tmp, '\n'));
+		empty_sp(ft_split(tmp, '\n'), data);
 	}
 	else
 		ft_error("file name is not valide");
@@ -147,13 +148,13 @@ void	parsing(char *s)
 
 int main(int ac, char **av)
 {
-	int	i;
+	t_data	data;
 
-	i = 0;
 	if (ac == 2)
 	{
-		parsing(av[1]);
+		parsing(av[1], &data);
 	}
 	else
 		printf ("Error\n cub3D: number of argement is not valide");
+	ft_draw(&data);
 }
