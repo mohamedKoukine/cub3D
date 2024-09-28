@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/09/27 15:01:03 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/09/28 12:35:11 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,16 @@
 # include <fcntl.h>
 # include "MLX42/MLX42.h"
 
-typedef struct s_data
+typedef struct s_cub
 {
+	int		f[6];
+	char    *l;
+    char    **d;
 	void	*mlx_ptr;
 	int		img_width;
 	int		img_height;
 	char	**lines;
-}		t_data;
+}		t_cub;
 
 char	*get_next_line(int fd);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -40,10 +43,14 @@ void	char_check(char *line);
 void	player_nb(char *line);
 void	skep_nl(char *line);
 void	freeall(char **ptr);
-void	empty_sp(char **map, t_data *data);
+void	empty_sp(char **map, t_cub *cub);
 char	**ft_split(char const *s, char c);
 char	*ft_strdup(const char *src);
-void	ft_draw(t_data *data);
+void	ft_draw(t_cub *cub);
+char	*ft_strtrim(char *s1, char *set);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
+int		ft_atoi(const char *str);
+
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 13

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_parc.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:23:05 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/09/26 15:23:33 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/09/28 12:29:31 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	freeall(char **ptr)
 	free(ptr);
 }
 
-void	empty_sp(char **map, t_data *data)
+void	empty_sp(char **map, t_cub *cub)
 {
 	int	i;
 	int	j;
@@ -128,5 +128,5 @@ void	empty_sp(char **map, t_data *data)
 			j++;
 		}
 	}
-	data->lines = map;
+	cub->lines = map;
 }

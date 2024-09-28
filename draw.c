@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/09/27 15:01:12 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/09/28 12:30:54 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,33 +35,33 @@ void	draw_map(int x, int y, void *image)
 	}
 }
 
-size_t	long_line(t_data *data)
+size_t	long_line(t_cub *cub)
 {
 	int		i;
 	size_t	j;
 	
 	i = 0;
 	j = 0;
-	while (data->lines[i])
+	while (cub->lines[i])
 	{
-		if (j < ft_strlen(data->lines[i], 1))
-			j = ft_strlen(data->lines[i], 1);
+		if (j < ft_strlen(cub->lines[i], 1))
+			j = ft_strlen(cub->lines[i], 1);
 		i++;
 	}
 	return (j);
 }
 
-int h_map(t_data *data)
+int h_map(t_cub *cub)
 {
 	int i;
 
 	i= 0;
-	while (data->lines[i])
+	while (cub->lines[i])
 		i++;
 	return (i);
 }
 
-void ft_draw(t_data *data)
+void ft_draw(t_cub *cub)
 {
     void	*mlx_ptr;
 	void	*image;
@@ -70,15 +70,15 @@ void ft_draw(t_data *data)
 
     i = 0;
 	j = 0;    
-    mlx_ptr = mlx_init(long_line(data) * q_size, h_map(data) * q_size, "MLX42", true);
-	image = mlx_new_image(mlx_ptr, long_line(data) * q_size, h_map(data) * q_size);
+    mlx_ptr = mlx_init(long_line(cub) * q_size, h_map(cub) * q_size, "MLX42", true);
+	image = mlx_new_image(mlx_ptr, long_line(cub) * q_size, h_map(cub) * q_size);
 	mlx_image_to_window(mlx_ptr, image, 0, 0);
-	while (data->lines[i])
+	while (cub->lines[i])
 	{
 		j = 0;
-		while (data->lines[i][j])
+		while (cub->lines[i][j])
 		{
-			if (data->lines[i][j] == '1')
+			if (cub->lines[i][j] == '1')
 				draw_map(i * q_size, j * q_size, image);
 			j++;
 		}

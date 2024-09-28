@@ -11,6 +11,8 @@ SRC = cub3D.c\
 		ft_strcmp.c\
 		map_parc.c\
 		draw.c\
+		ft_strtrim.c\
+		ft_atoi.c\
 		ft_split.c
 
 OBJ = $(SRC:.c=.o)
