@@ -13,6 +13,7 @@ SRC = cub3D.c\
 		draw.c\
 		ft_strtrim.c\
 		ft_atoi.c\
+		main.c\
 		ft_split.c
 
 OBJ = $(SRC:.c=.o)

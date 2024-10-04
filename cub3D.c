@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:54:27 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/09/28 12:47:56 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/03 15:41:40 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,17 +191,4 @@ void	parsing(char *s, t_cub *cub)
 	}
 	else
 		ft_error("file name is not valide", NULL);
-}
-
-int main(int ac, char **av)
-{
-	t_cub	cub;
-
-	if (ac == 2)
-	{
-		parsing(av[1], &cub);
-	}
-	else
-		printf ("Error\n cub3D: number of argement is not valide");
-	ft_draw(&cub);
 }
