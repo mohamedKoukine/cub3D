@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/04 09:25:53 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/04 12:28:17 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,23 +71,6 @@ int h_map(t_cub *cub)
 	return (i);
 }
 
-// ft_right(int x, int y, t_data *d)
-// {
-// 	printf("right\n");
-
-// }
-// ft_lef(int x, int y, t_data *d)
-// {
-// 	printf("left\n");
-// }
-// ft_down(int x, int y, t_data *d)
-// {
-// 	printf("down");
-// }
-// ft_up(int x, int y, t_data *d)
-// {
-// 	printf("up\n");
-// }
 
 double deg_to_rad(double an)
 {
@@ -203,14 +186,20 @@ void	player_angle(t_all *all)
 		all->player->angle = M_PI;
 }
 
-void	draw_line(t_all *all)
+void	draw_line(t_all *all, float angle)
 {
-	int xend;
-	int yend;
+	int i = 1;
 	all->player->ox = ((all->player->x + (q_size / 4)));
 	all->player->oy = ((all->player->y + (q_size / 4)));
-	xend = all->player->ox + (cos(all->player->angle) * 35);
-	yend = all->player->oy + (sin(all->player->angle) * 35);
+	int xend = all->player->ox;
+	int yend = all->player->oy;
+	while (all->cub->lines[yend / q_size][xend / q_size] != '1')
+	{
+		xend = all->player->ox + (cos(angle) * i);
+		yend = all->player->oy + (sin(angle) * i);
+		i++;
+	}
+	
 	// printf(" = %d\n", );
 	draw_line_1(all, xend, yend, ft_color(0, 0, 0, 255));
 	// while (i < 50)
@@ -249,6 +238,7 @@ int point_ch(t_all *all , float san, float can)
 void ft_catch(void *d)
 {
 	t_all *all;
+	int numray = 0;
 
 	all = d;
 	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_LEFT))
@@ -305,18 +295,28 @@ void ft_catch(void *d)
 	// 	all->player->y += 10;
 	// }
 	ft_draw_map(all);
-	draw_line(all);
+	all->ray_angle = all->player->angle - deg_to_rad (30);
+	while (numray < all->cub->width)
+	{
+		draw_line(all, all->ray_angle);
+		all->ray_angle += deg_to_rad(60) / all->cub->width;
+		numray++;
+	}
+	// draw_line(all, all->player->angle);
+	// draw_line(all, all->ray_angle);
 	drow_player(all, ft_color(251,65,88, 255));
 } 
 
 void ft_draw(t_all *all)
 {   
-    all->cub->mlx_ptr = mlx_init(long_line(all->cub) * q_size, h_map(all->cub) * q_size, "rase mohmaad", true);
-	all->cub->img = mlx_new_image(all->cub->mlx_ptr, long_line(all->cub) * q_size, h_map(all->cub) * q_size);
+	all->cub->width = long_line(all->cub) * q_size;
+	all->cub->height = h_map(all->cub) * q_size;
+    all->cub->mlx_ptr = mlx_init(all->cub->width, all->cub->height, "rase mohmaad", true);
+	all->cub->img = mlx_new_image(all->cub->mlx_ptr, all->cub->width, all->cub->height);
 	mlx_image_to_window(all->cub->mlx_ptr, all->cub->img, 0, 0);
 	ft_draw_map(all);///
 	player_angle(all);
-	draw_line(all);////
+	draw_line(all, all->player->angle);////
 	drow_player(all, ft_color(251,65,88, 255));
 	mlx_loop_hook(all->cub->mlx_ptr, ft_catch, all);
 	mlx_loop(all->cub->mlx_ptr);
