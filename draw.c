@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/04 09:22:25 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/04 09:25:53 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -275,8 +275,8 @@ void ft_catch(void *d)
 	{
 		if (!point_ch(all, (sin(all->player->angle  * -1) * 2), (cos(all->player->angle  * -1) * 2)))
 		{
-			all->player->y += sin(all->player->angle - M_PI) * 2;
-			all->player->x += cos(all->player->angle - M_PI) * 2;
+			all->player->y += sin(all->player->angle - M_PI - 0.1) * 2;
+			all->player->x += cos(all->player->angle - M_PI - 0.1) * 2;
 		}
 	}
 	else if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_D))
@@ -291,8 +291,8 @@ void ft_catch(void *d)
 	{
 		if (!point_ch(all, sin((M_PI / 2) - all->player->angle) * 2, cos((M_PI / 2) - all->player->angle) * 2))
 		{
-			all->player->y += sin((M_PI / 2) - all->player->angle) * 2;
-			all->player->x += cos((M_PI / 2) - all->player->angle) * 2;
+			all->player->y += sin(all->player->angle - (M_PI / 2) - 0.1) * 2;
+			all->player->x += cos(all->player->angle - (M_PI / 2) - 0.1) * 2;
 		}
 	}
 		// if ()
