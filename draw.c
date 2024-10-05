@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/04 12:28:17 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/05 11:40:29 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,35 +188,22 @@ void	player_angle(t_all *all)
 
 void	draw_line(t_all *all, float angle)
 {
-	int i = 1;
+	int i = 0;
 	all->player->ox = ((all->player->x + (q_size / 4)));
 	all->player->oy = ((all->player->y + (q_size / 4)));
 	int xend = all->player->ox;
 	int yend = all->player->oy;
-	while (all->cub->lines[yend / q_size][xend / q_size] != '1')
+	while (all->cub->lines[yend / q_size][xend / q_size] != '1'
+			&& all->cub->lines[yend / q_size][xend / q_size] != ' '
+			&& all->cub->lines[yend / q_size][xend / q_size])
 	{
 		xend = all->player->ox + (cos(angle) * i);
 		yend = all->player->oy + (sin(angle) * i);
 		i++;
 	}
-	
-	// printf(" = %d\n", );
-	draw_line_1(all, xend, yend, ft_color(0, 0, 0, 255));
-	// while (i < 50)
-	// {
-	// 	mlx_put_pixel(all->cub->img, all->player->oy, all->player->ox, ft_color(0 , 0 , 0 , 255));
-	// 	if (all->player->pl_dir == 'N')
-	// 		all->player->ox += cos(90);
-	// 	else if (all->player->pl_dir == 'E')
-	// 		all->player->oy += cos(0);
-	// 	else if (all->player->pl_dir == 'S')
-	// 		all->player->ox += cos(0);
-	// 	else if (all->player->pl_dir == 'W')
-	// 		all->player->oy += cos(90);
-	// 	i++;
-	// }
+	draw_line_1(all, xend, yend, ft_color(0, 0, 0, 12));
 }
-//san =   sin(all->player->angle) * 2      can = cos(all->player->angle) * 2
+
 int point_ch(t_all *all , float san, float can)
 {
 	all->player->a[1] = all->player->x;
@@ -247,29 +234,29 @@ void ft_catch(void *d)
 		if (all->player->angle == 0)
 			all->player->angle += M_PI * 2; 
 	}
-	else if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_RIGHT))
+	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_RIGHT))
 	{
 		all->player->angle += 0.1;
 		if (all->player->angle == M_PI * 2)
 			all->player->angle -= M_PI * 2;
 	}
-	else if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_W))
+	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_W))
 	{
 		if (!point_ch(all, sin(all->player->angle) * 2, cos(all->player->angle) * 2))
 		{
-			all->player->y += sin(all->player->angle) * 2;
-			all->player->x += cos(all->player->angle) * 2;
+			all->player->y += sin(all->player->angle) * 5;
+			all->player->x += cos(all->player->angle) * 5;
 		}
 	}
-	else if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_S))
+	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_S))
 	{
-		if (!point_ch(all, (sin(all->player->angle  * -1) * 2), (cos(all->player->angle  * -1) * 2)))
+		if (!point_ch(all, sin(all->player->angle - M_PI - 0.1) * 2, cos(all->player->angle - M_PI - 0.1) * 2))
 		{
 			all->player->y += sin(all->player->angle - M_PI - 0.1) * 2;
 			all->player->x += cos(all->player->angle - M_PI - 0.1) * 2;
 		}
 	}
-	else if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_D))
+	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_D))
 	{
 		if (!point_ch(all, sin(all->player->angle + (M_PI / 2)) * 2, cos(all->player->angle + (M_PI / 2)) * 2))
 		{
@@ -277,14 +264,16 @@ void ft_catch(void *d)
 			all->player->x += cos(all->player->angle + (M_PI / 2)) * 2;
 		}
 	}
-	else if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_A))
+	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_A))
 	{
-		if (!point_ch(all, sin((M_PI / 2) - all->player->angle) * 2, cos((M_PI / 2) - all->player->angle) * 2))
+		if (!point_ch(all, sin(all->player->angle - (M_PI / 2) - 0.1) * 2, cos(all->player->angle - (M_PI / 2) - 0.1) * 2))
 		{
 			all->player->y += sin(all->player->angle - (M_PI / 2) - 0.1) * 2;
 			all->player->x += cos(all->player->angle - (M_PI / 2) - 0.1) * 2;
 		}
 	}
+	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_ESCAPE))
+		exit (0);
 		// if ()
 		// {
 			// all->player->y -= sin(all->player->angle);
