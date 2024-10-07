@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/05 11:40:29 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/07 14:55:25 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,22 +86,20 @@ void	drow_player(t_all *all, int color)
 	
 	i = 0;
 	y = all->player->y;
-	x = all->player->x;
-	while(i <= q_size / 2)
+	x = all->player->x - 1;
+	while(i <=  2)
 	{
 		j = 0;
-		all->player->x = x;
-		while (j <= q_size / 2)
+		x = all->player->x - 1;
+		while (j <= 2)
 		{
-				mlx_put_pixel(all->cub->img, all->player->x, all->player->y, color);
+				mlx_put_pixel(all->cub->img, x, y, color);
 			j++;
-			all->player->x++;
+			x++;
 		}
-		all->player->y++;
+		y++;
 		i++;
 	}
-	all->player->y = y;
-	all->player->x = x;
 }
 
 void	ft_draw_map(t_all *all)
@@ -188,18 +186,34 @@ void	player_angle(t_all *all)
 
 void	draw_line(t_all *all, float angle)
 {
-	int i = 0;
-	all->player->ox = ((all->player->x + (q_size / 4)));
-	all->player->oy = ((all->player->y + (q_size / 4)));
-	int xend = all->player->ox;
-	int yend = all->player->oy;
+	int i = q_size;
+	int yend;
+	int xend;
+	all->player->ox = (all->player->x );
+	all->player->oy = (all->player->y );
+	// yend = floor(all->player->oy / q_size) * q_size - q_size;
+	if ()
+	{
+		yend = floor(all->player->oy / q_size) *  q_size - q_size ;
+		xend = all->player->ox + ((yend - all->player->oy) / tan(angle));
+	}
+	else
+	{
+		yend = floor(all->player->oy / q_size) *  q_size - q_size ;
+		xend = all->player->ox + ((yend - all->player->oy) / tan(angle));
+	}
+	// xend = i / tan(angle);
+	// while (1)
 	while (all->cub->lines[yend / q_size][xend / q_size] != '1'
 			&& all->cub->lines[yend / q_size][xend / q_size] != ' '
-			&& all->cub->lines[yend / q_size][xend / q_size])
+			&& all->cub->lines[yend / q_size][xend / q_size]
+			&& all->cub->lines[(yend + 1) / q_size][xend / q_size] != '1'
+			&& all->cub->lines[yend / q_size][(xend + 1) / q_size] != '1')
 	{
-		xend = all->player->ox + (cos(angle) * i);
-		yend = all->player->oy + (sin(angle) * i);
-		i++;
+		// if (all->cub->lines[yend / q_size][xend / q_size] == '1')
+		// 	break ;
+		xend += (cos(angle) * i);
+		yend += (sin(angle) * i);
 	}
 	draw_line_1(all, xend, yend, ft_color(0, 0, 0, 12));
 }
@@ -214,10 +228,10 @@ int point_ch(t_all *all , float san, float can)
 	all->player->c[0] = (all->player->y + q_size / 2);
 	all->player->d[1] = all->player->x;
 	all->player->d[0] = (all->player->y + q_size / 2);
-	if (all->cub->lines[(int)((all->player->a[0] + san)) / q_size][(int)((all->player->a[1]+ can)) / q_size] == '1'
-		|| all->cub->lines[(int)((all->player->b[0] + san)) / q_size][(int)((all->player->b[1]+ can)) / q_size] == '1'
-		|| all->cub->lines[(int)((all->player->c[0] + san)) / q_size][(int)((all->player->c[1]+ can)) / q_size] == '1'
-		|| all->cub->lines[(int)((all->player->d[0] + san)) / q_size][(int)((all->player->d[1]+ can)) / q_size] == '1')
+	if (all->cub->lines[(int)((all->player->a[0] + san)) / q_size][(int)((all->player->a[1]+ can)) / q_size] == '1')
+		// || all->cub->lines[(int)((all->player->b[0] + san)) / q_size][(int)((all->player->b[1]+ can)) / q_size] == '1'
+		// || all->cub->lines[(int)((all->player->c[0] + san)) / q_size][(int)((all->player->c[1]+ can)) / q_size] == '1'
+		// || all->cub->lines[(int)((all->player->d[0] + san)) / q_size][(int)((all->player->d[1]+ can)) / q_size] == '1')
 		return (1);
 	return (0);
 }
@@ -244,8 +258,8 @@ void ft_catch(void *d)
 	{
 		if (!point_ch(all, sin(all->player->angle) * 2, cos(all->player->angle) * 2))
 		{
-			all->player->y += sin(all->player->angle) * 5;
-			all->player->x += cos(all->player->angle) * 5;
+			all->player->y += sin(all->player->angle) * 2;
+			all->player->x += cos(all->player->angle) * 2;
 		}
 	}
 	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_S))
@@ -285,10 +299,18 @@ void ft_catch(void *d)
 	// }
 	ft_draw_map(all);
 	all->ray_angle = all->player->angle - deg_to_rad (30);
+	if (all->ray_angle < 0)
+		all->ray_angle += 2 * M_PI;
+	else if (all->ray_angle > 2 * M_PI)
+		all->ray_angle -= 2 * M_PI;
 	while (numray < all->cub->width)
 	{
 		draw_line(all, all->ray_angle);
 		all->ray_angle += deg_to_rad(60) / all->cub->width;
+		if (all->ray_angle < 0)
+			all->ray_angle += 2 * M_PI;
+		else if (all->ray_angle > 2 * M_PI)
+			all->ray_angle -= 2 * M_PI;
 		numray++;
 	}
 	// draw_line(all, all->player->angle);

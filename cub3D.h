@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/04 12:02:01 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/05 17:41:42 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_player
 typedef struct s_all
 {
 	float			ray_angle;
+	int				ray_dist;
 	struct s_player *player;
 	struct s_cub 	*cub;
 }		t_all;
