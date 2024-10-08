@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/08 15:24:47 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/08 15:27:59 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,15 +136,15 @@ void	ft_draw_map(t_all *all)
 
 void draw_line(t_all *all, int end_x, int end_y, int color)
 {    
-    float dy;
-    float dx;
-    float sx;
-    float sy;
+    int dy;
+    int dx;
+    int sx;
+    int sy;
     int err;
     int e2;
     
-    dx = fabsf(end_x - all->player->ox);
-    dy = fabsf(end_y - all->player->oy);
+    dx = abs(end_x - (int)all->player->ox);
+    dy = abs(end_y - (int)all->player->oy);
     err = dx - dy;
     if (all->player->ox < end_x)
         sx = 1;
@@ -154,7 +154,7 @@ void draw_line(t_all *all, int end_x, int end_y, int color)
         sy = 1;
     else 
         sy = -1;
-    while (all->player->ox != end_x || all->player->oy != end_y)
+    while ((int)all->player->ox != end_x || (int)all->player->oy != end_y)
     {
         mlx_put_pixel(all->cub->img, (int)all->player->ox, (int)all->player->oy, color);
         e2 = 2 * err;
@@ -324,7 +324,7 @@ void ft_catch(void *d)
 		if (all->player->angle == M_PI * 2)
 			all->player->angle -= (M_PI * 2);
 	}
-	    if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_W))
+	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_W))
     {
         if (!point_ch(all, sin(all->player->angle) * pl_speed, cos(all->player->angle) * pl_speed))
         {
@@ -334,7 +334,7 @@ void ft_catch(void *d)
     }
     if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_S))
     {
-        if (!point_ch(all, sin(all->player->angle) * pl_speed, cos(all->player->angle) * pl_speed))
+        if (!point_ch(all, -sin(all->player->angle) * pl_speed, -cos(all->player->angle) * pl_speed))
         {
             all->player->y -= (sin(all->player->angle) * pl_speed);
             all->player->x -= (cos(all->player->angle) * pl_speed);
