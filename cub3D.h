@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/08 15:11:39 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/08 16:34:04 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ void	parsing(char *s, t_cub *cub);
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 13
 # endif
-#  define q_size 50
+#  define q_size 100
 #  define pl_speed 4
 
 #endif
