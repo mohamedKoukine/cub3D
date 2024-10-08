@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/07 15:25:34 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/08 15:11:39 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,10 @@ typedef struct s_cub
 
 typedef struct s_player
 {
-	int		x;
-	int		y;
-	int		ox;
-	int		oy;
+	float	x;
+	float	y;
+	float	ox;
+	float	oy;
 	int		a[2];
 	int		b[2];
 	int		c[2];
@@ -93,5 +93,6 @@ void	parsing(char *s, t_cub *cub);
 #  define BUFFER_SIZE 13
 # endif
 #  define q_size 50
+#  define pl_speed 4
 
 #endif
