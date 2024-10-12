@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/12 15:55:48 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/12 16:16:17 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,20 @@ void	player_angle(t_all *all)
 		all->player->angle = M_PI;
 }
 
+int beetwen(t_all *all, float yend, float xend)
+{
+	if ((all->cub->lines[((int)yend + 1) / q_size][(int)xend / q_size] == '1'
+		&& all->cub->lines[(int)yend / q_size][((int)xend + 1) / q_size] == '1')
+		|| (all->cub->lines[((int)yend + 1) / q_size][(int)xend / q_size] == '1'
+		&& all->cub->lines[(int)yend / q_size][((int)xend - 1) / q_size] == '1')
+		|| (all->cub->lines[((int)yend - 1) / q_size][(int)xend / q_size] == '1'
+		&& all->cub->lines[(int)yend / q_size][((int)xend - 1) / q_size] == '1')
+		|| (all->cub->lines[((int)yend - 1) / q_size][(int)xend / q_size] == '1'
+		&& all->cub->lines[(int)yend / q_size][((int)xend + 1) / q_size] == '1'))
+		return (0);
+	return (1);
+}
+
 void	hor_point(t_all *all, float angle)
 {
 	float yend;
@@ -199,7 +213,7 @@ void	hor_point(t_all *all, float angle)
 	}
 	if(!(angle > 0 && angle < M_PI))
 	{
-		yend = floor(all->player->oy / q_size) *  q_size - 1;
+		yend = floor(all->player->oy / q_size) *  q_size - 0.0001f;
 		ystep = -1 * q_size;
 	}
 	xend = all->player->ox + ((yend - all->player->oy) / tan(angle));
@@ -210,8 +224,7 @@ void	hor_point(t_all *all, float angle)
 			&& (xend / q_size) < (int)ft_strlen(all->cub->lines[(int)yend / q_size], 0)
 			&& all->cub->lines[(int)yend / q_size][(int)xend / q_size] != ' '
 			&& all->cub->lines[(int)yend / q_size][(int)xend / q_size] != '1'
-			&& all->cub->lines[((int)yend + 1) / q_size][(int)xend / q_size] != '1'
-			&& all->cub->lines[(int)yend / q_size][((int)xend + 1) / q_size] != '1')
+			&& beetwen(all, yend, xend))
 	{
 		xend += xstep;
 		yend += ystep;
@@ -232,7 +245,7 @@ void	ver_point(t_all *all, float angle)
 	all->player->oy = all->player->y;
 	if (!(angle < 0.5 * M_PI || angle > 1.5 * M_PI))
 	{
-		xend = floor(all->player->ox / q_size) *  q_size - 1;
+		xend = floor(all->player->ox / q_size) *  q_size - 0.0001f;
 		xstep = -1 * q_size; 
 	}
 	if(angle < 0.5 * M_PI || angle > 1.5 * M_PI)
@@ -248,8 +261,7 @@ void	ver_point(t_all *all, float angle)
 			&& (xend / q_size) < (int)ft_strlen(all->cub->lines[(int)yend / q_size], 0)
 			&& all->cub->lines[(int)yend / q_size][(int)xend / q_size] != ' '
 			&& all->cub->lines[(int)yend / q_size][(int)xend / q_size] != '1'
-			&& all->cub->lines[((int)yend + 1) / q_size][(int)xend / q_size] != '1'
-			&& all->cub->lines[(int)yend / q_size][((int)xend + 1) / q_size] != '1')
+			&& beetwen(all, yend, xend))
 	{
 		xend += xstep;
 		yend += ystep;
@@ -264,12 +276,12 @@ int point_ch(t_all *all , float san, float can)
 {
 	all->player->a[1] = all->player->x;
 	all->player->a[0] = all->player->y;
-	all->player->b[1] = (all->player->x + 2);
+	all->player->b[1] = (all->player->x + 3);
 	all->player->b[0] = all->player->y;
-	all->player->c[1] = (all->player->x + 2);
-	all->player->c[0] = (all->player->y + 2);
+	all->player->c[1] = (all->player->x + 3);
+	all->player->c[0] = (all->player->y + 3);
 	all->player->d[1] = all->player->x;
-	all->player->d[0] = (all->player->y + 2);
+	all->player->d[0] = (all->player->y + 3);
 	if (all->cub->lines[(int)((all->player->a[0] + san)) / q_size][(int)((all->player->a[1]+ can)) / q_size] == '1'
 		|| all->cub->lines[(int)((all->player->b[0] + san)) / q_size][(int)((all->player->b[1]+ can)) / q_size] == '1'
 		|| all->cub->lines[(int)((all->player->c[0] + san)) / q_size][(int)((all->player->c[1]+ can)) / q_size] == '1'
@@ -289,7 +301,7 @@ int	dest_vita(t_all *all)
 		return (1);
 	else if (d_ver < d_hor)
 		return (0);
-	return (1);
+	return (3);
 }
 
 void ft_catch(void *d)
@@ -356,17 +368,23 @@ void ft_catch(void *d)
 	{
 		hor_point(all, all->ray_angle);
 		ver_point(all, all->ray_angle);
-		if (dest_vita(all))
+		if (dest_vita(all) == 1)
 		{
 			xend = all->hor_p_x;
 			yend = all->hor_p_y;
 			draw_line(all, xend, yend, ft_color(255, 0, 0, 255));
 		}
-		else
+		else if ((dest_vita(all) == 0))
 		{
 			xend = all->ver_p_x;
 			yend = all->ver_p_y;
 			draw_line(all, xend, yend, ft_color(0, 255, 0, 255));
+		}
+		else
+		{
+			xend = all->ver_p_x;
+			yend = all->ver_p_y;
+			draw_line(all, xend, yend, ft_color(0, 0, 255, 255));
 		}
 		all->ray_angle += deg_to_rad(60) / all->cub->width;
 		if (all->ray_angle < 0)
