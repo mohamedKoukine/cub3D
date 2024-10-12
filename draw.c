@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/08 17:13:58 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/12 15:55:48 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,10 +186,10 @@ void	player_angle(t_all *all)
 
 void	hor_point(t_all *all, float angle)
 {
-	int yend;
-	int xend;
-	int	xstep;
-	int ystep;
+	float yend;
+	float xend;
+	float	xstep;
+	float ystep;
 	all->player->ox = (all->player->x);
 	all->player->oy = (all->player->y);
 	if (angle > 0 && angle < M_PI)
@@ -199,33 +199,35 @@ void	hor_point(t_all *all, float angle)
 	}
 	if(!(angle > 0 && angle < M_PI))
 	{
-		yend = (floor(all->player->oy / q_size) *  q_size) - 1;
+		yend = floor(all->player->oy / q_size) *  q_size - 1;
 		ystep = -1 * q_size;
 	}
 	xend = all->player->ox + ((yend - all->player->oy) / tan(angle));
 	xstep = ystep / tan(angle);
-	while ((xend / q_size) >= 0 && (yend / q_size) >= 0 && (xend / q_size) < (all->cub->width / q_size) - 1
-			&& (yend / q_size) < (all->cub->height / q_size) - 1
-			&& all->cub->lines[yend / q_size]
-			&& all->cub->lines[yend / q_size][xend / q_size]
-			&& all->cub->lines[yend / q_size][xend / q_size] != ' '
-			&& all->cub->lines[yend / q_size][xend / q_size] != '1'
-			&& all->cub->lines[(yend + 1) / q_size][xend / q_size] != '1'
-			&& all->cub->lines[yend / q_size][(xend + 1) / q_size] != '1')
+	while (((xend) >= 0 && (yend) >= 0) && (xend / q_size) < (all->cub->width / q_size)
+			&& (yend / q_size) < (all->cub->height / q_size)
+			&& all->cub->lines[(int)yend / q_size]
+			&& (xend / q_size) < (int)ft_strlen(all->cub->lines[(int)yend / q_size], 0)
+			&& all->cub->lines[(int)yend / q_size][(int)xend / q_size] != ' '
+			&& all->cub->lines[(int)yend / q_size][(int)xend / q_size] != '1'
+			&& all->cub->lines[((int)yend + 1) / q_size][(int)xend / q_size] != '1'
+			&& all->cub->lines[(int)yend / q_size][((int)xend + 1) / q_size] != '1')
 	{
 		xend += xstep;
 		yend += ystep;
 	}
+	// if (xend < 0)
+	// 	xend = 0;
 	all->hor_p_x = xend;
 	all->hor_p_y = yend;
 }
 
 void	ver_point(t_all *all, float angle)
 {
-	int yend;
-	int xend;
-	int	xstep;
-	int ystep;
+	float yend;
+	float xend;
+	float	xstep;
+	float ystep;
 	all->player->ox = all->player->x;
 	all->player->oy = all->player->y;
 	if (!(angle < 0.5 * M_PI || angle > 1.5 * M_PI))
@@ -240,19 +242,21 @@ void	ver_point(t_all *all, float angle)
 	}
 	yend = all->player->oy + ((xend - all->player->ox) * tan(angle));
 	ystep = xstep * tan(angle);
-	while (xend / q_size >= 0 && yend / q_size >= 0 && xend / q_size < (all->cub->width / q_size )- 1
-			&& yend / q_size < (all->cub->height / q_size) - 1
-			&& all->cub->lines[yend / q_size]
-			&& all->cub->lines[yend / q_size][xend / q_size]
-			&& all->cub->lines[yend / q_size][xend / q_size] != ' '
-			&& all->cub->lines[yend / q_size][xend / q_size] != '1'
-			&& all->cub->lines[(yend + 1) / q_size][xend / q_size] != '1'
-			&& all->cub->lines[yend / q_size][(xend + 1) / q_size] != '1')
+	while (((xend / q_size) >= 0 && (yend / q_size) >= 0) && (xend / q_size) < (all->cub->width / q_size)
+			&& (yend / q_size) < (all->cub->height / q_size)
+			&& all->cub->lines[(int)yend / q_size]
+			&& (xend / q_size) < (int)ft_strlen(all->cub->lines[(int)yend / q_size], 0)
+			&& all->cub->lines[(int)yend / q_size][(int)xend / q_size] != ' '
+			&& all->cub->lines[(int)yend / q_size][(int)xend / q_size] != '1'
+			&& all->cub->lines[((int)yend + 1) / q_size][(int)xend / q_size] != '1'
+			&& all->cub->lines[(int)yend / q_size][((int)xend + 1) / q_size] != '1')
 	{
 		xend += xstep;
 		yend += ystep;
 	}
 	all->ver_p_x = xend;
+	// if (yend < 0)
+	// 	yend = 0;
 	all->ver_p_y = yend;
 }
 
@@ -276,10 +280,11 @@ int point_ch(t_all *all , float san, float can)
 
 int	dest_vita(t_all *all)
 {
-	float d_hor;
-	float d_ver;
+	int d_hor;
+	int d_ver;
 	d_hor = sqrt(pow(all->hor_p_x - all->player->ox, 2) + pow(all->hor_p_y - all->player->oy, 2));
 	d_ver = sqrt(pow(all->ver_p_x - all->player->ox, 2) + pow(all->ver_p_y - all->player->oy, 2));
+
 	if (d_hor < d_ver)
 		return (1);
 	else if (d_ver < d_hor)
@@ -290,7 +295,7 @@ int	dest_vita(t_all *all)
 void ft_catch(void *d)
 {
 	t_all *all;
-	int numray = 0;
+	
 
 	all = d;
 	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_LEFT))
@@ -345,7 +350,8 @@ void ft_catch(void *d)
 		all->ray_angle += 2 * M_PI;
 	else if (all->ray_angle >= 2 * M_PI)
 		all->ray_angle -= 2 * M_PI;
-	int xend, yend;//////////
+	float xend, yend = 0;//////////
+	int numray = 0;
 	while (numray <= all->cub->width)
 	{
 		hor_point(all, all->ray_angle);
@@ -354,16 +360,15 @@ void ft_catch(void *d)
 		{
 			xend = all->hor_p_x;
 			yend = all->hor_p_y;
-			draw_line(all, xend, yend, ft_color(0, 0, 0, 12));
-			all->ray_angle += deg_to_rad(60) / all->cub->width;
+			draw_line(all, xend, yend, ft_color(255, 0, 0, 255));
 		}
 		else
 		{
 			xend = all->ver_p_x;
 			yend = all->ver_p_y;
-			draw_line(all, xend, yend, ft_color(40, 150, 98, 255));
-			all->ray_angle += deg_to_rad(60) / all->cub->width;
+			draw_line(all, xend, yend, ft_color(0, 255, 0, 255));
 		}
+		all->ray_angle += deg_to_rad(60) / all->cub->width;
 		if (all->ray_angle < 0)
 			all->ray_angle += 2 * M_PI;
 		else if (all->ray_angle >= 2 * M_PI)

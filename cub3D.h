@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/08 16:34:04 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/10 19:12:55 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,10 +52,10 @@ typedef struct s_all
 {
 	float			ray_angle;
 	int				ray_dist;
-	int				hor_p_x;
-	int				ver_p_x;
-	int				hor_p_y;
-	int				ver_p_y;
+	float				hor_p_x;
+	float				ver_p_x;
+	float				hor_p_y;
+	float				ver_p_y;
 	struct s_player *player;
 	struct s_cub 	*cub;
 }		t_all;
