@@ -6,7 +6,7 @@
 /*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/12 16:16:17 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/14 14:46:23 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,14 @@ void	drow_player(t_all *all, int color)
 	}
 }
 
+void	draw_mp(t_all *all, char c)
+{
+	if (c == '1')
+		draw_map(all, ft_color(17,0,199, 255), 1);
+	else if (c == '0')
+		draw_map(all, ft_color(255,255,255, 255), 0);
+}
+
 void	ft_draw_map(t_all *all)
 {
 	int		i;
@@ -124,10 +132,7 @@ void	ft_draw_map(t_all *all)
 				all->player->pl_dir = all->cub->lines[i][j];
 				all->cub->lines[i][j] = '0';
 			}
-			if (all->cub->lines[i][j] == '1')
-				draw_map(all, ft_color(17,0,199, 255), 1);
-			else if (all->cub->lines[i][j] == '0')
-				draw_map(all, ft_color(255,255,255, 255), 0);
+			draw_mp(all, all->cub->lines[i][j]);
 			j++;
 		}
 		i++;
@@ -229,8 +234,8 @@ void	hor_point(t_all *all, float angle)
 		xend += xstep;
 		yend += ystep;
 	}
-	// if (xend < 0)
-	// 	xend = 0;
+	if (xend < 0)
+		xend = 0;
 	all->hor_p_x = xend;
 	all->hor_p_y = yend;
 }
@@ -267,8 +272,8 @@ void	ver_point(t_all *all, float angle)
 		yend += ystep;
 	}
 	all->ver_p_x = xend;
-	// if (yend < 0)
-	// 	yend = 0;
+	if (yend < 0)
+		yend = 0;
 	all->ver_p_y = yend;
 }
 
@@ -289,19 +294,133 @@ int point_ch(t_all *all , float san, float can)
 		return (1);
 	return (0);
 }
-
-int	dest_vita(t_all *all)
+float	dest_vita1(t_all *all)
 {
-	int d_hor;
-	int d_ver;
+	float d_hor;
+	float d_ver;
 	d_hor = sqrt(pow(all->hor_p_x - all->player->ox, 2) + pow(all->hor_p_y - all->player->oy, 2));
 	d_ver = sqrt(pow(all->ver_p_x - all->player->ox, 2) + pow(all->ver_p_y - all->player->oy, 2));
-
 	if (d_hor < d_ver)
-		return (1);
-	else if (d_ver < d_hor)
-		return (0);
-	return (3);
+		return 1;
+	return 0;
+}
+float	dest_vita2(t_all *all)
+{
+	float d_hor;
+	float d_ver;
+	d_hor = sqrt(pow(all->hor_p_x - all->player->ox, 2) + pow(all->hor_p_y - all->player->oy, 2));
+	d_ver = sqrt(pow(all->ver_p_x - all->player->ox, 2) + pow(all->ver_p_y - all->player->oy, 2));
+	if (d_hor < d_ver)
+		return (d_hor * cos(all->player->angle - all->ray_angle));
+	return (d_ver * cos(all->player->angle - all->ray_angle));
+}
+
+void draw_rm(t_all *all, float wall_h)
+{
+	int			y;
+	int			i = 0;
+	y = all->jump;
+	while (i < wall_h / 2)
+	{
+		mlx_put_pixel(all->cub->img, all->x, y, ft_color(0, 0 , 255, 255));
+		y--;
+		i++;
+	}
+	y = all->jump;
+	while (i < wall_h)
+	{
+		mlx_put_pixel(all->cub->img, all->x, y, ft_color(0, 0 , 255, 255));
+		y++;
+		i++;
+	}
+	if (all->x < all->cub->width)
+		all->x++;
+	else
+		all->x = 0;
+}
+
+void draw_fc(t_all *all)
+{
+	int i= 0;
+	int j= 0;
+	while (i < all->cub->height)
+	{
+		j = 0;
+		while (j < all->cub->width)
+		{
+			if (i < all->jump)
+				mlx_put_pixel(all->cub->img, j, i, ft_color(0, 255 , 255, 255));
+			else
+				mlx_put_pixel(all->cub->img, j, i, ft_color(255, 255 , 255, 255));
+			j++;
+		}
+		i++;
+	}
+	
+}
+
+void	draw_mini(t_all *all)
+{
+	float	xend;
+	float	yend;
+	int		numray;
+
+	numray = 0;
+	while (numray <= all->cub->width)
+	{
+		hor_point(all, all->ray_angle);
+		ver_point(all, all->ray_angle);
+		if (dest_vita1(all) == 1)
+		{
+			xend = all->hor_p_x;
+			yend = all->hor_p_y;
+			draw_line(all, xend, yend, ft_color(255, 0, 0, 255));
+		}
+		else
+		{
+			xend = all->ver_p_x;
+			yend = all->ver_p_y;
+			draw_line(all, xend, yend, ft_color(0, 255, 0, 255));
+		}
+		all->ray_angle += deg_to_rad(60) / all->cub->width;
+		if (all->ray_angle < 0)
+			all->ray_angle += 2 * M_PI;
+		else if (all->ray_angle >= 2 * M_PI)
+			all->ray_angle -= 2 * M_PI;
+		numray++;
+	}
+	drow_player(all, ft_color(251,65,88, 255));
+}
+
+void	draw_3d(t_all *all)
+{
+	float	wall_h;
+	int		numray;
+	float	dpp;
+
+	dpp = (all->cub->width / 2) / tan(deg_to_rad(30));
+	numray = 0;
+	while (numray <= all->cub->width)
+	{
+		hor_point(all, all->ray_angle);
+		ver_point(all, all->ray_angle);
+		float res = dest_vita2(all);
+		wall_h = (q_size / res) * dpp;
+		if (wall_h >= all->cub->height)
+			wall_h = all->cub->height;
+		draw_rm(all, wall_h);
+		all->ray_angle += deg_to_rad(60) / all->cub->width;
+		if (all->ray_angle < 0)
+			all->ray_angle += 2 * M_PI;
+		else if (all->ray_angle >= 2 * M_PI)
+			all->ray_angle -= 2 * M_PI;
+		numray++;
+	}
+	while (all->jump >= all->cub->width / 2)
+	{
+		all->jump--;
+		usleep (700);
+	}
 }
 
 void ft_catch(void *d)
@@ -356,54 +475,31 @@ void ft_catch(void *d)
     }
 	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_ESCAPE))
 		exit (0);
+	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_SPACE)) 
+		all->jump = all->jump + 70;
 	ft_draw_map(all);
+	draw_fc(all);
 	all->ray_angle = all->player->angle - deg_to_rad (30);
 	if (all->ray_angle < 0)
 		all->ray_angle += 2 * M_PI;
 	else if (all->ray_angle >= 2 * M_PI)
 		all->ray_angle -= 2 * M_PI;
-	float xend, yend = 0;//////////
-	int numray = 0;
-	while (numray <= all->cub->width)
-	{
-		hor_point(all, all->ray_angle);
-		ver_point(all, all->ray_angle);
-		if (dest_vita(all) == 1)
-		{
-			xend = all->hor_p_x;
-			yend = all->hor_p_y;
-			draw_line(all, xend, yend, ft_color(255, 0, 0, 255));
-		}
-		else if ((dest_vita(all) == 0))
-		{
-			xend = all->ver_p_x;
-			yend = all->ver_p_y;
-			draw_line(all, xend, yend, ft_color(0, 255, 0, 255));
-		}
-		else
-		{
-			xend = all->ver_p_x;
-			yend = all->ver_p_y;
-			draw_line(all, xend, yend, ft_color(0, 0, 255, 255));
-		}
-		all->ray_angle += deg_to_rad(60) / all->cub->width;
-		if (all->ray_angle < 0)
-			all->ray_angle += 2 * M_PI;
-		else if (all->ray_angle >= 2 * M_PI)
-			all->ray_angle -= 2 * M_PI;
-		numray++;
-	}
-	drow_player(all, ft_color(251,65,88, 255));
+	draw_3d(all);
+	// draw_mmini(all);
 } 
+
 
 void ft_draw(t_all *all)
 {   
 	all->cub->width = long_line(all->cub) * q_size;
 	all->cub->height = h_map(all->cub) * q_size;
+	all->x = 0;
+	all->jump = all->cub->height / 2;
     all->cub->mlx_ptr = mlx_init(all->cub->width, all->cub->height, "rase mohmaad", true);
 	all->cub->img = mlx_new_image(all->cub->mlx_ptr, all->cub->width, all->cub->height);
 	mlx_image_to_window(all->cub->mlx_ptr, all->cub->img, 0, 0);
 	ft_draw_map(all);///
+	draw_fc(all);
 	player_angle(all);
 	// draw_line(all, all->player->angle);////
 	drow_player(all, ft_color(251,65,88, 255));
