@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/21 11:09:16 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:18:01 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -401,23 +401,17 @@ void	draw_mini(t_all *all)
 void	draw_texture(t_all *all, float wall_h)
 {
 	int			y;
-	y = all->jump;
 	int text_of_x;
 	int text_of_y;
 
 	int wall_top_px = (all->cub->height / 2) - ((int) wall_h / 2);
 	int wall_bottom_px = (all->cub->height / 2) + ((int) wall_h / 2);
 
-
-	
-	// printf ("y   %d\n", wall_top_px);
-	// printf ("wall_top_px   %d\n", wall_bottom_px);
 	y = wall_top_px;
 	if (dest_vita1(all))
 		text_of_x = (((int) all->hor_p_x % q_size) * all->cub->texture->width / q_size) ;
 	else
 		text_of_x = (((int) all->ver_p_y % q_size) * all->cub->texture->width / q_size);
-
 
 	while (y < wall_bottom_px)
 	{
@@ -429,32 +423,7 @@ void	draw_texture(t_all *all, float wall_h)
 		int32_t pixel3 = all->cub->texture->pixels[index + 3];
 		mlx_put_pixel(all->cub->img, all->x, y++, ft_color(pixel, pixel1, pixel2,pixel3));
 	}
-	
 
-	// while (y < wall_bottom_px)
-	// {
-	// 	int top = y + (wall_h/ 2) - (all->cub->height / 2);
-	// 	text_of_y = top * ((float)q_size / (float) wall_h);
-
-	// 	// text_of_y = (y - wall_top_px) * (float) all->cub->texture->height / (float) wall_h;
-	// 	uint32_t pixel = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4];
-	// 	uint32_t pixel1 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 1];
-	// 	uint32_t pixel2 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 2];
-	// 	uint32_t pixel3 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 3];
-	// 	mlx_put_pixel(all->cub->img, all->x, y++, ft_color(pixel, pixel1, pixel2,pixel3));
-	// }
-	// while (i < wall_h)
-	// {
-	// 	text_of_y = (y - wall_top_px) * ((float) all->cub->texture->height / (int) (wall_h));
-	// 	unsigned int pixel = (all->cub->texture->width * text_of_y) + text_of_x;
-	// 	// unsigned int b  = (pixel >> 16) & 0xFF;
-    //     // unsigned int g = (pixel >> 8)  & 0xFF;
-    //     // unsigned int r  = pixel & 0xFF;
-	// 	// unsigned int color  = (r << 24) | (g << 16) | (b << 8) | 0xFF;
-	// 	mlx_put_pixel(all->cub->img, all->x, y, ft_color(pixel,pixel,pixel,pixel));
-	// 	y++;
-	// 	i++;
-	// // }
 	if (all->x < all->cub->width)
 		all->x++;
 	else
