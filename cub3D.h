@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/17 12:44:05 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/21 13:08:11 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ typedef struct s_player
 
 typedef struct s_all
 {
+	int					res_w;
+	int					res_h;
 	float				ray_angle;
 	int					ray_dist;
 	int					x;
@@ -95,7 +97,7 @@ void	parsing(char *s, t_cub *cub);
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 13
 # endif
-#  define q_size 25
-#  define pl_speed 5
+#  define q_size 200
+#  define pl_speed 50
 
 #endif

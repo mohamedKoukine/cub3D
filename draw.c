@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
+<<<<<<< HEAD
+/*   Updated: 2024/10/21 13:07:52 by aelbouab         ###   ########.fr       */
+=======
 /*   Updated: 2024/10/21 11:18:01 by mkaoukin         ###   ########.fr       */
+>>>>>>> e66fd8ab5e06c9de36d7249acbc3ab6c78e54ba4
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,11 +136,32 @@ void	ft_draw_map(t_all *all)
 				all->player->pl_dir = all->cub->lines[i][j];
 				all->cub->lines[i][j] = '0';
 			}
-			draw_mp(all, all->cub->lines[i][j]);
+			// draw_mp(all, all->cub->lines[i][j]);
 			j++;
 		}
 		i++;
 	}
+	// i = all->player->ox;
+	// while (all->cub->lines[i])
+	// {
+	// 	j = all->player->oy ;
+	// 	while (all->cub->lines[i][j])
+	// 	{
+	// 		all->cub->x =  j * q_size;
+	// 		all->cub->y =  i * q_size;
+	// 		if (all->cub->lines[i][j] == 'E' || all->cub->lines[i][j] == 'N'
+	// 			|| all->cub->lines[i][j] == 'W' || all->cub->lines[i][j] == 'S')
+	// 		{
+	// 			all->player->x = j * q_size;
+	// 			all->player->y = i * q_size;
+	// 			all->player->pl_dir = all->cub->lines[i][j];
+	// 			all->cub->lines[i][j] = '0';
+	// 		}
+	// 		draw_mp(all, all->cub->lines[i][j]);
+	// 		j++;
+	// 	}
+	// 	i++;
+	// }
 }
 
 void draw_line(t_all *all, int end_x, int end_y, int color)
@@ -338,7 +363,7 @@ void draw_rm(t_all *all, float wall_h)
 		y++;
 		i++;
 	}
-	if (all->x < all->cub->width)
+	if (all->x < all->res_w)
 		all->x++;
 	else
 		all->x = 0;
@@ -348,12 +373,12 @@ void draw_fc(t_all *all)
 {
 	int i= 0;
 	int j= 0;
-	while (i < all->cub->height)
+	while (i < all->res_h)
 	{
 		j = 0;
-		while (j < all->cub->width)
+		while (j < all->res_w)
 		{
-			if (i < all->jump)
+			if (i < all->res_h / 2)
 				mlx_put_pixel(all->cub->img, j, i, ft_color(0, 255 , 255, 255));
 			else
 				mlx_put_pixel(all->cub->img, j, i, ft_color(255, 255 , 255, 255));
@@ -371,7 +396,7 @@ void	draw_mini(t_all *all)
 	int		numray;
 
 	numray = 0;
-	while (numray <= all->cub->width)
+	while (numray <= all->res_w)
 	{
 		hor_point(all, all->ray_angle);
 		ver_point(all, all->ray_angle);
@@ -387,7 +412,7 @@ void	draw_mini(t_all *all)
 			yend = all->ver_p_y;
 			draw_line(all, xend, yend, ft_color(0, 255, 0, 255));
 		}
-		all->ray_angle += deg_to_rad(60) / all->cub->width;
+		all->ray_angle += deg_to_rad(60) / all->res_w;
 		if (all->ray_angle < 0)
 			all->ray_angle += 2 * M_PI;
 		else if (all->ray_angle >= 2 * M_PI)
@@ -404,8 +429,8 @@ void	draw_texture(t_all *all, float wall_h)
 	int text_of_x;
 	int text_of_y;
 
-	int wall_top_px = (all->cub->height / 2) - ((int) wall_h / 2);
-	int wall_bottom_px = (all->cub->height / 2) + ((int) wall_h / 2);
+	int wall_top_px = (all->res_h / 2) - ((int) wall_h / 2);
+	int wall_bottom_px = (all->res_h / 2) + ((int) wall_h / 2);
 
 	y = wall_top_px;
 	if (dest_vita1(all))
@@ -424,7 +449,35 @@ void	draw_texture(t_all *all, float wall_h)
 		mlx_put_pixel(all->cub->img, all->x, y++, ft_color(pixel, pixel1, pixel2,pixel3));
 	}
 
+<<<<<<< HEAD
+	// while (y < wall_bottom_px)
+	// {
+	// 	int top = y + (wall_h/ 2) - (all->cub->height / 2);
+	// 	text_of_y = top * ((float)q_size / (float) wall_h);
+
+	// 	// text_of_y = (y - wall_top_px) * (float) all->cub->texture->height / (float) wall_h;
+	// 	uint32_t pixel = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4];
+	// 	uint32_t pixel1 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 1];
+	// 	uint32_t pixel2 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 2];
+	// 	uint32_t pixel3 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 3];
+	// 	mlx_put_pixel(all->cub->img, all->x, y++, ft_color(pixel, pixel1, pixel2,pixel3));
+	// }
+	// while (i < wall_h)
+	// {
+	// 	text_of_y = (y - wall_top_px) * ((float) all->cub->texture->height / (int) (wall_h));
+	// 	unsigned int pixel = (all->cub->texture->width * text_of_y) + text_of_x;
+	// 	// unsigned int b  = (pixel >> 16) & 0xFF;
+    //     // unsigned int g = (pixel >> 8)  & 0xFF;
+    //     // unsigned int r  = pixel & 0xFF;
+	// 	// unsigned int color  = (r << 24) | (g << 16) | (b << 8) | 0xFF;
+	// 	mlx_put_pixel(all->cub->img, all->x, y, ft_color(pixel,pixel,pixel,pixel));
+	// 	y++;
+	// 	i++;
+	// // }
+	if (all->x < all->res_w)
+=======
 	if (all->x < all->cub->width)
+>>>>>>> e66fd8ab5e06c9de36d7249acbc3ab6c78e54ba4
 		all->x++;
 	else
 		all->x = 0;
@@ -436,19 +489,19 @@ void	draw_3d(t_all *all)
 	int		numray;
 	float	dpp;
 
-	dpp = (all->cub->width / 2) / tan(deg_to_rad(30));
+	dpp = (all->res_w / 2) / tan(deg_to_rad(30));
 	numray = 0;
-	while (numray <= all->cub->width)
+	while (numray <= all->res_w)
 	{
 		hor_point(all, all->ray_angle);
 		ver_point(all, all->ray_angle);
 		float res = dest_vita2(all);
 		wall_h = (q_size / res) * dpp;
-		if (wall_h >= all->cub->height)
-			wall_h = all->cub->height;
+		if (wall_h >= all->res_h)
+			wall_h = all->res_h;
 		// draw_rm(all, wall_h);
 		draw_texture(all, wall_h);
-		all->ray_angle += deg_to_rad(60) / all->cub->width;
+		all->ray_angle += deg_to_rad(60) / all->res_w;
 		if (all->ray_angle < 0)
 			all->ray_angle += 2 * M_PI;
 		else if (all->ray_angle >= 2 * M_PI)
@@ -526,15 +579,17 @@ void ft_draw(t_all *all)
 	all->cub->width = long_line(all->cub) * q_size;
 	all->cub->height = h_map(all->cub) * q_size;
 	all->x = 0;
-	all->jump = all->cub->height / 2;
-    all->cub->mlx_ptr = mlx_init(all->cub->width, all->cub->height, "rase mohmaad", true);
-	all->cub->img = mlx_new_image(all->cub->mlx_ptr, all->cub->width, all->cub->height);
+	all->jump = all->cub->height / 2;////2048 × 1556    ||    1920 x 1080
+	all->res_w = 1920;
+	all->res_h = 1080;
+    all->cub->mlx_ptr = mlx_init(all->res_w, all->res_h, "rase mohmaad", true);
+	all->cub->img = mlx_new_image(all->cub->mlx_ptr, all->res_w, all->res_h);
 	mlx_image_to_window(all->cub->mlx_ptr, all->cub->img, 0, 0);
 	ft_draw_map(all);///
 	draw_fc(all);
 	player_angle(all);
 	// draw_line(all, all->player->angle);////
-	draw_player(all, ft_color(251,65,88, 255));
+	// draw_player(all, ft_color(251,65,88, 255));
 	mlx_texture_t *img = mlx_load_png("./images/5.png");
 	all->cub->texture = mlx_texture_to_image(all->cub->mlx_ptr, img);
 	mlx_loop_hook(all->cub->mlx_ptr, ft_catch, all);
