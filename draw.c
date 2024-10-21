@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/27 14:54:42 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/14 14:46:23 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:09:16 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ size_t	long_line(t_cub *cub)
 {
 	int		i;
 	size_t	j;
-	
+
 	i = 0;
 	j = 0;
 	while (cub->lines[i])
@@ -77,7 +77,7 @@ double deg_to_rad(double an)
 	return (an * (M_PI / 180));
 }
 
-void	drow_player(t_all *all, int color)
+void	draw_player(t_all *all, int color)
 {
 	int i;
 	int j;
@@ -87,11 +87,11 @@ void	drow_player(t_all *all, int color)
 	i = 0;
 	y = all->player->y;
 	x = all->player->x - 1;
-	while(i <=  2)
+	while(i <= 7)
 	{
 		j = 0;
 		x = all->player->x - 1;
-		while (j <= 2)
+		while (j <= 7)
 		{
 				mlx_put_pixel(all->cub->img, x, y, color);
 			j++;
@@ -209,8 +209,8 @@ void	hor_point(t_all *all, float angle)
 	float xend;
 	float	xstep;
 	float ystep;
-	all->player->ox = (all->player->x);
-	all->player->oy = (all->player->y);
+	all->player->ox = (all->player->x) + 3;
+	all->player->oy = (all->player->y) + 3;
 	if (angle > 0 && angle < M_PI)
 	{
 		yend = floor(all->player->oy / q_size) *  q_size + q_size;
@@ -218,7 +218,7 @@ void	hor_point(t_all *all, float angle)
 	}
 	if(!(angle > 0 && angle < M_PI))
 	{
-		yend = floor(all->player->oy / q_size) *  q_size - 0.0001f;
+		yend = floor(all->player->oy / q_size) *  q_size - 0.001f;
 		ystep = -1 * q_size;
 	}
 	xend = all->player->ox + ((yend - all->player->oy) / tan(angle));
@@ -246,12 +246,12 @@ void	ver_point(t_all *all, float angle)
 	float xend;
 	float	xstep;
 	float ystep;
-	all->player->ox = all->player->x;
-	all->player->oy = all->player->y;
+	all->player->ox = all->player->x + 3;
+	all->player->oy = all->player->y + 3;
 	if (!(angle < 0.5 * M_PI || angle > 1.5 * M_PI))
 	{
-		xend = floor(all->player->ox / q_size) *  q_size - 0.0001f;
-		xstep = -1 * q_size; 
+		xend = floor(all->player->ox / q_size) *  q_size - 0.001f;
+		xstep = -1 * q_size;
 	}
 	if(angle < 0.5 * M_PI || angle > 1.5 * M_PI)
 	{
@@ -279,18 +279,23 @@ void	ver_point(t_all *all, float angle)
 
 int point_ch(t_all *all , float san, float can)
 {
-	all->player->a[1] = all->player->x;
-	all->player->a[0] = all->player->y;
-	all->player->b[1] = (all->player->x + 3);
-	all->player->b[0] = all->player->y;
-	all->player->c[1] = (all->player->x + 3);
-	all->player->c[0] = (all->player->y + 3);
-	all->player->d[1] = all->player->x;
-	all->player->d[0] = (all->player->y + 3);
-	if (all->cub->lines[(int)((all->player->a[0] + san)) / q_size][(int)((all->player->a[1]+ can)) / q_size] == '1'
-		|| all->cub->lines[(int)((all->player->b[0] + san)) / q_size][(int)((all->player->b[1]+ can)) / q_size] == '1'
-		|| all->cub->lines[(int)((all->player->c[0] + san)) / q_size][(int)((all->player->c[1]+ can)) / q_size] == '1'
-		|| all->cub->lines[(int)((all->player->d[0] + san)) / q_size][(int)((all->player->d[1]+ can)) / q_size] == '1')
+	all->player->a[1] = (all->player->x + can) / q_size;
+	all->player->a[0] = (all->player->y + san) / q_size;
+	all->player->b[1] = ((all->player->x + 6) + can) / q_size;
+	all->player->b[0] = (all->player->y + san) / q_size;
+	all->player->c[1] = ((all->player->x + 6) + can) / q_size;
+	all->player->c[0] = ((all->player->y + 6)+ san) / q_size;
+	all->player->d[1] = (all->player->x + can) / q_size;
+	all->player->d[0] = ((all->player->y + 6)+ san) / q_size;
+	if (!all->cub->lines[(int)all->player->a[0]]
+		|| !all->cub->lines[(int)all->player->b[0]]
+		|| !all->cub->lines[(int)all->player->c[0]]
+		|| !all->cub->lines[(int)all->player->d[0]])
+		return (1);
+	if (all->cub->lines[(int)all->player->a[0] ][(int)all->player->a[1] ] == '1'
+		|| all->cub->lines[(int)all->player->b[0] ][(int)all->player->b[1] ] == '1'
+		|| all->cub->lines[(int)all->player->c[0] ][(int)all->player->c[1] ] == '1'
+		|| all->cub->lines[(int)all->player->d[0] ][(int)all->player->d[1] ] == '1')
 		return (1);
 	return (0);
 }
@@ -389,7 +394,71 @@ void	draw_mini(t_all *all)
 			all->ray_angle -= 2 * M_PI;
 		numray++;
 	}
-	drow_player(all, ft_color(251,65,88, 255));
+	draw_player(all, ft_color(251,65,88, 255));
+}
+
+
+void	draw_texture(t_all *all, float wall_h)
+{
+	int			y;
+	y = all->jump;
+	int text_of_x;
+	int text_of_y;
+
+	int wall_top_px = (all->cub->height / 2) - ((int) wall_h / 2);
+	int wall_bottom_px = (all->cub->height / 2) + ((int) wall_h / 2);
+
+
+	
+	// printf ("y   %d\n", wall_top_px);
+	// printf ("wall_top_px   %d\n", wall_bottom_px);
+	y = wall_top_px;
+	if (dest_vita1(all))
+		text_of_x = (((int) all->hor_p_x % q_size) * all->cub->texture->width / q_size) ;
+	else
+		text_of_x = (((int) all->ver_p_y % q_size) * all->cub->texture->width / q_size);
+
+
+	while (y < wall_bottom_px)
+	{
+		text_of_y = (y - wall_top_px) * (float) all->cub->texture->height / (float) (wall_h);
+		int	index = ((all->cub->texture->width * text_of_y) + text_of_x) * 4;
+		int32_t pixel = all->cub->texture->pixels[index];
+		int32_t pixel1 = all->cub->texture->pixels[index + 1];
+		int32_t pixel2 = all->cub->texture->pixels[index + 2];
+		int32_t pixel3 = all->cub->texture->pixels[index + 3];
+		mlx_put_pixel(all->cub->img, all->x, y++, ft_color(pixel, pixel1, pixel2,pixel3));
+	}
+	
+
+	// while (y < wall_bottom_px)
+	// {
+	// 	int top = y + (wall_h/ 2) - (all->cub->height / 2);
+	// 	text_of_y = top * ((float)q_size / (float) wall_h);
+
+	// 	// text_of_y = (y - wall_top_px) * (float) all->cub->texture->height / (float) wall_h;
+	// 	uint32_t pixel = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4];
+	// 	uint32_t pixel1 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 1];
+	// 	uint32_t pixel2 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 2];
+	// 	uint32_t pixel3 = all->cub->texture->pixels[((q_size * text_of_y) + text_of_x) * 4 + 3];
+	// 	mlx_put_pixel(all->cub->img, all->x, y++, ft_color(pixel, pixel1, pixel2,pixel3));
+	// }
+	// while (i < wall_h)
+	// {
+	// 	text_of_y = (y - wall_top_px) * ((float) all->cub->texture->height / (int) (wall_h));
+	// 	unsigned int pixel = (all->cub->texture->width * text_of_y) + text_of_x;
+	// 	// unsigned int b  = (pixel >> 16) & 0xFF;
+    //     // unsigned int g = (pixel >> 8)  & 0xFF;
+    //     // unsigned int r  = pixel & 0xFF;
+	// 	// unsigned int color  = (r << 24) | (g << 16) | (b << 8) | 0xFF;
+	// 	mlx_put_pixel(all->cub->img, all->x, y, ft_color(pixel,pixel,pixel,pixel));
+	// 	y++;
+	// 	i++;
+	// // }
+	if (all->x < all->cub->width)
+		all->x++;
+	else
+		all->x = 0;
 }
 
 void	draw_3d(t_all *all)
@@ -408,18 +477,14 @@ void	draw_3d(t_all *all)
 		wall_h = (q_size / res) * dpp;
 		if (wall_h >= all->cub->height)
 			wall_h = all->cub->height;
-		draw_rm(all, wall_h);
+		// draw_rm(all, wall_h);
+		draw_texture(all, wall_h);
 		all->ray_angle += deg_to_rad(60) / all->cub->width;
 		if (all->ray_angle < 0)
 			all->ray_angle += 2 * M_PI;
 		else if (all->ray_angle >= 2 * M_PI)
 			all->ray_angle -= 2 * M_PI;
 		numray++;
-	}
-	while (all->jump >= all->cub->width / 2)
-	{
-		all->jump--;
-		usleep (700);
 	}
 }
 
@@ -475,8 +540,6 @@ void ft_catch(void *d)
     }
 	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_ESCAPE))
 		exit (0);
-	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_SPACE)) 
-		all->jump = all->jump + 70;
 	ft_draw_map(all);
 	draw_fc(all);
 	all->ray_angle = all->player->angle - deg_to_rad (30);
@@ -485,7 +548,7 @@ void ft_catch(void *d)
 	else if (all->ray_angle >= 2 * M_PI)
 		all->ray_angle -= 2 * M_PI;
 	draw_3d(all);
-	// draw_mmini(all);
+	// draw_mini(all);
 } 
 
 
@@ -502,7 +565,9 @@ void ft_draw(t_all *all)
 	draw_fc(all);
 	player_angle(all);
 	// draw_line(all, all->player->angle);////
-	drow_player(all, ft_color(251,65,88, 255));
+	draw_player(all, ft_color(251,65,88, 255));
+	mlx_texture_t *img = mlx_load_png("./images/5.png");
+	all->cub->texture = mlx_texture_to_image(all->cub->mlx_ptr, img);
 	mlx_loop_hook(all->cub->mlx_ptr, ft_catch, all);
 	mlx_loop(all->cub->mlx_ptr);
 }

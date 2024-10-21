@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/13 18:23:35 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/10/17 12:44:05 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ typedef struct s_cub
 	void	*mlx_ptr;
 	void	*img;
 	char	**lines;
+	mlx_image_t *texture;
 }		t_cub;
 
 typedef struct s_player
@@ -40,10 +41,10 @@ typedef struct s_player
 	float	y;
 	float	ox;
 	float	oy;
-	int		a[2];
-	int		b[2];
-	int		c[2];
-	int		d[2];
+	float		a[2];
+	float		b[2];
+	float		c[2];
+	float		d[2];
 	float	angle;
 	char	pl_dir;
 }		t_player;
@@ -94,7 +95,7 @@ void	parsing(char *s, t_cub *cub);
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 13
 # endif
-#  define q_size 100
-#  define pl_speed 4
+#  define q_size 25
+#  define pl_speed 5
 
 #endif
