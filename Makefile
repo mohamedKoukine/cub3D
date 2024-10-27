@@ -1,59 +1,40 @@
-NAME = minishell
+NAME = cub3D
 
 CC = cc 
 
-FLAGS = -Wall -Wextra -Werror -fsanitize=address
-READLINE_L = $(shell brew --prefix readline)/lib
-READLINE_I = $(shell brew --prefix readline)/include
+FLAGS = -Wall -Wextra -Werror -Imlx -fsanitize=address -g
 
-SRC = ./parsing/ft_strlen.c\
-		./parsing/ft_strcmp.c\
-		./parsing/ft_strncmp.c\
-		./parsing/main.c\
-		./parsing/ft_calloc.c\
-		./parsing/ft_split.c\
-		./parsing/ft_bzero.c\
-		./parsing/ft_lst.c\
-		./parsing/parssing.c\
-		./parsing/parssing0.c\
-		./parsing/parssing1.c\
-		./parsing/is_empty.c\
-		./parsing/ft_strtrim.c\
-		./parsing/util.c\
-		./parsing/ft_atoi.c\
-		./parsing/env.c\
-		./parsing/echo.c\
-		./parsing/exit.c\
-		./parsing/cd.c\
-		./execution/parsing_pipex.c\
-		./execution/ft_strjoinn.c\
-		./execution/ft_split.c\
-		./execution/ft_str.c\
-		./execution/get_next_line_utils.c\
-		./execution/get_next_line.c\
-		./execution/pwd.c\
-		./execution/ft_lstsize_bonus.c\
-		./execution/pipex_bonus.c
+SRC = cub3D.c\
+		get_next_line.c\
+		get_next_line_utils.c\
+		ft_strncmp.c\
+		ft_strcmp.c\
+		map_parc.c\
+		draw.c\
+		ft_strtrim.c\
+		ft_atoi.c\
+		main.c\
+		ft_split.c
 
 OBJ = $(SRC:.c=.o)
 
-INCLUDE1 = ex_minishell.h
-INCLUDE2 = pr_minishell.h
+INCLUDE1 = cub3D.h
+INCLUDE2 = ./MLX42/MLX42.h=
+MLX42 = ./MLX42/libmlx42.a
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(FLAGS) $(OBJ) -o $@ -L $(READLINE_L) -lreadline 
+	$(CC) $(FLAGS) $(OBJ) $(MLX42) -Iinclude -lglfw -L"/Users/$(USER)/.brew/opt/glfw/lib/" -framework Cocoa -framework OpenGL -framework IOKit -o $@
 
-%.o: %.c
-	$(CC) $(FLAGS) -I $(READLINE_I) -c $< -o $@
+%.o: %.c $(INCLUDE1) $(INCLUDE2)
+	$(CC) $(FLAGS) -c $< -o $@
 
 clean:
 	rm -rf $(OBJ)
 
 fclean: clean
 	rm -rf $(NAME)
-
 re: fclean all
 
 .PHONY: clean
