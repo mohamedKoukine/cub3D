@@ -14,6 +14,13 @@ SRC = cub3D.c\
 		ft_strtrim.c\
 		ft_atoi.c\
 		main.c\
+		utils1.c\
+		utils2.c\
+		utils3.c\
+		utils4.c\
+		utils5.c\
+		utils6.c\
+		parsing1.c\
 		ft_split.c
 
 OBJ = $(SRC:.c=.o)

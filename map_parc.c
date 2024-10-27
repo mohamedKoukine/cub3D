@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:23:05 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/09/28 12:29:31 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/27 10:48:02 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,13 +95,13 @@ void	empty_sp(char **map, t_cub *cub)
 	int	j;
 
 	i = -1;
-	j = 0;
 	while (map[++i])
 	{
-		j = 0;
-		while (map[i][j])
+		j = -1;
+		while (map[i][++j])
 		{
-			if (map[i][j] == '0')
+			if (map[i][j] == '0' || map[i][j] == 'E' || map[i][j] == 'N'
+				|| map[i][j] == 'S' || map[i][j] == 'W')
 			{
 				if (i == 0 || j == 0 || !map[i + 1] || !map[i][j + 1]
 					|| map[i][j + 1] == ' ' || map[i][j - 1] == ' ')
@@ -113,19 +113,6 @@ void	empty_sp(char **map, t_cub *cub)
 					return (printf ("empty space in map\n"), freeall(map)
 						, exit(1));
 			}
-			else if (map[i][j] == 'E' || map[i][j] == 'N' || map[i][j] == 'S' || map[i][j] == 'W')
-			{
-				if (i == 0 || j == 0 || !map[i + 1] || !map[i][j + 1]
-					|| map[i][j + 1] == ' ' || map[i][j - 1] == ' ')
-					return (printf ("empty space in map\n"), freeall(map)
-						, exit(1));
-				if (ft_strlen(map[i + 1], 0) <= (size_t)j
-					|| ft_strlen(map[i - 1], 0) <= (size_t)j
-					|| map[i + 1][j] == ' ' || map[i - 1][j] == ' ')
-					return (printf ("empty space in map\n"), freeall(map)
-						, exit(1));
-			}
-			j++;
 		}
 	}
 	cub->lines = map;
