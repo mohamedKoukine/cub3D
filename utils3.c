@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:02:18 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 10:46:06 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/27 15:34:25 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	beetwen(t_all *all, float yend, float xend)
 
 void	hor_point1(t_all *all, float xend, float yend, float ystep)
 {
-	int	xstep;
+	float	xstep;
 
 	xstep = ystep / tan(all->ray_angle);
 	while (((xend) >= 0 && (yend) >= 0)
