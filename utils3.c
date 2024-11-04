@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils3.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:02:18 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 15:34:25 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/31 19:14:46 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,14 @@ void	player_angle(t_all *all)
 
 int	beetwen(t_all *all, float yend, float xend)
 {
-	if ((all->cub->lines[((int)yend + 1) / Q_SIZE][(int)xend / Q_SIZE] == '1'
-		&& all->cub->lines[(int)yend / Q_SIZE][((int)xend + 1) / Q_SIZE] == '1')
-		|| (all->cub->lines[((int)yend + 1) / Q_SIZE][(int)xend / Q_SIZE] == '1'
-		&& all->cub->lines[(int)yend / Q_SIZE][((int)xend - 1) / Q_SIZE] == '1')
-		|| (all->cub->lines[((int)yend - 1) / Q_SIZE][(int)xend / Q_SIZE] == '1'
-		&& all->cub->lines[(int)yend / Q_SIZE][((int)xend - 1) / Q_SIZE] == '1')
-		|| (all->cub->lines[((int)yend - 1) / Q_SIZE][(int)xend / Q_SIZE] == '1'
-		&& all->cub->lines[(int)yend / Q_SIZE]
-			[((int)xend + 1) / Q_SIZE] == '1'))
+	if (((all->cub->lines[((int)yend + 1) / Q_SIZE][(int)xend / Q_SIZE] == '1')
+		*( all->cub->lines[(int)yend / Q_SIZE][((int)xend + 1) / Q_SIZE] == '1'))
+		+( (all->cub->lines[((int)yend + 1) / Q_SIZE][(int)xend / Q_SIZE] == '1')
+		*( all->cub->lines[(int)yend / Q_SIZE][((int)xend - 1) / Q_SIZE] == '1'))
+		+( (all->cub->lines[((int)yend - 1) / Q_SIZE][(int)xend / Q_SIZE] == '1')
+		*( all->cub->lines[(int)yend / Q_SIZE][((int)xend - 1) / Q_SIZE] == '1'))
+		+( (all->cub->lines[((int)yend - 1) / Q_SIZE][(int)xend / Q_SIZE] == '1')
+		* (all->cub->lines[(int)yend / Q_SIZE][((int)xend + 1) / Q_SIZE] == '1')))
 		return (0);
 	return (1);
 }
@@ -44,15 +43,12 @@ void	hor_point1(t_all *all, float xend, float yend, float ystep)
 	float	xstep;
 
 	xstep = ystep / tan(all->ray_angle);
-	while (((xend) >= 0 && (yend) >= 0)
-		&& (xend / Q_SIZE) < (all->cub->width / Q_SIZE)
-		&& (yend / Q_SIZE) < (all->cub->height / Q_SIZE)
-		&& all->cub->lines[(int)yend / Q_SIZE]
-		&& (xend / Q_SIZE) < (int)ft_strlen(all->cub->lines[(int)yend / Q_SIZE],
-			0)
-		&& all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] != ' '
-		&& all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] != '1'
-		&& beetwen(all, yend, xend))
+	while ((xend  * yend >= 0)
+		 * ((xend) < (all->cub->width)) * ((yend) < (all->cub->height))
+		* (int)(all->cub->lines[(int)yend / Q_SIZE])
+		* ((xend / Q_SIZE) < (int)ft_strlen(all->cub->lines[(int)yend / Q_SIZE], 0))
+		&& (all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] == '0')
+		* beetwen(all, yend, xend))
 	{
 		xend += xstep;
 		yend += ystep;
@@ -96,18 +92,18 @@ int	point_ch(t_all *all, float san, float can)
 	all->player->d[1] = (all->player->x + can) / Q_SIZE;
 	all->player->d[0] = ((all->player->y + 200) + san) / Q_SIZE;
 	if (!all->cub->lines[(int)all->player->a[0]]
-		|| !all->cub->lines[(int)all->player->b[0]]
-		|| !all->cub->lines[(int)all->player->c[0]]
-		|| !all->cub->lines[(int)all->player->d[0]])
+		+ !all->cub->lines[(int)all->player->b[0]]
+		+ !all->cub->lines[(int)all->player->c[0]]
+		+ !all->cub->lines[(int)all->player->d[0]])
 		return (1);
-	if (all->cub->lines[(int)all->player->a[0]]
-		[(int)all->player->a[1]] == '1'
-		|| all->cub->lines[(int)all->player->b[0]]
-		[(int)all->player->b[1]] == '1'
-		|| all->cub->lines[(int)all->player->c[0]]
-		[(int)all->player->c[1]] == '1'
-		|| all->cub->lines[(int)all->player->d[0]]
-		[(int)all->player->d[1]] == '1')
+	if ((all->cub->lines[(int)all->player->a[0]]
+		[(int)all->player->a[1]] == '1')
+		+( all->cub->lines[(int)all->player->b[0]]
+		[(int)all->player->b[1]] == '1')
+		+( all->cub->lines[(int)all->player->c[0]]
+		[(int)all->player->c[1]] == '1')
+		+( all->cub->lines[(int)all->player->d[0]]
+		[(int)all->player->d[1]] == '1'))
 		return (1);
 	return (0);
 }

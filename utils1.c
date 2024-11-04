@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils1.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:52:18 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 10:35:01 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/31 13:11:59 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,26 +23,27 @@ void	draw_map(t_all *all, int color, int type)
 	int	j;
 	int	y;
 	int	x;
+	(void) type;
 
 	i = -1;
 	y = all->cub->y;
 	x = all->cub->x;
-	while (++i < Q_SIZE)
+	while (++i < 10)
 	{
 		j = 0;
-		all->cub->x = x;
-		while (j < Q_SIZE)
+		x = all->cub->x;
+		while (j < 10)
 		{
 			if (type == 1 && (all->cub->y == y || all->cub->x == x
-					|| j == Q_SIZE || i == Q_SIZE))
-				mlx_put_pixel(all->cub->img, all->cub->x,
-					all->cub->y, ft_color (0, 0, 0, 255));
+					|| j == 10 || i == 10))
+				mlx_put_pixel(all->cub->img, x,
+					y, ft_color (0, 0, 0, 255));
 			else
-				mlx_put_pixel(all->cub->img, all->cub->x, all->cub->y, color);
+				mlx_put_pixel(all->cub->img, x, y, color);
 			j++;
-			all->cub->x++;
+			x++;
 		}
-		all->cub->y++;
+		y++;
 	}
 }
 

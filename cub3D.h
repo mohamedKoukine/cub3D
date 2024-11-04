@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 12:04:47 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/31 14:52:28 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,16 @@ typedef struct s_cub
 	char		**d;
 	int			x;
 	int			y;
-	char		*paths[5];
-	int			ff[3];
-	int			c[3];
 	int			width;
 	int			height;
 	void		*mlx_ptr;
 	void		*img;
 	char		**lines;
+	int			minix;
+	int			miniy;
+	char		*paths[5];
+	int			ff[3];
+	int			c[3];
 	mlx_image_t	*texture[4];
 	int32_t		pixel;
 	int32_t		pixel1;
@@ -46,6 +48,8 @@ typedef struct s_player
 {
 	float		x;
 	float		y;
+	float		x_mini;
+	float		y_mini;
 	float		ox;
 	float		oy;
 	float		a[2];
@@ -55,6 +59,12 @@ typedef struct s_player
 	float		angle;
 	char		pl_dir;
 }		t_player;
+
+typedef struct s_mouse
+{
+	int	   x;
+	int	   y;
+}		t_mouse;
 
 typedef struct s_all
 {
@@ -70,6 +80,7 @@ typedef struct s_all
 	float				ver_p_y;
 	struct s_player		*player;
 	struct s_cub		*cub;
+	struct s_mouse		*mouse;
 }		t_all;
 
 char	*get_next_line(int fd);

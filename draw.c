@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 14:03:18 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 12:03:59 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:13:35 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,21 @@
 
 void	rotation(t_all *all)
 {
-	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_LEFT))
-	{
-		all->player->angle -= 0.1;
-		if (all->player->angle < 0)
-			all->player->angle += M_PI * 2;
-	}
-	if (mlx_is_key_down(all->cub->mlx_ptr, MLX_KEY_RIGHT))
-	{
-		all->player->angle += 0.1;
-		if (all->player->angle >= M_PI * 2)
-			all->player->angle -= (M_PI * 2);
-	}
+	int		m_x;
+	int		m_y;
+
+	mlx_get_mouse_pos(all->cub->mlx_ptr, &m_x, &m_y);
+	if (m_x < all->mouse->x)
+		all->player->angle -= 0.001 * (all->mouse->x - m_x);
+	if (m_x > all->mouse->x)
+		all->player->angle += 0.001 * (m_x - all->mouse->x);
+	if (all->player->angle >= M_PI * 2)
+			all->player->angle -= (M_PI * 2);	
+	if (all->player->angle < 0)
+			all->player->angle += M_PI * 2; 	
+	mlx_set_mouse_pos(all->cub->mlx_ptr, all->res_w / 2, all->res_h / 2);
+	all->mouse->x = all->res_w / 2;
+	all->mouse->y = all->res_h / 2;
 }
 
 void	moves(t_all *all, float x, float y)
@@ -55,6 +58,67 @@ void	moves(t_all *all, float x, float y)
 		slide_in(all, y, x);
 	}
 }
+ 
+void draw_line(t_all *all)
+{
+	int i;
+	float x;
+	float y;
+
+	i = 0;
+	x = 102;
+	y = 102;
+	while (i <= 10)
+	{
+		mlx_put_pixel(all->cub->img, x, y, ft_color(251,65,88, 255));
+		x += cos(all->player->angle);
+		y += sin(all->player->angle);
+		i++;
+	}
+	
+}
+
+void	draw_out(t_all *all, int color)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i <= 210)
+	{
+		j = 0;
+		while (j <= 210)
+		{
+			if ((i < 9) + (j < 9) + (i > 201) + (j > 201))
+				mlx_put_pixel(all->cub->img, j, i, color);
+			j++;
+		}
+		i++;
+	}
+}
+
+void	draw_minimap(t_all *all)
+{
+	int i;
+	int j;
+
+	i = 0;
+	draw_line(all);
+	while (all->cub->lines[i])
+	{
+		j = 0;
+		while ((size_t)j < ft_strlen(all->cub->lines[i], 0))
+		{
+			all->cub->x =  (j * 10) + ((200 / 2) - all->player->x_mini);
+			all->cub->y =  (i * 10) + ((200 / 2) - all->player->y_mini);
+			draw_mp(all, all->cub->lines[i][j]);
+			j++;
+		}
+		i++;
+	}
+	draw_out(all, ft_color(0,0,0, 255));
+	draw_player(all, ft_color(251,65,88, 255));
+}
 
 void	ft_catch(void *d)
 {
@@ -68,11 +132,14 @@ void	ft_catch(void *d)
 	ft_draw_map(all);
 	draw_fc(all);
 	all->ray_angle = all->player->angle - deg_to_rad (30);
-	if (all->ray_angle < 0)
-		all->ray_angle += 2 * M_PI;
-	else if (all->ray_angle >= 2 * M_PI)
-		all->ray_angle -= 2 * M_PI;
+	// if (all->ray_angle < 0)
+	// 	all->ray_angle += 2 * M_PI;
+	// else if (all->ray_angle >= 2 * M_PI)
+	// 	all->ray_angle -= 2 * M_PI;
+	all->ray_angle += ((all->ray_angle < 0) * (2 * M_PI)) + (((all->ray_angle >= 2 * M_PI) * (2 * M_PI)) * -1);
 	draw_3d (all);
+	draw_minimap (all);
+	// draw_mini(all);
 }
 
 void	fill_img(t_cub *cub)
@@ -118,6 +185,11 @@ void	ft_draw(t_all *all)
 	ft_draw_map(all);
 	draw_fc(all);
 	player_angle(all);
+	draw_line(all);
+	mlx_set_mouse_pos(all->cub->mlx_ptr, all->res_w / 2, all->res_h / 2);
+	all->mouse->x = all->res_w / 2;
+	all->mouse->y = all->res_h / 2;
+	mlx_set_cursor_mode(all->cub->mlx_ptr, MLX_MOUSE_HIDDEN);
 	mlx_loop_hook(all->cub->mlx_ptr, ft_catch, all);
 	mlx_loop(all->cub->mlx_ptr);
 }

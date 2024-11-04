@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 11:22:45 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 12:04:25 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/27 17:05:39 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,15 @@
 void	slide_in(t_all *all, float y, float x)
 {
 	if (!point_ch(all, y, 0))
+	{
+		all->player->y_mini += y / 50;
 		all->player->y += y;
+	}
 	if (!point_ch(all, 0, x))
+	{
+		all->player->x_mini += x / 50;
 		all->player->x += x;
+	}
 }
 
 void	check_valid_file(t_cub *cub, int i, int j)

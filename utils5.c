@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:08:23 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 10:28:25 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/10/31 18:43:07 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,10 +143,11 @@ void	draw_3d(t_all *all)
 		wall_h = (Q_SIZE / res) * dpp;
 		draw_texture(all, wall_h, 0);
 		all->ray_angle += deg_to_rad(60) / all->res_w;
-		if (all->ray_angle < 0)
-			all->ray_angle += 2 * M_PI;
-		else if (all->ray_angle >= 2 * M_PI)
-			all->ray_angle -= 2 * M_PI;
+		// if (all->ray_angle < 0)
+		// 	all->ray_angle += 2 * M_PI;
+		// else if (all->ray_angle >= 2 * M_PI)
+		// 	all->ray_angle -= 2 * M_PI;
+		all->ray_angle += ((all->ray_angle < 0) * (2 * M_PI)) + (((all->ray_angle >= 2 * M_PI) * (2 * M_PI)) * -1);
 		numray++;
 	}
 }
