@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:54:27 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/10/27 11:25:30 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:51:02 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,9 @@ void	fill_arg(t_cub *cub, int j)
 		else if (cub->d[j][0] == 'F')
 			fill_fc(cub->d[j], cub, 1);
 	}
-	cub->paths[4] = NULL;
+	cub->paths[4] = "./images/2.png";
+	cub->paths[5] = "./images/open_door.png";
+	cub->paths[6] = NULL;
 }
 
 void	parsing1(t_cub *cub, char *tmp)

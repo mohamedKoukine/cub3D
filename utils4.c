@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:04:27 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 10:46:12 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/06 14:17:27 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	ver_point1(t_all *all, float xend, float yend, float xstep)
 				(int)yend / Q_SIZE], 0)
 		&& all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] != ' '
 		&& all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] != '1'
+		&& all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] != 'D'
 		&& beetwen(all, yend, xend))
 	{
 		xend += xstep;

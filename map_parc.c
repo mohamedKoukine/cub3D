@@ -6,7 +6,7 @@
 /*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 10:23:05 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 10:48:02 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/04 13:38:30 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	char_check(char *line)
 	{
 		if (line[i] != '1' && line[i] != '0' && line[i] != 'N'
 			&& line[i] != 'S' && line[i] != 'E' && line[i] != 'W'
-			&& line[i] != ' ' && line[i] != '\n')
+			&& line[i] != ' ' && line[i] != '\n' && line[i] != 'D')
 		{
 			printf ("map need to include : 0 for an empty space,"
 				"1 for a wall, and N,S,E or W for the player\n");

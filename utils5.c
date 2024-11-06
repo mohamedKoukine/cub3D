@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils5.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:08:23 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/31 18:43:07 by aelbouab         ###   ########.fr       */
+/*   Updated: 2024/11/04 16:05:47 by mkaoukin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,15 +111,30 @@ void	draw_texture(t_all *all, float wall_h, int i)
 		i = 2;
 	else if (i && (all->ray_angle > 0 && all->ray_angle < M_PI))
 		i = 3;
-	else if (!i && (all->ray_angle >= M_PI_2 && all->ray_angle < 3 * M_PI_2))
+	else if (!i && (all->ray_angle >= M_PI_2 && all->ray_angle < 3 * M_PI_2))///////// khasni nfham
 		i = 1;
 	if (i == 2 || i == 3)
-		text_of_x = (((int) all->hor_p_x % Q_SIZE)
+	{
+		if (!all->flag_door)
+			text_of_x = (((int) all->hor_p_x % Q_SIZE)
 				* all->cub->texture[i]->width / Q_SIZE);
+		else
+			text_of_x = (((int) all->hor_p_x % Q_SIZE)
+				* all->cub->texture[4]->width / Q_SIZE);
+	}
 	else
-		text_of_x = (((int) all->ver_p_y % Q_SIZE)
+	{
+		if (!all->flag_door)
+			text_of_x = (((int) all->ver_p_y % Q_SIZE)
 				* all->cub->texture[i]->width / Q_SIZE);
-	draw_texture1(all, wall_h, text_of_x, i);
+		else
+			text_of_x = (((int) all->ver_p_y % Q_SIZE)
+				* all->cub->texture[4]->width / Q_SIZE);
+	}
+	if (!all->flag_door)
+		draw_texture1(all, wall_h, text_of_x, i);
+	else
+		draw_texture1(all, wall_h, text_of_x, 4);
 	if (all->x < all->res_w)
 		all->x++;
 	else
@@ -141,13 +156,20 @@ void	draw_3d(t_all *all)
 		ver_point(all, all->ray_angle);
 		res = dest_vita2(all);
 		wall_h = (Q_SIZE / res) * dpp;
+		if (dest_vita1(all) && ((int)all->hor_p_x / Q_SIZE) < (int)ft_strlen(all->cub->lines[(int)all->hor_p_y / Q_SIZE],
+			0) && all->cub->lines[(int)all->hor_p_y / Q_SIZE][(int)all->hor_p_x / Q_SIZE] == 'D')
+			all->flag_door = 1;
+		else if (!dest_vita1(all) && ((int)all->ver_p_x / Q_SIZE) < (int)ft_strlen(all->cub->lines[(int)all->ver_p_y/ Q_SIZE],
+			0) && all->cub->lines[(int)all->ver_p_y / Q_SIZE][(int)all->ver_p_x / Q_SIZE] == 'D')
+			all->flag_door = 1;
+		else
+			all->flag_door = 0;
 		draw_texture(all, wall_h, 0);
 		all->ray_angle += deg_to_rad(60) / all->res_w;
-		// if (all->ray_angle < 0)
-		// 	all->ray_angle += 2 * M_PI;
-		// else if (all->ray_angle >= 2 * M_PI)
-		// 	all->ray_angle -= 2 * M_PI;
-		all->ray_angle += ((all->ray_angle < 0) * (2 * M_PI)) + (((all->ray_angle >= 2 * M_PI) * (2 * M_PI)) * -1);
+		if (all->ray_angle < 0)
+			all->ray_angle += 2 * M_PI;
+		else if (all->ray_angle >= 2 * M_PI)
+			all->ray_angle -= 2 * M_PI;
 		numray++;
 	}
 }
