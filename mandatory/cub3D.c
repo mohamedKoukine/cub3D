@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/26 13:54:27 by aelbouab          #+#    #+#             */
-/*   Updated: 2024/11/09 16:08:50 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/15 16:26:36 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,24 +42,25 @@ void	fill_paths(t_cub *cub, char *s, int l)
 	cub->paths[l] = &s[i];
 }
 
-void	fill_arg(t_cub *cub, int j)
+void    fill_arg(t_cub *cub, int j)
 {
-	while (cub->d[++j])
-	{
-		if (cub->d[j][0] == 'E')
-			fill_paths(cub, cub->d[j], 0);
-		else if (cub->d[j][0] == 'W')
-			fill_paths(cub, cub->d[j], 1);
-		else if (cub->d[j][0] == 'N')
-			fill_paths(cub, cub->d[j], 2);
-		else if (cub->d[j][0] == 'S')
-			fill_paths(cub, cub->d[j], 3);
-		else if (cub->d[j][0] == 'C')
-			fill_fc(cub->d[j], cub, 0);
-		else if (cub->d[j][0] == 'F')
-			fill_fc(cub->d[j], cub, 1);
-	}
-	cub->paths[4] = NULL;
+    while (cub->d[++j])
+    {
+        if (cub->d[j][0] == 'E')
+            fill_paths(cub, cub->d[j], 0);
+        else if (cub->d[j][0] == 'W')
+            fill_paths(cub, cub->d[j], 1);
+        else if (cub->d[j][0] == 'N')
+            fill_paths(cub, cub->d[j], 2);
+        else if (cub->d[j][0] == 'S')
+            fill_paths(cub, cub->d[j], 3);
+        else if (cub->d[j][0] == 'C')
+            fill_fc(cub->d[j], cub, 0);
+        else if (cub->d[j][0] == 'F')
+            fill_fc(cub->d[j], cub, 1);
+    }
+    cub->paths[4] = "./images/door.png";
+    cub->paths[5] = NULL;
 }
 
 void	parsing1(t_cub *cub, char *tmp)

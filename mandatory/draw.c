@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 14:03:18 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/11/09 16:10:15 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/15 11:53:18 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,9 +111,8 @@ void	ft_draw(t_all *all)
 {
 	all->cub->width = long_line(all->cub) * Q_SIZE;
 	all->cub->height = h_map(all->cub) * Q_SIZE;
-	all->jump = all->cub->height / 2;
-	all->res_w = 1570;
-	all->res_h = 800;
+	all->res_w = 1250;
+	all->res_h = 780;
 	all->cub->mlx_ptr = mlx_init(all->res_w, all->res_h, "rase mohmaad", true);
 	if (!all->cub->mlx_ptr)
 		ft_error("error mlx_unit", all->cub, 1);

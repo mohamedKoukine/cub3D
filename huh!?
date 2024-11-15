@@ -1,0 +1,32 @@
+// void	draw_3d(t_all *all)
+// {
+// 	float	wall_h;
+// 	int		numray;
+// 	float	dpp;
+// 	float	res;
+
+// 	dpp = (all->res_w / 2) / tan(deg_to_rad(30));
+// 	numray = 0;
+// 	while (numray <= all->res_w)
+// 	{
+// 		hor_point(all, all->ray_angle);
+// 		ver_point(all, all->ray_angle);
+// 		res = dest_vita2(all);
+// 		wall_h = (Q_SIZE / res) * dpp;
+// 		if (dest_vita1(all) && ((int)all->hor_p_x / Q_SIZE) < (int)ft_strlen(all->cub->lines[(int)all->hor_p_y / Q_SIZE],
+// 			0) && all->cub->lines[(int)all->hor_p_y / Q_SIZE][(int)all->hor_p_x / Q_SIZE] == 'D')
+// 			all->flag_door = 1;
+// 		else if (!dest_vita1(all) && ((int)all->ver_p_x / Q_SIZE) < (int)ft_strlen(all->cub->lines[(int)all->ver_p_y/ Q_SIZE],
+// 			0) && all->cub->lines[(int)all->ver_p_y / Q_SIZE][(int)all->ver_p_x / Q_SIZE] == 'D')
+// 			all->flag_door = 1;
+// 		else
+// 			all->flag_door = 0;
+// 		draw_texture(all, wall_h, 0);
+// 		all->ray_angle += deg_to_rad(60) / all->res_w;
+// 		if (all->ray_angle < 0)
+// 			all->ray_angle += 2 * M_PI;
+// 		else if (all->ray_angle >= 2 * M_PI)
+// 			all->ray_angle -= 2 * M_PI;
+// 		numray++;
+// 	}
+// }

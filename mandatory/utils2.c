@@ -3,47 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   utils2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 12:58:15 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/11/09 16:10:26 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/13 13:59:14 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	draw_player(t_all *all, int color)
-{
-	int	i;
-	int	j;
-	int	y;
-	int	x;
-
-	i = 0;
-	y = all->player->y;
-	x = all->player->x - 1;
-	while (i <= 7)
-	{
-		j = 0;
-		x = all->player->x - 1;
-		while (j <= 7)
-		{
-			mlx_put_pixel(all->cub->img, x, y, color);
-			j++;
-			x++;
-		}
-		y++;
-		i++;
-	}
-}
-
-void	draw_mp(t_all *all, char c)
-{
-	if (c == '1')
-		draw_map(all, ft_color(17, 0, 199, 255), 1);
-	else if (c == '0')
-		draw_map(all, ft_color(255, 255, 255, 255), 0);
-}
+// void	draw_mp(t_all *all, char c)
+// {
+// 	if (c == '1')
+// 		draw_map(all, ft_color(17, 0, 199, 255), 1);
+// 	else if (c == '0')
+// 		draw_map(all, ft_color(255, 255, 255, 255), 0);
+// }
 
 void	ft_draw_map(t_all *all)
 {

@@ -1,16 +1,10 @@
+EA ./images/wall1.png                 
 
-EA ./images/1.png                 
+WE ./images/wall2.png                   
 
-WE ./images/2 2.png                   
+NO  ./images/wall3.png            
 
-NO  ./images/4.png            
-
-
-SO ./images/5.png
-       
-
-
-
+SO ./images/wall4.png
 
 C 0,225,225                        
 

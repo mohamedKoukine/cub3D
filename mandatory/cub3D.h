@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/25 11:49:47 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/11/09 15:50:47 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/13 14:09:40 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <math.h>
-# include "MLX42/MLX42.h"
+# include "../MLX42/MLX42.h"
 
 typedef struct s_cub
 {
@@ -63,7 +63,6 @@ typedef struct s_all
 	float				ray_angle;
 	int					ray_dist;
 	int					x;
-	int					jump;
 	float				hor_p_x;
 	float				ver_p_x;
 	float				hor_p_y;
@@ -104,9 +103,6 @@ void	draw_map(t_all *all, int color, int type);
 size_t	long_line(t_cub *cub);
 int		h_map(t_cub *cub);
 double	deg_to_rad(double an);
-void	draw_player(t_all *all, int color);
-void	draw_mp(t_all *all, char c);
-void	ft_draw_map(t_all *all);
 void	ft_draw_map(t_all *all);
 void	player_angle(t_all *all);
 int		beetwen(t_all *all, float yend, float xend);

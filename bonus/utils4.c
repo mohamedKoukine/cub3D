@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   utils4.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mkaoukin <mkaoukin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aelbouab <aelbouab@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/26 13:04:27 by mkaoukin          #+#    #+#             */
-/*   Updated: 2024/10/27 10:46:12 by mkaoukin         ###   ########.fr       */
+/*   Updated: 2024/11/15 11:35:20 by aelbouab         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+#include "b_cub3D.h"
 
 void	ver_point1(t_all *all, float xend, float yend, float xstep)
 {
@@ -25,6 +25,7 @@ void	ver_point1(t_all *all, float xend, float yend, float xstep)
 				(int)yend / Q_SIZE], 0)
 		&& all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] != ' '
 		&& all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] != '1'
+		&& all->cub->lines[(int)yend / Q_SIZE][(int)xend / Q_SIZE] != 'D'
 		&& beetwen(all, yend, xend))
 	{
 		xend += xstep;
@@ -92,14 +93,14 @@ void	draw_rm(t_all *all, float wall_h)
 	int	i;
 
 	i = 0;
-	y = all->jump;
+	y = all->cub->height / 2;
 	while (i < wall_h / 2)
 	{
 		mlx_put_pixel(all->cub->img, all->x, y, ft_color(0, 0, 255, 255));
 		y--;
 		i++;
 	}
-	y = all->jump;
+	y = all->cub->height / 2;
 	while (i < wall_h)
 	{
 		mlx_put_pixel(all->cub->img, all->x, y, ft_color(0, 0, 255, 255));
